@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-trgm-gin-index
+      author: am-cid
+      changes:
+        - sql: CREATE EXTENSION IF NOT EXISTS pg_trgm;
+        - sql: CREATE INDEX IF NOT EXISTS idx_book_title_trgm ON book USING gin (title gin_trgm_ops);
+        - sql: CREATE INDEX IF NOT EXISTS idx_book_author_trgm ON book USING gin (author gin_trgm_ops);
+      rollback:
+        - sql: DROP INDEX IF EXISTS idx_book_title_trgm;
+        - sql: DROP INDEX IF EXISTS idx_book_author_trgm;
