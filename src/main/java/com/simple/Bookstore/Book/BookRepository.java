@@ -23,7 +23,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                     SELECT count(DISTINCT b.id)
                     FROM book b
                     LEFT JOIN review r ON b.id = r.book_id
-                    WHERE (:query IS NULL OR b.title <% :query OR b.author <% :query)
+                    WHERE (:query IS NULL OR :query <% b.title OR :query <% b.author)
                     GROUP BY b.id
                     HAVING (:rating IS NULL OR AVG(r.rating) >= :rating)
                     """,

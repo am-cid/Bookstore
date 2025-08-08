@@ -1,8 +1,9 @@
 package com.simple.Bookstore.Book;
 
+import com.simple.Bookstore.Exceptions.BookNotFoundException;
 import com.simple.Bookstore.Genre.Genre;
 import com.simple.Bookstore.Review.Review;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -12,32 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    @Autowired
-    private BookRepository bookRepo;
+    private final BookRepository bookRepo;
 
     @Override
-    public List<BookSearchResultDTO> getAllBooks() {
+    public List<BookSearchResultDTO> findAllBooks() {
         return bookRepo.findAll().stream()
                 .map(this::bookToSearchResultDTO)
                 .toList();
     }
 
     @Override
-    public void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO newBook) {
-        oldBook.setTitle(newBook.title() != null ? newBook.title() : oldBook.getTitle());
-        oldBook.setAuthor(newBook.author() != null ? newBook.author() : oldBook.getAuthor());
-        oldBook.setDescription(newBook.description() != null ? newBook.description() : oldBook.getDescription());
-        oldBook.extendGenres(newBook.genres());
-        oldBook.setFrontImage(newBook.frontImage() != null ? newBook.frontImage() : oldBook.getFrontImage());
-        oldBook.setBackImage(newBook.backImage() != null ? newBook.backImage() : oldBook.getBackImage());
-        oldBook.setSpineImage(newBook.spineImage() != null ? newBook.spineImage() : oldBook.getSpineImage());
-        oldBook.extendContentImages(newBook.contentImages());
-    }
-
-    @Override
-    public Optional<BookSearchResultDTO> getBookById(Long id) {
+    public Optional<BookSearchResultDTO> findBookById(Long id) {
         return bookRepo.findById(id).map(this::bookToSearchResultDTO);
     }
 
@@ -55,7 +44,7 @@ public class BookServiceImpl implements BookService {
                     updateOldBookWithRequestDTO(existingBook, book);
                     return bookRepo.save(existingBook);
                 })
-                .orElseThrow(() -> new BookNotFoundException("Book with ID " + id + " not found"));
+                .orElseThrow(() -> new BookNotFoundException(id));
     }
 
     // ... other methods ...
@@ -64,7 +53,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void deleteBook(Long id) {
         if (!bookRepo.existsById(id)) {
-            throw new BookNotFoundException("Book with ID " + id + " not found");
+            throw new BookNotFoundException(id);
         }
         bookRepo.deleteById(id);
     }
@@ -83,7 +72,6 @@ public class BookServiceImpl implements BookService {
         return new PageImpl<>(filteredDTOs, pageable, filteredDTOs.size());
     }
 
-    @Override
     public Book createDtoToBook(BookRequestDTO dto) {
         Book book = new Book();
         book.setTitle(dto.title());
@@ -95,6 +83,17 @@ public class BookServiceImpl implements BookService {
         book.setSpineImage(dto.spineImage());
         book.setContentImages(dto.contentImages());
         return book;
+    }
+
+    public void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO newBook) {
+        oldBook.setTitle(newBook.title() != null ? newBook.title() : oldBook.getTitle());
+        oldBook.setAuthor(newBook.author() != null ? newBook.author() : oldBook.getAuthor());
+        oldBook.setDescription(newBook.description() != null ? newBook.description() : oldBook.getDescription());
+        oldBook.extendGenres(newBook.genres());
+        oldBook.setFrontImage(newBook.frontImage() != null ? newBook.frontImage() : oldBook.getFrontImage());
+        oldBook.setBackImage(newBook.backImage() != null ? newBook.backImage() : oldBook.getBackImage());
+        oldBook.setSpineImage(newBook.spineImage() != null ? newBook.spineImage() : oldBook.getSpineImage());
+        oldBook.extendContentImages(newBook.contentImages());
     }
 
     /**

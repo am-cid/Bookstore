@@ -21,7 +21,7 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity<List<BookSearchResultDTO>> getBooks() {
-        return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
+        return new ResponseEntity<>(bookService.findAllBooks(), HttpStatus.OK);
     }
 
     @PostMapping
@@ -32,7 +32,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<BookSearchResultDTO>> getBook(@PathVariable Long id) {
-        return new ResponseEntity<>(bookService.getBookById(id), HttpStatus.OK);
+        return new ResponseEntity<>(bookService.findBookById(id), HttpStatus.OK);
     }
 
 

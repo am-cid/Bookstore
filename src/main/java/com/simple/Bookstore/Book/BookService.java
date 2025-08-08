@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface BookService {
-    List<BookSearchResultDTO> getAllBooks();
+    List<BookSearchResultDTO> findAllBooks();
 
-    Optional<BookSearchResultDTO> getBookById(Long id);
+    Optional<BookSearchResultDTO> findBookById(Long id);
 
     Book createBook(BookRequestDTO bookDTO);
 
@@ -20,9 +20,4 @@ public interface BookService {
     void deleteBook(Long id);
 
     Page<BookSearchResultDTO> searchBooks(String query, Set<Genre> genres, Double rating, Pageable pageable);
-
-    // HELPERS
-    Book createDtoToBook(BookRequestDTO dto);
-
-    void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO bookRequestDTO);
 }

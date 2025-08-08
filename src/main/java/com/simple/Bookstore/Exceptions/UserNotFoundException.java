@@ -1,0 +1,15 @@
+package com.simple.Bookstore.Exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException() {
+        super("User does not exist! ");
+    }
+
+    public UserNotFoundException(String username) {
+        super("User \"" + username + "\" does not exist! ");
+    }
+}
