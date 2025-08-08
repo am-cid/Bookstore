@@ -47,7 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
         if (!review.getUser().getId().equals(securityService.getLoggedInUser().getId()))
-            throw new UnauthorizedException("You are not authorized to delete this review");
+            throw new UnauthorizedException("You are not authorized to edit this review");
 
         review.setContent(request.content());
         review.setRating(request.rating());

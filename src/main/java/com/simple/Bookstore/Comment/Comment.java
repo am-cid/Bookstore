@@ -20,11 +20,14 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(length = 2000, nullable = false)
+    private String content;
+
     @Column(nullable = false)
     private LocalDateTime date;
 
-    @Column(length = 2000, nullable = false)
-    private String content;
+    @Column(nullable = false)
+    private boolean edited;
 
     @ManyToOne
     @JoinColumn(name = "review_id", nullable = false)
@@ -33,5 +36,6 @@ public class Comment {
     @PrePersist
     protected void onCreate() {
         this.date = LocalDateTime.now();
+        this.edited = false;
     }
 }
