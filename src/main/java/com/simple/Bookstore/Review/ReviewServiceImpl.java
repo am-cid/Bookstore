@@ -75,6 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
                 review.getUser().getDisplayName(),
                 review.getRating(),
                 review.getDate(),
+                review.isEdited(),
                 review.getContent()
         );
     }

@@ -7,6 +7,7 @@ public record CommentResponseDTO(
         Long userId,
         String displayName,
         LocalDateTime date,
+        boolean edited,
         String content
 ) {
 }

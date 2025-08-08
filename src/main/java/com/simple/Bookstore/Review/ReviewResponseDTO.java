@@ -8,6 +8,7 @@ public record ReviewResponseDTO(
         String displayName,
         Double rating,
         LocalDateTime date,
+        boolean edited,
         String content
 ) {
 }

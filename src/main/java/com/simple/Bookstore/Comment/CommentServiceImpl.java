@@ -72,6 +72,7 @@ public class CommentServiceImpl implements CommentService {
                 comment.getUser().getId(),
                 comment.getUser().getDisplayName(),
                 comment.getDate(),
+                comment.isEdited(),
                 comment.getContent()
         );
     }
