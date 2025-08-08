@@ -6,6 +6,7 @@ import com.simple.Bookstore.Genre.Genre;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
+@Order(2)
 public class BookSeeder implements CommandLineRunner {
     private final BookRepository bookRepo;
 
