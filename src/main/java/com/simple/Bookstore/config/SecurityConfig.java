@@ -23,17 +23,24 @@ public class SecurityConfig {
                         .ignoringRequestMatchers("/api/v1/**")
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET,
-                                "/api/v1/books/**",
-                        ).permitAll()
-                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/logout").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
                         // only admin can create, edit, and delete books.
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/books").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/books/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/books/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/books/*").hasRole("ADMIN")
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN")
+                        // only logged in users can GET POST PATCH DELETE reviews
+                        .requestMatchers(HttpMethod.POST, "/api/v1/books/*/reviews").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/reviews/*").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/reviews/*").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/*").authenticated()
+                        // for website viewing
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/books/**",
+                                "/api/v1/comments/**",
+                                "/api/v1/reviews/**"
+                        ).permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         // require authentication for everything else
                         .anyRequest().authenticated()
                 )
