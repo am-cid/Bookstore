@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="body-div">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div id="main-layout">
+        <div th:replace="~{fragments/sidebar-left :: sidebar-left}"></div>
+<!--        <div th:replace="~{fragments/main-content :: content}"></div>-->
+<!--        <div th:replace="~{fragments/sidebar-right :: sidebar-left}"></div>-->
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+
+</body>
+</html>

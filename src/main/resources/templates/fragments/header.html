@@ -1,0 +1,26 @@
+<header th:fragment="header">
+    <div id="header">
+        <div id="header-logo-div">
+            <a href="/">
+                <img alt="Bookstore Logo" class="logo" src="/images/logo.png">
+            </a>
+        </div>
+        <div id="header-right-div">
+            <div id="header-top-right-div">
+                <a href="/support">
+                    <img alt="Support" class="logo" src="/images/support.png">
+                </a>
+                <a href="/">
+                    <img alt="About Us" class="logo" src="/images/about-us.png">
+                </a>
+            </div>
+            <div id="header-bottom-right-div">
+                <form action="/books/search" method="get">
+                    <input name="query" type="text">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+
