@@ -25,6 +25,16 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value = """
             SELECT b.id, b.title, b.author, b.description, b.front_image, b.back_image, b.spine_image,
+                AVG(r.rating), COUNT(r.id)
+            FROM book b
+            LEFT JOIN review r ON b.id = r.book_id
+            GROUP BY b.id
+            """,
+            nativeQuery = true)
+    List<BookRelevanceProjection> findBooksForScoring();
+
+    @Query(value = """
+            SELECT b.id, b.title, b.author, b.description, b.front_image, b.back_image, b.spine_image,
                    AVG(r.rating) AS averageRating
             FROM book b
             JOIN review r ON b.id = r.book_id

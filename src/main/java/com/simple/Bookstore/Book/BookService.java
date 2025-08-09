@@ -15,6 +15,8 @@ public interface BookService {
 
     List<BookSearchResultDTO> findTopNRatedBooks(int n);
 
+    List<BookSearchResultDTO> findRelevantBooks();
+
     Optional<BookSearchResultDTO> findBookById(Long id);
 
     List<String> findDistinctAuthors();

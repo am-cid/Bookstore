@@ -16,6 +16,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
+    private static final double RATING_WEIGHT = 0.70;
+    private static final double REVIEW_COUNT_WEIGHT = 0.20;
+    private static final double DATE_WEIGHT = 0.10;
     private final BookRepository bookRepo;
 
     @Override
@@ -46,6 +49,37 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<String> findDistinctAuthors() {
         return bookRepo.findDistinctAuthors();
+    }
+
+    @Override
+    public List<BookSearchResultDTO> findRelevantBooks() {
+        List<BookRelevanceProjection> books = bookRepo.findBooksForScoring();
+
+        // normalize
+        double maxRating = books
+                .stream()
+                .mapToDouble(p -> p.getAverageRating() != null ? p.getAverageRating() : 0.0)
+                .max()
+                .orElse(1.0);
+        long maxReviewCount = books
+                .stream()
+                .mapToLong(p -> p.getReviewCount() != null ? p.getReviewCount() : 0L)
+                .max()
+                .orElse(1L);
+        long maxDateProxy = books
+                .stream()
+                .mapToLong(BookRelevanceProjection::getId)
+                .max()
+                .orElse(1L);
+
+        return books.stream()
+                .sorted((p1, p2) -> {
+                    Double score1 = calculateRelevancy(p1, maxRating, maxReviewCount, maxDateProxy);
+                    Double score2 = calculateRelevancy(p2, maxRating, maxReviewCount, maxDateProxy);
+                    return Double.compare(score2, score1); // Sort in descending order
+                })
+                .map(this::relevancyProjectionToDTO)
+                .toList();
     }
 
     @Override
@@ -193,6 +227,24 @@ public class BookServiceImpl implements BookService {
                 book.getFrontImage(),
                 book.getBackImage(),
                 book.getSpineImage(),
+                book.getContentImages()
+        );
+    }
+
+    private BookSearchResultDTO relevancyProjectionToDTO(BookRelevanceProjection projection) {
+        Book book = bookRepo
+                .findById(projection.getId())
+                .orElseThrow(() -> new BookNotFoundException(projection.getId()));
+        return new BookSearchResultDTO(
+                projection.getId(),
+                projection.getTitle(),
+                projection.getAuthor(),
+                projection.getDescription(),
+                book.getGenres(),
+                projection.getAverageRating(),
+                projection.getFrontImage(),
+                projection.getBackImage(),
+                projection.getSpineImage(),
                 book.getContentImages()
         );
     }
