@@ -26,6 +26,29 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BookSearchResultDTO> findTopNRatedBooks(int n) {
+        return bookRepo
+                .findTopNRatedBooks(n)
+                .stream()
+                .map(this::searchResultProjectionToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<BookSearchResultDTO> findLatestNBooks(int n) {
+        return bookRepo
+                .findLatestNBooks(n)
+                .stream()
+                .map(this::searchResultProjectionToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<String> findDistinctAuthors() {
+        return bookRepo.findDistinctAuthors();
+    }
+
+    @Override
     public Optional<BookSearchResultDTO> findBookById(Long id) {
         return bookRepo.findById(id).map(this::bookToSearchResultDTO);
     }
@@ -47,8 +70,6 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    // ... other methods ...
-
     @Override
     @Transactional
     public void deleteBook(Long id) {
@@ -61,18 +82,52 @@ public class BookServiceImpl implements BookService {
     @Override
     public Page<BookSearchResultDTO> searchBooks(String query, Set<Genre> genres, Double rating, Pageable pageable) {
         if (query == null && genres == null && rating == null) {
+            // return none if no parameters
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
+        } else if (query == null && rating == null) {
+            // return all then filter by genre if genre is the only parameter
+            List<BookSearchResultDTO> filteredDTOs = bookRepo
+                    .findAll()
+                    .stream()
+                    .map(this::bookToSearchResultDTO)
+                    .filter(dto -> dto
+                            .genres()
+                            .stream()
+                            .anyMatch(genres::contains)
+                    )
+                    .toList();
+            return new PageImpl<>(filteredDTOs, pageable, filteredDTOs.size());
+        } else {
+            // filter normally
+            List<BookSearchResultDTO> filteredDTOs = bookRepo
+                    .searchBooks(query, rating, pageable)
+                    .stream()
+                    .map(this::searchResultProjectionToDTO)
+                    .filter(dto -> genres == null || dto.genres().stream()
+                            .anyMatch(genres::contains))
+                    .toList();
+            return new PageImpl<>(filteredDTOs, pageable, filteredDTOs.size());
         }
-        Page<BookSearchResultProjection> bookProjections = bookRepo.searchBooks(query, rating, pageable);
-        List<BookSearchResultDTO> filteredDTOs = bookProjections.stream()
-                .map(this::searchResultProjectionToDTO)
-                .filter(dto -> genres == null || dto.genres().stream()
-                        .anyMatch(g -> genres.contains(g.name())))
-                .toList();
-        return new PageImpl<>(filteredDTOs, pageable, filteredDTOs.size());
     }
 
-    public Book createDtoToBook(BookRequestDTO dto) {
+    // HELPERS
+
+    private Double calculateRelevancy(
+            BookRelevanceProjection projection,
+            double maxRating,
+            long maxReviewCount,
+            long maxDateProxy
+    ) {
+        double normalizedRating = (projection.getAverageRating() != null) ? projection.getAverageRating() / maxRating : 0.0;
+        double normalizedReviewCount = (projection.getReviewCount() != null) ? (double) projection.getReviewCount() / maxReviewCount : 0.0;
+
+        double normalizedDate = (double) projection.getId() / maxDateProxy;
+        return (normalizedRating * RATING_WEIGHT) +
+                (normalizedReviewCount * REVIEW_COUNT_WEIGHT) +
+                (normalizedDate * DATE_WEIGHT);
+    }
+
+    private Book createDtoToBook(BookRequestDTO dto) {
         Book book = new Book();
         book.setTitle(dto.title());
         book.setAuthor(dto.author());
@@ -85,7 +140,7 @@ public class BookServiceImpl implements BookService {
         return book;
     }
 
-    public void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO newBook) {
+    private void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO newBook) {
         oldBook.setTitle(newBook.title() != null ? newBook.title() : oldBook.getTitle());
         oldBook.setAuthor(newBook.author() != null ? newBook.author() : oldBook.getAuthor());
         oldBook.setDescription(newBook.description() != null ? newBook.description() : oldBook.getDescription());
@@ -100,12 +155,9 @@ public class BookServiceImpl implements BookService {
      * Helper method to perform the mapping from projection to DTO
      */
     private BookSearchResultDTO searchResultProjectionToDTO(BookSearchResultProjection projection) {
-        // Fetch the full entity to get the genres collection, which is not available in the projection.
-        // This is a new, separate database call for each book on the page.
-        Book book = bookRepo.findById(projection.getId()).orElse(null);
-        if (book == null) {
-            return null;
-        }
+        Book book = bookRepo
+                .findById(projection.getId())
+                .orElseThrow(() -> new BookNotFoundException(projection.getId()));
         return new BookSearchResultDTO(
                 projection.getId(),
                 projection.getTitle(),

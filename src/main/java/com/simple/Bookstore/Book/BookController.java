@@ -1,7 +1,7 @@
 package com.simple.Bookstore.Book;
 
 import com.simple.Bookstore.Genre.Genre;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,9 +15,9 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/books")
+@RequiredArgsConstructor
 public class BookController {
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
     @GetMapping
     public ResponseEntity<List<BookSearchResultDTO>> getBooks() {

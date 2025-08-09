@@ -11,7 +11,13 @@ import java.util.Set;
 public interface BookService {
     List<BookSearchResultDTO> findAllBooks();
 
+    List<BookSearchResultDTO> findLatestNBooks(int n);
+
+    List<BookSearchResultDTO> findTopNRatedBooks(int n);
+
     Optional<BookSearchResultDTO> findBookById(Long id);
+
+    List<String> findDistinctAuthors();
 
     Book createBook(BookRequestDTO bookDTO);
 
@@ -20,4 +26,5 @@ public interface BookService {
     void deleteBook(Long id);
 
     Page<BookSearchResultDTO> searchBooks(String query, Set<Genre> genres, Double rating, Pageable pageable);
+
 }
