@@ -5,6 +5,8 @@ import java.util.List;
 public interface ReviewService {
     List<ReviewResponseDTO> findAllReviewsByBookId(Long bookId);
 
+    List<ReviewResponseDTO> findLatestNReviews(int n);
+
     ReviewResponseDTO findReviewById(Long id);
 
     ReviewResponseDTO createReview(Long bookId, ReviewRequestDTO request);

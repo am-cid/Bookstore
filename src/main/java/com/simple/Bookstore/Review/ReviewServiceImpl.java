@@ -27,6 +27,15 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<ReviewResponseDTO> findLatestNReviews(int n) {
+        return reviewRepository
+                .findTopNByOrderByIdDesc(n)
+                .stream()
+                .map(this::reviewToResponseDTO)
+                .toList();
+    }
+
+    @Override
     public ReviewResponseDTO findReviewById(Long id) {
         return reviewRepository
                 .findById(id)
