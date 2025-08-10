@@ -1,5 +1,7 @@
 package com.simple.Bookstore.config;
 
+import com.simple.Bookstore.Auth.AuthFailureHandler;
+import com.simple.Bookstore.Auth.AuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,16 +50,8 @@ public class SecurityConfig {
                         .loginProcessingUrl("/api/v1/auth/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
-                        .successHandler((request, response, authentication) -> {
-                            response.setStatus(HttpStatus.OK.value());
-                            response.getWriter().write("Login successful!");
-                            response.getWriter().flush();
-                        })
-                        .failureHandler((request, response, exception) -> {
-                            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                            response.getWriter().write("Login failed: " + exception.getMessage());
-                            response.getWriter().flush();
-                        })
+                        .successHandler(new AuthSuccessHandler())
+                        .failureHandler(new AuthFailureHandler())
                         .permitAll()
                 )
                 .logout(logout -> logout
