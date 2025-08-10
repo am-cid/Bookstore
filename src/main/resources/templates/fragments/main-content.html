@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!--/*@thymesVar id="bannerBooks" type="java.util.List<com.simple.Bookstore.Book.BookSearchResultDTO>"*/-->
+<div class="flex-column" id="main-content" th:fragment="main-content">
+    <!-- SLIDING BANNER -->
+    <div id="sliding-banner" th:if="${bannerBooks != null and !#lists.isEmpty(bannerBooks)}">
+        <div id="sliding-banner-images">
+            <ul class="flex-row" >
+                <li th:each="book : ${bannerBooks}">
+                    <a th:href="@{/api/v1/books/{id}(id=${book.id})}">
+                        <img th:alt="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"
+                             th:src="${#strings.isEmpty(book.frontImage) ?
+                                    (#strings.isEmpty(book.backImage) ?
+                                        (#strings.isEmpty(book.spineImage) ?
+                                            (#lists.isEmpty(book.contentImages) ?
+                                                'https://placehold.co/700x200?text=' +
+                                                (#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title)
+                                                + '%0A' +
+                                                (#strings.isEmpty(book.author) ? '' : book.author)
+                                                : #lists.first(book.contentImages)
+                                            )
+                                            : book.spineImage
+                                        )
+                                        : book.backImage
+                                    )
+                                    : book.frontImage
+                                }">
+                    </a>
+                    <div style="text-align:center; margin-top:4px; font-size:14px;">
+                        <strong th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></strong>
+                        <div th:if="${!#strings.isEmpty(book.author)}"
+                             th:text="${book.author}"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="sliding-banner-thumbs">
+            <ul class="flex-row" >
+                <li th:each="book : ${bannerBooks}">
+                    <img th:alt="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"
+                         th:src="${#strings.isEmpty(book.frontImage) ?
+                                (#strings.isEmpty(book.backImage) ?
+                                    (#strings.isEmpty(book.spineImage) ?
+                                        (#lists.isEmpty(book.contentImages) ?
+                                            'https://placehold.co/80x20?text=' +
+                                            (#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title)
+                                            : #lists.first(book.contentImages)
+                                        )
+                                        : book.spineImage
+                                    )
+                                    : book.backImage
+                                )
+                                : book.frontImage
+                            }">
+                </li>
+            </ul>
+        </div>
+        <script th:src="@{/js/sliding-banner.js}"></script>
+    </div>
+    <!-- LATEST RELEASES -->
+    <div id="latest-releases">
+
+    </div>
+    <!-- AVAILABLE TITLES -->
+    <div id="available-titles">
+
+    </div>
+</div>
+
+</body>
+</html>
