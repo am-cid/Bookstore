@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: sidebar-left</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
 <!--/*@thymesVar id="authors" type="java.util.List<java.lang.String>"*/-->
 <!--/*@thymesVar id="genres" type="java.util.List<com.simple.Bookstore.Genre.Genre>"*/-->
 <!--/*@thymesVar id="latestReview" type="com.simple.Bookstore.Review.ReviewResponseDTO"*/-->
@@ -5,7 +14,7 @@
 
 <div id="sidebar-left" th:fragment="sidebar-left">
     <script th:src="@{/js/sidebar.js}"></script>
-
+    <!-- AUTHOR LIST -->
     <div class="sidebar-left-div">
         <p class="sidebar-left-title">Authors</p>
         <div class="sidebar-left-list" id="authors-list">
@@ -28,7 +37,7 @@
             </div>
         </div>
     </div>
-
+    <!-- GENRE LIST -->
     <div class="sidebar-left-div">
         <p class="sidebar-left-title">Genres</p>
         <div class="sidebar-left-list" id="genres-list">
@@ -51,7 +60,7 @@
             </div>
         </div>
     </div>
-
+    <!-- LATEST REVIEW -->
     <div class="sidebar-left-div" th:if="${latestReview}">
         <p class="sidebar-left-title">Latest Review</p>
         <div class="sidebar-left-list">
@@ -85,3 +94,6 @@
         </div>
     </div>
 </div>
+
+</body>
+</html>
