@@ -93,7 +93,19 @@ public class BookSeeder implements CommandLineRunner {
         book11.setTitle("Pride and Prejudice");
         book11.setAuthor("Jane Austen");
         book11.setDescription("A romantic classic exploring love, class, and manners.");
-        book11.setGenres(Set.of(Genre.CLASSIC_FICTION, Genre.ROMANCE));
+        book11.setGenres(Set.of(
+                Genre.CLASSIC_FICTION,
+                Genre.ROMANCE,
+                Genre.ACTION_ADVENTURE_FICTION,
+                Genre.MYSTERY,
+                Genre.CHILDRENS_FICTION,
+                Genre.HARD_SCI_FI,
+                Genre.SCIENCE_FICTION,
+                Genre.SATIRE,
+                Genre.CONTEMPORARY_ROMANCE,
+                Genre.DARK_ROMANCE,
+                Genre.BIOGRAPHY
+        ));
 
         Book book12 = new Book();
         book12.setTitle("The Haunting of Hill House");

@@ -25,14 +25,14 @@
                    th:text="${author}"></a>
             </th:block>
             <div th:if="${#lists.size(authors) > 10}">
-                <a class="sidebar-left-list-item float-right show-more-link" href="#authors-list"
+                <a class="sidebar-left-list-item float-right show-more-link more-less-link" href="#authors-list"
                    onclick="toggleVisibility('authors-list', 'show-more-link', 'show-less-link')">
-                    Show more
+                    More...
                 </a>
-                <a class="sidebar-left-list-item float-right show-less-link" href="#authors-list"
+                <a class="sidebar-left-list-item float-right show-less-link more-less-link" href="#authors-list"
                    onclick="toggleVisibility('authors-list', 'show-more-link', 'show-less-link')"
                    style="display: none">
-                    Show less
+                    Less...
                 </a>
             </div>
         </div>
@@ -48,14 +48,14 @@
                    th:text="${genre.displayName}"></a>
             </th:block>
             <div th:if="${#lists.size(genres) > 10}">
-                <a class="sidebar-left-list-item float-right show-more-link" href="#genres-list"
+                <a class="sidebar-left-list-item float-right show-more-link more-less-link" href="#genres-list"
                    onclick="toggleVisibility('genres-list', 'show-more-link', 'show-less-link')">
-                    Show more
+                    More...
                 </a>
-                <a class="sidebar-left-list-item float-right show-less-link" href="#genres-list"
+                <a class="sidebar-left-list-item float-right show-less-link more-less-link" href="#genres-list"
                    onclick="toggleVisibility('genres-list', 'show-more-link', 'show-less-link')"
                    style="display: none">
-                    Show less
+                    Less...
                 </a>
             </div>
         </div>

@@ -29,8 +29,8 @@ public class HomeController {
         // TODO: format below as "2 days ago. <username> just posted <book-title>. <description: 50 char cutoff>"
         // TODO: model.addAttribute("hotNewsBooks", latestBooks.subList(0, Math.min(2, latestBooks.size())));
 
-        model.addAttribute("latestReleases", latestBooks.subList(0, Math.min(4, latestBooks.size())));
-        model.addAttribute("availableTitles", bookService.findRelevantBooks());
+        model.addAttribute("latestUploads", latestBooks.subList(0, Math.min(4, latestBooks.size())));
+        model.addAttribute("availableBooks", bookService.findRelevantBooks());
 
         // left sidebar data
         System.out.println(Arrays.stream(Genre.values()).toList());

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="bookDtoList" type="java.util.List<com.simple.Bookstore.Book.BookSearchResultDTO>"*/-->
+<!--/*@thymesVar id="headingTitle" type="java.lang.String"*/-->
+
+<div class='flex-column' th:fragment="twoColBookList(bookDtoList, headingTitle)">
+    <div class="book-list-content-div">
+        <div th:replace="~{fragments/svg-heading :: svgHeading(text=${headingTitle})}"></div>
+        <div class="book-list-content">
+            <div class="book-list-item" th:each="book : ${bookDtoList}">
+                <div class="book-list-item-image">
+                    <img th:alt="'book-list-item-image-' + ${book.id}"
+                         th:src="${book.frontImage != null ?
+                     book.frontImage : 'https://placehold.co/100x140?text=' +
+                         (#strings.isEmpty(book.title) ?
+                             'Book ' + book.id : book.title + '\n' + book.author
+                 )}" />
+                </div>
+                <div class="book-list-item-details">
+                    <p>
+                        <a th:href="@{/api/v1/books/{id}(id=${book.id})}"
+                           th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></a>
+                        <span th:if="${book.averageRating != null}">
+                            (<span th:text="${book.averageRating}"></span> / 5.0)
+                        </span>
+                    </p>
+
+                    <ul>
+                        <li th:each="genre, iter : ${#lists.toList(book.genres)}"
+                            th:if="${iter.index < 8}"
+                            th:text="${genre.displayName}"></li>
+                        <li class="hidden-genre"
+                            th:each="genre, iter : ${#lists.toList(book.genres)}"
+                            th:if="${iter.index >= 8}"
+                            th:text="${genre.displayName}"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
