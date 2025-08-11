@@ -46,10 +46,12 @@
 
     function moveNext() {
         index++;
+        updateThumbs();
         setTransform(false);
     }
     function movePrev() {
         index--;
+        updateThumbs();
         setTransform(false);
     }
 
@@ -57,17 +59,17 @@
     // I do this because if I don't have a clone, the jump would be too big going from first
     // to last and vice versa.
     slidesWrap.addEventListener('transitionend', () => {
-        // if moved to clone at the end (index === realSlidesCount + 1) -> jump to 1
         if (index === realSlidesCount + 1) {
+            // if moved to clone at the end (index === realSlidesCount + 1) -> jump to 1
             index = 1;
             setTransform(true);
-        }
-        // if moved to clone at the front (index === 0) -> jump to real last (realSlidesCount)
-        if (index === 0) {
+            updateThumbs();
+        } else if (index === 0) {
+            // if moved to clone at the front (index === 0) -> jump to real last (realSlidesCount)
             index = realSlidesCount;
             setTransform(true);
+            updateThumbs();
         }
-        updateThumbs();
     });
 
     // thumb clicks
@@ -75,6 +77,7 @@
         thumb.addEventListener('click', () => {
             index = i + 1; // thumbs are 0..N-1, real slides 1..N
             setTransform(false);
+            updateThumbs();
             resetAuto();
         });
     });
@@ -86,7 +89,7 @@
     }
     window.addEventListener('resize', recalc);
 
-    // Auto slide
+    // auto slide
     function startAuto() {
         stopAuto();
         autoId = setInterval(() => { moveNext(); }, 3000);

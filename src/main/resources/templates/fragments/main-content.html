@@ -33,11 +33,6 @@
                                     : book.frontImage
                                 }">
                     </a>
-                    <div style="text-align:center; margin-top:4px; font-size:14px;">
-                        <strong th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></strong>
-                        <div th:if="${!#strings.isEmpty(book.author)}"
-                             th:text="${book.author}"></div>
-                    </div>
                 </li>
             </ul>
         </div>
