@@ -54,7 +54,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookSearchResultDTO> findRelevantBooks() {
         List<BookRelevanceProjection> books = bookRepo.findBooksForScoring();
-
         // normalize
         double maxRating = books
                 .stream()
@@ -71,12 +70,12 @@ public class BookServiceImpl implements BookService {
                 .mapToLong(BookRelevanceProjection::getId)
                 .max()
                 .orElse(1L);
-
-        return books.stream()
+        return books
+                .stream()
                 .sorted((p1, p2) -> {
                     Double score1 = calculateRelevancy(p1, maxRating, maxReviewCount, maxDateProxy);
                     Double score2 = calculateRelevancy(p2, maxRating, maxReviewCount, maxDateProxy);
-                    return Double.compare(score2, score1); // Sort in descending order
+                    return Double.compare(score2, score1);
                 })
                 .map(this::relevancyProjectionToDTO)
                 .toList();
