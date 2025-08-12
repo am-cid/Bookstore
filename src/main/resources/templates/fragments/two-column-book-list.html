@@ -23,13 +23,11 @@
                  )}" />
                 </div>
                 <div class="book-list-item-details">
-                    <p>
-                        <a th:href="@{/api/v1/books/{id}(id=${book.id})}"
-                           th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></a>
-                        <span th:if="${book.averageRating != null}">
-                            (<span th:text="${book.averageRating}"></span> / 5.0)
-                        </span>
-                    </p>
+                    <a th:href="@{/api/v1/books/{id}(id=${book.id})}"
+                       th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></a>
+                    <b class="rating-score" th:if="${book.averageRating != null}">
+                        <span th:text="${book.averageRating}"></span> / 5
+                    </b>
 
                     <ul>
                         <li th:each="genre, iter : ${#lists.toList(book.genres)}"

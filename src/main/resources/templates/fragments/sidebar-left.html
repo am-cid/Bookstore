@@ -67,11 +67,11 @@
             <a class="sidebar-left-list-item"
                th:href="@{/api/v1/books/{id}(id=${latestReview.bookId()})}"
                th:text="${latestReview.bookTitle()}"></a>
-            <div class="flex-row space-between">
-                <p class="sidebar-left-list-item">
-                    <span th:text="${latestReview.rating()}"></span>/5.0
+            <div class="flex-row space-between sidebar-left-list-item">
+                <p class="rating-score">
+                    <b><span th:text="${latestReview.rating()}"></span> / 5</b>
                 </p>
-                <p class="sidebar-left-list-item" th:text="${latestReviewDate}"></p>
+                <p th:text="${latestReviewDate}"></p>
             </div>
             <div class="sidebar-left-list-item"
                  th:if="${latestReview.content() != null && !latestReview.content().isEmpty()}">
