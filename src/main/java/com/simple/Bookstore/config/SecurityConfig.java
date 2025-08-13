@@ -3,6 +3,7 @@ package com.simple.Bookstore.config;
 import com.simple.Bookstore.Auth.AuthFailureHandler;
 import com.simple.Bookstore.Auth.AuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,8 +19,20 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
 
+    @Value("${spring.profiles.active:dev}")
+    private String activeProfile;
+    @Value("${security.remember-me.key:}")
+    private String rememberMeKey;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        if (activeProfile.equals("prod") && rememberMeKey.isBlank()) {
+            throw new IllegalStateException(
+                    "You are in production and need to set remember-me key in " +
+                            "application-prod.properties. It is not set by default"
+            );
+        }
+
         http
                 .csrf((csrf) -> csrf
                         .ignoringRequestMatchers("/api/v1/**")
@@ -57,6 +70,9 @@ public class SecurityConfig {
                         .successHandler(new AuthSuccessHandler())
                         .failureHandler(new AuthFailureHandler())
                         .permitAll()
+                )
+                .rememberMe(remember -> remember
+                        .key(rememberMeKey)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/v1/auth/logout")

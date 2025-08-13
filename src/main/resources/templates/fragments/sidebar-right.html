@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: sidebar-right</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!--/*@thymesVar id="authors" type="java.util.List<java.lang.String>"*/-->
+<!--/*@thymesVar id="genres" type="java.util.List<com.simple.Bookstore.Genre.Genre>"*/-->
+<!--/*@thymesVar id="latestReview" type="com.simple.Bookstore.Review.ReviewResponseDTO"*/-->
+<!--/*@thymesVar id="latestReviewDate" type="String"*/-->
+
+<div id="sidebar-right" th:fragment="sidebar-right">
+    <div id="theme-changer"></div>
+    <div id="login-div">
+        <div id="login-form-heading">
+            <div th:replace="~{fragments/svg-heading-surrounded-by-circles :: svgHeading('LOG IN')}"></div>
+        </div>
+        <div id="login-form">
+            <form method="post" th:action="@{/api/v1/auth/login}">
+                <div>
+                    <label for="username">Username</label><br>
+                    <input id="username" name="username" required type="text">
+                </div>
+                <div>
+                    <label for="password">Password</label><br>
+                    <input id="password" name="password" required type="password">
+                </div>
+                <div>
+                    <input id="remember-me" name="remember-me" type="checkbox">
+                    <label for="remember-me">Remember me</label>
+                </div>
+                <div>
+                    <button type="submit">Log In</button>
+                </div>
+                <div>
+                    <a th:href="@{/forgot-password}">Forgot password?</a><br>
+                    <a th:href="@{/register}">Register account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- idk what to do here yet.
+    magagamer.com put weekly top rated here
+    but i kinda want a max 10 list of themes (with live preview??) to be put here -->
+</div>
+
+</body>
+</html>

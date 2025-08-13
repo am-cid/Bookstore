@@ -323,6 +323,73 @@ body {
     display: none !important;
 }
 
+#sidebar-right {
+    display: flex;
+    flex-direction: column;
+    max-width: 175px;
+    min-width: 175px;
+}
+
+#login-form-heading {
+    display: flex;
+    flex-direction: column;
+}
+
+#login-form-heading svg {
+    font-size: 26px;
+    padding: 0 0 0 43px;
+}
+
+#login-form-heading circle {
+    fill: var(--color-07, #FFF2D3);
+}
+
+#login-form-heading .circle-outline {
+    fill: var(--color-02, #F61590);
+}
+
+#login-form-heading .svg-text-heading .text-outline-outer {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-02, #F61590);
+    stroke-linejoin: round;
+    stroke-width: 12;
+}
+#login-form-heading .svg-text-heading .text-outline-middle {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-07, #FFF2D3);
+    stroke-linejoin: round;
+    stroke-width: 8;
+}
+#login-form-heading .svg-text-heading .text-outline-inner {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-02, #F61590);
+    stroke-linejoin: round;
+    stroke-width: 4;
+}
+#login-form-heading .svg-text-heading .text-fill {
+    fill: var(--color-07, #FFF2D3);
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--color-06, #FFE2E7);
+    border: 2px solid var(--color-02, #F61590);
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: -5px;
+}
+
+#login-form input {
+    max-width: 140px;
+    margin-bottom: 10px;
+}
+
 #footer {
     display: flex;
     flex-direction: row;

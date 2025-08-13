@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div style="z-index: 9999; display: inline-block; line-height: 1;"
+     th:fragment="svgHeading(text)">
+    <svg class="svg-text-heading" preserveAspectRatio="xMinYMid meet"
+         style="overflow:visible; height:1em;"
+         viewBox="0 0 1 35"
+         xmlns="http://www.w3.org/2000/svg">
+        <!-- circle with gradient colors-->
+        <circle class="circle-outline" cx="0"  cy="15" r="10" />
+        <circle class="circle-outline" cx="121" cy="15" r="10" />
+        <circle cx="0"  cy="15" r="8" />
+        <circle cx="121" cy="15" r="8" />
+        <!-- outer outline -->
+        <text class="text-outline-outer"
+              th:text="${text}"
+              x="16"
+              y="0">
+        </text>
+        <!-- middle outline -->
+        <text class="text-outline-middle"
+              th:text="${text}"
+              x="16"
+              y="0">
+        </text>
+        <!-- inner outline -->
+        <text class="text-outline-inner"
+              th:text="${text}"
+              x="16"
+              y="0">
+        </text>
+        <!-- fill -->
+        <text class="text-fill"
+              th:text="${text}"
+              x="16"
+              y="0">
+        </text>
+    </svg>
+</div>
+</body>
+</html>
