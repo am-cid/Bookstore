@@ -48,14 +48,16 @@ public class ThemeSeeder implements CommandLineRunner {
             publishedTheme.setName(pubName);
             publishedTheme.setUser(user);
             publishedTheme.setPublished(true);
-            publishedTheme.setBase00("1d1f21");
-            publishedTheme.setBase01("282a2e");
-            publishedTheme.setBase02("373b41");
-            publishedTheme.setBase03("969896");
-            publishedTheme.setBase04("b4b7b4");
-            publishedTheme.setBase05("c5c8c6");
-            publishedTheme.setBase06("e0e0e0");
-            publishedTheme.setBase07("ffffff");
+            // THEME: cupcake by chriskempson
+            // https://github.com/chriskempson/base16-default-schemes/blob/master/cupcake.yaml
+            publishedTheme.setBase00("585062");
+            publishedTheme.setBase01("72677E");
+            publishedTheme.setBase02("8b8198");
+            publishedTheme.setBase03("a59daf");
+            publishedTheme.setBase04("bfb9c6");
+            publishedTheme.setBase05("d8d5dd");
+            publishedTheme.setBase06("f2f1f4");
+            publishedTheme.setBase07("fbf1f2");
             themeRepository.save(publishedTheme);
             log.info("Created published theme for {}: {}", username, pubName);
         }
@@ -67,15 +69,16 @@ public class ThemeSeeder implements CommandLineRunner {
             unpublishedTheme.setName(unpubName);
             unpublishedTheme.setUser(user);
             unpublishedTheme.setPublished(false);
-            unpublishedTheme.setBase00("2e2e2e");
-            unpublishedTheme.setBase01("3e3e3e");
-            unpublishedTheme.setBase02("4e4e4e");
-            unpublishedTheme.setBase03("5e5e5e");
-            unpublishedTheme.setBase04("6e6e6e");
-            unpublishedTheme.setBase05("7e7e7e");
-            unpublishedTheme.setBase06("8e8e8e");
-            unpublishedTheme.setBase07("9e9e9e");
-
+            // THEME: mangagamer theme by am-cid
+            // based off the colors of the website https://www.mangagamer.com
+            unpublishedTheme.setBase00("A40E60");
+            unpublishedTheme.setBase01("FF0000");
+            unpublishedTheme.setBase02("F61590");
+            unpublishedTheme.setBase03("F88B9E");
+            unpublishedTheme.setBase04("FFD376");
+            unpublishedTheme.setBase05("AAFFB1");
+            unpublishedTheme.setBase06("FFE2E7");
+            unpublishedTheme.setBase07("FFF2D3");
             themeRepository.save(unpublishedTheme);
             log.info("Created unpublished theme for {}: {}", username, unpubName);
         }
