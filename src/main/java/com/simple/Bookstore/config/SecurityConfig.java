@@ -42,6 +42,10 @@ public class SecurityConfig {
                                 "/api/v1/comments/**",
                                 "/api/v1/reviews/**"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/", "/static/**", "/css/**", "/js/**", "/img/**",
+                                "/fonts/**"
+                        ).permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         // require authentication for everything else
                         .anyRequest().authenticated()
