@@ -30,10 +30,14 @@
                     </b>
 
                     <ul>
-                        <li th:each="genre, iter : ${#lists.toList(book.genres)}"
+                        <li class="genre-oval"
+                            th:classappend="${genre.getStyleClass()}"
+                            th:each="genre, iter : ${#lists.toList(book.genres)}"
                             th:if="${iter.index < 8}"
-                            th:text="${genre.displayName}"></li>
-                        <li class="hidden-genre"
+                            th:text="${genre.displayName}">
+                        </li>
+                        <li class="genre-oval hidden-genre"
+                            th:classappend="${genre.getStyleClass()}"
                             th:each="genre, iter : ${#lists.toList(book.genres)}"
                             th:if="${iter.index >= 8}"
                             th:text="${genre.displayName}"></li>

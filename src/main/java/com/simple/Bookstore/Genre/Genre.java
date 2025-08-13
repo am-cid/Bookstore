@@ -1,5 +1,6 @@
 package com.simple.Bookstore.Genre;
 
+import com.simple.Bookstore.Exceptions.UnreachableException;
 import lombok.Getter;
 
 /**
@@ -139,9 +140,43 @@ public enum Genre {
     WOMENS_FICTION("Women’s fiction"),
     YOUNG_ADULT("Young adult");
 
+
+    // for computing styling class
+    private final static int length = values().length;
+    private static final int numStylingClasses = 3;
+    private static final int[] groupEnds;
+
+    // calculate distribution of remainders:
+    // e.g. 95 genres split into 3 groups will have a remainder of 2. This 2
+    // will be split evenly across the first two groups. The distribution will
+    // always be 1.
+    static {
+        // e.g. 95 / 3 = 31 genres for each class
+        int remainder = length % numStylingClasses;
+        // e.g. 95 % 3 = 2 genres to be distributed
+        int baseGroupSize = length / numStylingClasses;
+        groupEnds = new int[numStylingClasses];
+
+        int currentEnd = 0;
+        for (int i = 0; i < numStylingClasses; i++) {
+            currentEnd += baseGroupSize + (i < remainder ? 1 : 0);
+            groupEnds[i] = currentEnd;
+        }
+    }
+
     private final String displayName;
 
     Genre(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getStyleClass() throws UnreachableException {
+        int ordinal = ordinal();
+        for (int i = 0; i < numStylingClasses; i++) {
+            if (ordinal < groupEnds[i]) {
+                return String.format("genre-color-style-%02d", i);
+            }
+        }
+        throw new UnreachableException("Genre.getStyleClass()");
     }
 }

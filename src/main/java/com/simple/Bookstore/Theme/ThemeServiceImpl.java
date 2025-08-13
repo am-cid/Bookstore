@@ -185,7 +185,7 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public String getThemeAsCss(Long id, int steps) {
         Theme theme = themeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Theme not found: " + id));
+                .orElseThrow(() -> new ThemeNotFoundException(id));
         StringBuilder css = new StringBuilder(":root {\n");
         // base colors from base08 config
         for (int i = 0; i <= 7; i++) {

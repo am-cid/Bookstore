@@ -6,6 +6,8 @@
             toggleLi.textContent = "More...";
             toggleLi.classList.add("toggle-genre");
             toggleLi.classList.add("more-less-link");
+            toggleLi.classList.add("genre-oval");
+            toggleLi.classList.add("genre-color-style-00");
             ul.appendChild(toggleLi);
             toggleLi.addEventListener("click", () => {
                 const isExpanded = toggleLi.textContent === "Less...";
