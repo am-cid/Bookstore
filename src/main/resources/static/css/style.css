@@ -176,7 +176,7 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    border: 2px solid var(--color-04, #00FFFF);
+    border: 2px solid aqua;
     pointer-events: none;
 }
 
