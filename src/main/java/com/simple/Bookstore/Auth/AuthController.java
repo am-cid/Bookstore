@@ -1,7 +1,7 @@
 package com.simple.Bookstore.Auth;
 
+import com.simple.Bookstore.Exceptions.UsernameAlreadyTakenException;
 import com.simple.Bookstore.Role.Role;
-import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,18 +22,16 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequestDTO request) {
-        // Basic validation (you'd want more robust validation)
-        if (userService.findByUsername(request.username()).isPresent()) {
-            return new ResponseEntity<>("Username already taken!", HttpStatus.BAD_REQUEST);
+        try {
+            userService.createUser(request, Role.USER);
+            return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
+        } catch (
+                UsernameAlreadyTakenException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (
+                Exception e) {
+            return new ResponseEntity<>("Something went wrong!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        User newUser = new User();
-        newUser.setUsername(request.username());
-        newUser.setPassword(request.password()); // Password will be encoded by userService
-        newUser.setRole(Role.USER); // Default role for new registrations
-        newUser.setDisplayName(request.displayName() != null ? request.displayName() : request.username());
-
-        userService.createUser(newUser);
-        return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
     }
 }

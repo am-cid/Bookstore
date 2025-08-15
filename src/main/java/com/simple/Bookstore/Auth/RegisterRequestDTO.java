@@ -16,6 +16,8 @@ public record RegisterRequestDTO(
                 message = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character")
         String password,
 
-        String displayName
+        String displayName,
+
+        boolean isPublic
 ) {
 }
