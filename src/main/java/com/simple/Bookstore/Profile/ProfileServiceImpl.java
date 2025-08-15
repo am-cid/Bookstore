@@ -20,7 +20,7 @@ public class ProfileServiceImpl implements ProfileService {
                     .orElseThrow(() -> new UserNotFoundException(username));
         } else {
             return profileRepository
-                    .findByUserUsernameAndPublicIsTrue(username)
+                    .findByUserUsernameAndIsPublicIsTrue(username)
                     .map(ProfileDtoConverter::profileToResponseDTO)
                     .orElseThrow(() -> new UserNotFoundException(username));
         }

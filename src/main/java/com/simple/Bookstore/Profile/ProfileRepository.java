@@ -16,9 +16,9 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     Optional<Profile> findByUserUsername(String username);
 
-    Optional<Profile> findByIdAndPublicIsTrue(Long id);
+    Optional<Profile> findByIdAndIsPublicIsTrue(Long id);
 
-    Optional<Profile> findByUserUsernameAndPublicIsTrue(String username);
+    Optional<Profile> findByUserUsernameAndIsPublicIsTrue(String username);
 
     @Query(value = """
             SELECT p from Profile p
