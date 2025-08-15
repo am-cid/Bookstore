@@ -1,6 +1,7 @@
 package com.simple.Bookstore.Book;
 
 import com.simple.Bookstore.Genre.Genre;
+import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Review.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -42,6 +43,9 @@ public class Book {
     @CollectionTable(name = "book_content_images", joinColumns = @JoinColumn(name = "book_id"))
     @Column(name = "image_url")
     private Set<String> contentImages = new HashSet<>();
+
+    @ManyToMany(mappedBy = "savedBooks")
+    private Set<Profile> savedByProfiles = new HashSet<>();
 
     public void extendGenres(Set<Genre> newGenres) {
         this.genres.addAll(newGenres);

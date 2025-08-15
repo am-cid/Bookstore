@@ -57,7 +57,7 @@ public class ThemeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTheme(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        themeService.removeTheme(id, user);
+        themeService.deleteTheme(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -75,21 +75,26 @@ public class ThemeController {
             @PathVariable Long id,
             @AuthenticationPrincipal User user
     ) {
-        themeService.removeThemeForUser(id, user);
+        themeService.deleteThemeFromSavedThemes(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "/{id}/css", produces = "text/css")
     public String getThemeCss(
             @PathVariable Long id,
-            @RequestParam(defaultValue = "25") int steps) {
-        return themeService.getThemeAsCss(id, steps);
+            @AuthenticationPrincipal User user,
+            @RequestParam(defaultValue = "25") int steps
+    ) {
+        return themeService.getThemeAsCss(id, user, steps);
     }
 
     @PostMapping("/{id}/css")
-    public ResponseEntity<String> updateCssTheme(@PathVariable("id") Long id) {
+    public ResponseEntity<String> updateCssTheme(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal User user
+    ) {
         try {
-            themeService.updateCssTheme(id);
+            themeService.updateCssTheme(id, user);
             return ResponseEntity.ok("Successfully updated css theme");
         } catch (
                 IOException e

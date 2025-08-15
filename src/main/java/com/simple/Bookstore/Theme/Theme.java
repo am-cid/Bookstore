@@ -1,10 +1,11 @@
 package com.simple.Bookstore.Theme;
 
-import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.Profile.Profile;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -18,11 +19,11 @@ public class Theme {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "profile_id", nullable = false)
+    private Profile profile;
 
-    @ManyToMany(mappedBy = "themesInUse")
-    private Set<User> usersUsing;
+    @ManyToMany(mappedBy = "savedThemes")
+    private Set<Profile> profilesUsing = new HashSet<>();
 
     @Column(nullable = false)
     private boolean published = false;

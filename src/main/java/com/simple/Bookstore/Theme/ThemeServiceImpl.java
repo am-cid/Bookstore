@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
 import com.simple.Bookstore.Exceptions.UnauthorizedException;
+import com.simple.Bookstore.Profile.Profile;
+import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserRepository;
+import com.simple.Bookstore.utils.ThemeDtoConverter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,13 +32,16 @@ public class ThemeServiceImpl implements ThemeService {
     private final ThemeRepository themeRepository;
     private final UserRepository userRepository;
     private final ObjectMapper yamlMapper;
+    private final ProfileRepository profileRepository;
 
     public ThemeServiceImpl(
             ThemeRepository themeRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            ProfileRepository profileRepository
     ) {
         this.themeRepository = themeRepository;
         this.userRepository = userRepository;
+        this.profileRepository = profileRepository;
         this.yamlMapper = new ObjectMapper(new YAMLFactory());
     }
 
@@ -44,20 +50,20 @@ public class ThemeServiceImpl implements ThemeService {
         if (user == null) {
             return themeRepository
                     .findByPublishedIsTrue(pageable)
-                    .map(this::themeToResponseDTO);
+                    .map(ThemeDtoConverter::themeToResponseDTO);
         } else {
             return themeRepository
                     .findByPublishedOrOwnedUnpublishedThemes(user, pageable)
-                    .map(this::themeToResponseDTO);
+                    .map(ThemeDtoConverter::themeToResponseDTO);
         }
     }
 
     @Override
     public List<ThemeResponseDTO> getThemesByUser(User user) {
         return themeRepository
-                .findByUser(user)
+                .findByProfileUser(user)
                 .stream()
-                .map(this::themeToResponseDTO)
+                .map(ThemeDtoConverter::themeToResponseDTO)
                 .toList();
     }
 
@@ -65,15 +71,17 @@ public class ThemeServiceImpl implements ThemeService {
     public ThemeResponseDTO getPublishedThemeById(Long id) throws ThemeNotFoundException {
         return themeRepository
                 .findByIdAndPublishedIsTrue(id)
-                .map(this::themeToResponseDTO)
+                .map(ThemeDtoConverter::themeToResponseDTO)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
     }
 
     @Override
     public ThemeResponseDTO createTheme(User user, ThemeRequestDTO request) {
-        Theme theme = requestDtoToTheme(user, request);
+        Profile profile = user.getProfile();
+        Theme theme = ThemeDtoConverter.requestDtoToTheme(profile, request);
+        profileRepository.save(profile);
         Theme savedTheme = themeRepository.save(theme);
-        return themeToResponseDTO(savedTheme);
+        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
     }
 
     @Override
@@ -81,7 +89,7 @@ public class ThemeServiceImpl implements ThemeService {
         Theme theme = themeRepository
                 .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
-        if (!theme.getUser().equals(user)) {
+        if (!user.getId().equals(theme.getProfile().getUser().getId())) {
             throw new UnauthorizedException("You are not authorized to edit this theme");
         }
         theme.setName(request.name());
@@ -94,17 +102,18 @@ public class ThemeServiceImpl implements ThemeService {
         theme.setBase06(request.base06());
         theme.setBase07(request.base07());
         Theme savedTheme = themeRepository.save(theme);
-        return themeToResponseDTO(savedTheme);
+        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
     }
 
     @Override
-    public void removeTheme(Long id, User user) {
+    public void deleteTheme(Long id, User user) {
         Theme theme = themeRepository
                 .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
-        if (!user.getId().equals(theme.getUser().getId())) {
+        if (!user.getId().equals(theme.getProfile().getUser().getId())) {
             throw new IllegalStateException("You are not user of theme " + theme.getName());
         }
+        theme.getProfilesUsing().forEach(profile -> profile.getSavedThemes().remove(theme));
         themeRepository.delete(theme);
     }
 
@@ -114,12 +123,12 @@ public class ThemeServiceImpl implements ThemeService {
         Theme theme = themeRepository
                 .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
-        if (!user.getId().equals(theme.getUser().getId())) {
+        if (!user.getId().equals(theme.getProfile().getUser().getId())) {
             throw new IllegalStateException("You are not user of theme " + theme.getName());
         }
         theme.setPublished(true);
         Theme savedTheme = themeRepository.save(theme);
-        return themeToResponseDTO(savedTheme);
+        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
     }
 
     @Override
@@ -128,14 +137,14 @@ public class ThemeServiceImpl implements ThemeService {
         Theme theme = themeRepository
                 .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
-        if (!user.getId().equals(theme.getUser().getId())) {
+        if (!user.getId().equals(theme.getProfile().getUser().getId())) {
             throw new IllegalStateException("You are not user of theme " + theme.getName());
         }
         theme.setPublished(false);
-        theme.getUsersUsing().forEach(userUsing -> userUsing.getThemesInUse().remove(theme));
-        theme.getUsersUsing().clear();
+        theme.getProfilesUsing().forEach(userUsing -> userUsing.getSavedThemes().remove(theme));
+        theme.getProfilesUsing().clear();
         Theme savedTheme = themeRepository.save(theme);
-        return themeToResponseDTO(savedTheme);
+        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
     }
 
     @Override
@@ -143,22 +152,30 @@ public class ThemeServiceImpl implements ThemeService {
     public ThemeResponseDTO saveThemeForUser(Long id, User user) {
         Theme theme = themeRepository
                 .findByIdAndPublishedIsTrue(id)
-                .orElseThrow(ThemeNotFoundException::new);
-        user.getThemesInUse().add(theme);
-        theme.getUsersUsing().add(user);
-        userRepository.save(user);
+                .orElseThrow(() -> new ThemeNotFoundException(id));
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepository.findById(user.getId()).get();
+        managedUser.getProfile().getSavedThemes().add(theme);
+        theme.getProfilesUsing().add(user.getProfile());
+        userRepository.save(managedUser);
         Theme savedTheme = themeRepository.save(theme);
-        return themeToResponseDTO(savedTheme);
+        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
     }
 
     @Override
     @Transactional
-    public void removeThemeForUser(Long id, User user) {
+    public void deleteThemeFromSavedThemes(Long id, User user) {
         Theme theme = themeRepository.findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
-        user.getThemesInUse().remove(theme);
-        theme.getUsersUsing().remove(user);
-        userRepository.save(user);
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepository.findById(user.getId()).get();
+        managedUser.getProfile().getSavedThemes().remove(theme);
+        theme.getProfilesUsing().remove(user.getProfile());
+        userRepository.save(managedUser);
         themeRepository.save(theme);
     }
 
@@ -171,7 +188,7 @@ public class ThemeServiceImpl implements ThemeService {
     public ThemeResponseDTO findThemeById(Long id) {
         return themeRepository
                 .findById(id)
-                .map(this::themeToResponseDTO)
+                .map(ThemeDtoConverter::themeToResponseDTO)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
     }
 
@@ -179,13 +196,17 @@ public class ThemeServiceImpl implements ThemeService {
     public Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable) {
         return themeRepository
                 .searchThemes(query, userId, pageable)
-                .map(this::projectionToResponseDTO);
+                .map(ThemeDtoConverter::projectionToResponseDTO);
     }
 
     @Override
-    public String getThemeAsCss(Long id, int steps) {
+    public String getThemeAsCss(Long id, User user, int steps) {
         Theme theme = themeRepository.findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
+        if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
+            throw new ThemeNotFoundException(id);
+        }
+
         StringBuilder css = new StringBuilder(":root {\n");
         // base colors from base08 config
         for (int i = 0; i <= 7; i++) {
@@ -217,68 +238,21 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public void updateCssTheme(Long id) throws IOException {
-        String cssContent = getThemeAsCss(id, 25);
+    public ThemeResponseDTO updateCssTheme(Long id, User user) throws IOException, ThemeNotFoundException {
+        String cssContent = getThemeAsCss(id, user, 25);
         String filename = "generated-variables.css";
         Path path = Paths.get("src/main/resources/static/css/" + filename);
         if (!Files.exists(path.getParent())) {
             Files.createDirectories(path.getParent());
         }
         Files.write(path, cssContent.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        return themeRepository.findById(id)
+                .map(ThemeDtoConverter::themeToResponseDTO)
+                .orElseThrow(() -> new ThemeNotFoundException(id));
+
     }
 
     // HELPERS
-    private ThemeResponseDTO themeToResponseDTO(Theme theme) {
-        return new ThemeResponseDTO(
-                theme.getId(),
-                theme.getName(),
-                theme.getUser().getId(),
-                theme.getUser().getUsername(),
-                theme.getUser().getDisplayName(),
-                theme.getBase00(),
-                theme.getBase01(),
-                theme.getBase02(),
-                theme.getBase03(),
-                theme.getBase04(),
-                theme.getBase05(),
-                theme.getBase06(),
-                theme.getBase07()
-        );
-    }
-
-    private Theme requestDtoToTheme(User user, ThemeRequestDTO request) {
-        Theme theme = new Theme();
-        theme.setUser(user);
-        theme.setName(request.name());
-        theme.setPublished(request.published());
-        theme.setBase00(request.base00());
-        theme.setBase01(request.base01());
-        theme.setBase02(request.base02());
-        theme.setBase03(request.base03());
-        theme.setBase04(request.base04());
-        theme.setBase05(request.base05());
-        theme.setBase06(request.base06());
-        theme.setBase07(request.base07());
-        return theme;
-    }
-
-    private ThemeResponseDTO projectionToResponseDTO(ThemeProjection projection) {
-        return new ThemeResponseDTO(
-                projection.getId(),
-                projection.getName(),
-                projection.getUserId(),
-                projection.getUsername(),
-                projection.getUserDisplayName(),
-                projection.getBase00(),
-                projection.getBase01(),
-                projection.getBase02(),
-                projection.getBase03(),
-                projection.getBase04(),
-                projection.getBase05(),
-                projection.getBase06(),
-                projection.getBase07()
-        );
-    }
 
     /**
      * interpolates between two colors (inclusive)

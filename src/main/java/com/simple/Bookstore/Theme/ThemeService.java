@@ -1,5 +1,6 @@
 package com.simple.Bookstore.Theme;
 
+import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
 import com.simple.Bookstore.User.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,9 +26,9 @@ public interface ThemeService {
 
     ThemeResponseDTO saveThemeForUser(Long id, User user);
 
-    void removeTheme(Long id, User user);
+    void deleteTheme(Long id, User user);
 
-    void removeThemeForUser(Long id, User user);
+    void deleteThemeFromSavedThemes(Long id, User user);
 
     Theme loadThemeFromYaml(File yamlFile) throws IOException;
 
@@ -35,7 +36,7 @@ public interface ThemeService {
 
     Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable);
 
-    String getThemeAsCss(Long id, int steps);
+    String getThemeAsCss(Long id, User user, int steps);
 
-    void updateCssTheme(Long id) throws IOException;
+    ThemeResponseDTO updateCssTheme(Long id, User user) throws IOException, ThemeNotFoundException;
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface ThemeRepository extends JpaRepository<Theme, Long> {
-    List<Theme> findByUser(User user);
+    List<Theme> findByProfileUser(User user);
 
     Page<Theme> findByPublishedIsTrue(Pageable pageable);
 
@@ -24,7 +24,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
     @Query(value = """
             SELECT t from Theme t
             WHERE t.published = true
-                or (t.published = false AND t.user = :user)
+                or (t.published = false AND t.profile.user = :user)
             """)
     Page<Theme> findByPublishedOrOwnedUnpublishedThemes(@Param("user") User user, Pageable pageable);
 

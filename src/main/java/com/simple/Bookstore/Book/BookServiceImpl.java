@@ -2,7 +2,7 @@ package com.simple.Bookstore.Book;
 
 import com.simple.Bookstore.Exceptions.BookNotFoundException;
 import com.simple.Bookstore.Genre.Genre;
-import com.simple.Bookstore.Review.Review;
+import com.simple.Bookstore.utils.BookDtoConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -10,7 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookSearchResultDTO> findAllBooks() {
         return bookRepo.findAll().stream()
-                .map(this::bookToSearchResultDTO)
+                .map(BookDtoConverter::bookToSearchResultDTO)
                 .toList();
     }
 
@@ -33,7 +36,7 @@ public class BookServiceImpl implements BookService {
         return bookRepo
                 .findTopNRatedBooks(n)
                 .stream()
-                .map(this::searchResultProjectionToDTO)
+                .map(projection -> BookDtoConverter.searchResultProjectionToDTO(projection, bookRepo))
                 .toList();
     }
 
@@ -42,7 +45,7 @@ public class BookServiceImpl implements BookService {
         return bookRepo
                 .findLatestNBooks(n)
                 .stream()
-                .map(this::searchResultProjectionToDTO)
+                .map(projection -> BookDtoConverter.searchResultProjectionToDTO(projection, bookRepo))
                 .toList();
     }
 
@@ -77,19 +80,19 @@ public class BookServiceImpl implements BookService {
                     Double score2 = calculateRelevancy(p2, maxRating, maxReviewCount, maxDateProxy);
                     return Double.compare(score2, score1);
                 })
-                .map(this::relevancyProjectionToDTO)
+                .map(projection -> BookDtoConverter.relevancyProjectionToDTO(projection, bookRepo))
                 .toList();
     }
 
     @Override
     public Optional<BookSearchResultDTO> findBookById(Long id) {
-        return bookRepo.findById(id).map(this::bookToSearchResultDTO);
+        return bookRepo.findById(id).map(BookDtoConverter::bookToSearchResultDTO);
     }
 
     @Override
     @Transactional
     public Book createBook(BookRequestDTO bookDTO) {
-        return bookRepo.save(createDtoToBook(bookDTO));
+        return bookRepo.save(BookDtoConverter.createDtoToBook(bookDTO));
     }
 
     @Override
@@ -106,10 +109,10 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void deleteBook(Long id) {
-        if (!bookRepo.existsById(id)) {
-            throw new BookNotFoundException(id);
-        }
-        bookRepo.deleteById(id);
+        Book book = bookRepo.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+        book.getSavedByProfiles().forEach(profile -> profile.getSavedBooks().remove(book));
+        bookRepo.delete(book);
     }
 
     @Override
@@ -122,7 +125,7 @@ public class BookServiceImpl implements BookService {
             List<BookSearchResultDTO> filteredDTOs = bookRepo
                     .findAll()
                     .stream()
-                    .map(this::bookToSearchResultDTO)
+                    .map(BookDtoConverter::bookToSearchResultDTO)
                     .filter(dto -> dto
                             .genres()
                             .stream()
@@ -135,7 +138,7 @@ public class BookServiceImpl implements BookService {
             List<BookSearchResultDTO> filteredDTOs = bookRepo
                     .searchBooks(query, rating, pageable)
                     .stream()
-                    .map(this::searchResultProjectionToDTO)
+                    .map(projection -> BookDtoConverter.searchResultProjectionToDTO(projection, bookRepo))
                     .filter(dto -> genres == null || dto.genres().stream()
                             .anyMatch(genres::contains))
                     .toList();
@@ -160,19 +163,6 @@ public class BookServiceImpl implements BookService {
                 (normalizedDate * DATE_WEIGHT);
     }
 
-    private Book createDtoToBook(BookRequestDTO dto) {
-        Book book = new Book();
-        book.setTitle(dto.title());
-        book.setAuthor(dto.author());
-        book.setDescription(dto.description());
-        book.setGenres(dto.genres());
-        book.setFrontImage(dto.frontImage());
-        book.setBackImage(dto.backImage());
-        book.setSpineImage(dto.spineImage());
-        book.setContentImages(dto.contentImages());
-        return book;
-    }
-
     private void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO newBook) {
         oldBook.setTitle(newBook.title() != null ? newBook.title() : oldBook.getTitle());
         oldBook.setAuthor(newBook.author() != null ? newBook.author() : oldBook.getAuthor());
@@ -182,69 +172,5 @@ public class BookServiceImpl implements BookService {
         oldBook.setBackImage(newBook.backImage() != null ? newBook.backImage() : oldBook.getBackImage());
         oldBook.setSpineImage(newBook.spineImage() != null ? newBook.spineImage() : oldBook.getSpineImage());
         oldBook.extendContentImages(newBook.contentImages());
-    }
-
-    /**
-     * Helper method to perform the mapping from projection to DTO
-     */
-    private BookSearchResultDTO searchResultProjectionToDTO(BookSearchResultProjection projection) {
-        Book book = bookRepo
-                .findById(projection.getId())
-                .orElseThrow(() -> new BookNotFoundException(projection.getId()));
-        return new BookSearchResultDTO(
-                projection.getId(),
-                projection.getTitle(),
-                projection.getAuthor(),
-                projection.getDescription(),
-                book.getGenres(),
-                projection.getAverageRating(),
-                projection.getFrontImage(),
-                projection.getBackImage(),
-                projection.getSpineImage(),
-                projection.getContentImages()
-        );
-    }
-
-    /**
-     * Converts a Book entity to a BookSearchResultDTO.
-     *
-     * @param book The Book entity to convert.
-     * @return The corresponding BookSearchResultDTO.
-     */
-    private BookSearchResultDTO bookToSearchResultDTO(Book book) {
-        OptionalDouble averageRating = book.getReviews().stream()
-                .mapToDouble(Review::getRating)
-                .average();
-        Double avgRating = averageRating.isPresent() ? averageRating.getAsDouble() : null;
-        return new BookSearchResultDTO(
-                book.getId(),
-                book.getTitle(),
-                book.getAuthor(),
-                book.getDescription(),
-                book.getGenres(),
-                avgRating,
-                book.getFrontImage(),
-                book.getBackImage(),
-                book.getSpineImage(),
-                book.getContentImages()
-        );
-    }
-
-    private BookSearchResultDTO relevancyProjectionToDTO(BookRelevanceProjection projection) {
-        Book book = bookRepo
-                .findById(projection.getId())
-                .orElseThrow(() -> new BookNotFoundException(projection.getId()));
-        return new BookSearchResultDTO(
-                projection.getId(),
-                projection.getTitle(),
-                projection.getAuthor(),
-                projection.getDescription(),
-                book.getGenres(),
-                projection.getAverageRating(),
-                projection.getFrontImage(),
-                projection.getBackImage(),
-                projection.getSpineImage(),
-                book.getContentImages()
-        );
     }
 }

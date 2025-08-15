@@ -46,7 +46,7 @@ public class ThemeSeeder implements CommandLineRunner {
         if (themeRepository.findByName(pubName).isEmpty()) {
             Theme publishedTheme = new Theme();
             publishedTheme.setName(pubName);
-            publishedTheme.setUser(user);
+            publishedTheme.setProfile(user.getProfile());
             publishedTheme.setPublished(true);
             // THEME: cupcake by chriskempson
             // https://github.com/chriskempson/base16-default-schemes/blob/master/cupcake.yaml
@@ -67,7 +67,7 @@ public class ThemeSeeder implements CommandLineRunner {
         if (themeRepository.findByName(unpubName).isEmpty()) {
             Theme unpublishedTheme = new Theme();
             unpublishedTheme.setName(unpubName);
-            unpublishedTheme.setUser(user);
+            unpublishedTheme.setProfile(user.getProfile());
             unpublishedTheme.setPublished(false);
             // THEME: mangagamer theme by am-cid
             // based off the colors of the website https://www.mangagamer.com
