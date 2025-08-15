@@ -70,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
         return new CommentResponseDTO(
                 comment.getId(),
                 comment.getUser().getId(),
-                comment.getUser().getDisplayName(),
+                comment.getUser().getProfile().getDisplayName(),
                 comment.getDate(),
                 comment.isEdited(),
                 comment.getContent()

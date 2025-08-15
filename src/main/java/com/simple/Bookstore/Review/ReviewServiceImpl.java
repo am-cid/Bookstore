@@ -80,7 +80,7 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewResponseDTO reviewToResponseDTO(Review review) {
         return new ReviewResponseDTO(
                 review.getId(),
-                review.getUser().getDisplayName(),
+                review.getUser().getProfile().getDisplayName(),
                 review.getBook().getId(),
                 review.getBook().getTitle(),
                 review.getDate(),
