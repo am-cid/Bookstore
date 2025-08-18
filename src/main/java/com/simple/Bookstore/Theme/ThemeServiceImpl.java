@@ -8,6 +8,7 @@ import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserRepository;
+import com.simple.Bookstore.utils.ColorUtils;
 import com.simple.Bookstore.utils.ThemeMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +47,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Page<ThemeResponseDTO> getPublishedOrOwnedUnpublishedThemes(User user, Pageable pageable) {
+    public Page<ThemeResponseDTO> findPublishedOrOwnedUnpublishedThemes(User user, Pageable pageable) {
         if (user == null) {
             return themeRepository
                     .findByPublishedIsTrue(pageable)
@@ -59,7 +60,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public List<ThemeResponseDTO> getThemesByUser(User user) {
+    public List<ThemeResponseDTO> findThemesByUser(User user) {
         return themeRepository
                 .findByProfileUser(user)
                 .stream()
@@ -68,7 +69,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeResponseDTO getPublishedThemeById(Long id) throws ThemeNotFoundException {
+    public ThemeResponseDTO findPublishedThemeById(Long id) throws ThemeNotFoundException {
         return themeRepository
                 .findByIdAndPublishedIsTrue(id)
                 .map(ThemeMapper::themeToResponseDTO)
@@ -217,16 +218,16 @@ public class ThemeServiceImpl implements ThemeService {
         // interpolated colors for circles after heading
         Color start = Color.decode("#" + theme.getBase03());
         Color end = Color.decode("#" + theme.getBase04());
-        List<String> interpolated = getInterpolatedColors(start, end, 27)
+        List<String> interpolated = ColorUtils.getInterpolatedColors(start, end, 27)
                 .subList(1, 26); // exclude original endpoints
         IntStream.range(0, interpolated.size())
                 .forEach(i -> css.append(String.format("  --interpolated-color-%02d: %s;%n", i, interpolated.get(i))));
 
         // genre text color (must be darker than base05 which is genre bg)
-        List<String> genreTextColors = getGenreTextColors(
-                theme.getBase03(),
-                theme.getBase04(),
-                theme.getBase05()
+        List<String> genreTextColors = ColorUtils.getGenreTextColors(
+                Color.decode("#" + theme.getBase03()),
+                Color.decode("#" + theme.getBase04()),
+                Color.decode("#" + theme.getBase05())
         );
         IntStream.range(0, genreTextColors.size())
                 .forEach(i -> css.append(
@@ -252,49 +253,7 @@ public class ThemeServiceImpl implements ThemeService {
 
     }
 
-    // HELPERS
 
-    /**
-     * interpolates between two colors (inclusive)
-     *
-     * @param start inclusive starting color for the interpolation
-     * @param end   inclusive ending color for the interpolation
-     * @param steps amount of colors generated
-     * @return list of interpolated colors
-     */
-    private List<String> getInterpolatedColors(Color start, Color end, int steps) {
-        List<String> colors = new ArrayList<>();
-        for (int i = 0; i < steps; i++) {
-            float ratio = i / (float) (steps - 1);
-            int r = (int) (start.getRed() + ratio * (end.getRed() - start.getRed()));
-            int g = (int) (start.getGreen() + ratio * (end.getGreen() - start.getGreen()));
-            int b = (int) (start.getBlue() + ratio * (end.getBlue() - start.getBlue()));
-            colors.add(String.format("#%02X%02X%02X", r, g, b));
-        }
-        return colors;
-    }
 
-    /**
-     * Darkens passed in colors using custom ratio for use as text color in
-     * listing genres.
-     *
-     * @param genreBg list of background colors the genre ovals will use
-     * @return list of darkened colors that the genre ovals' text will use
-     */
-    private List<String> getGenreTextColors(String... genreBg) {
-        List<Color> genreBgDarkenedStrings = Arrays
-                .stream(genreBg)
-                .map(c -> Color.decode("#" + c).darker())
-                .toList();
-        List<String> result = new ArrayList<>();
-        for (Color c : genreBgDarkenedStrings) {
-            result.add(String.format(
-                    "#%02X%02X%02X",
-                    (int) (c.getRed() * 0.3),
-                    (int) (c.getGreen() * 0.7),
-                    (int) (c.getBlue() * 0.3)
-            ));
-        }
-        return result;
     }
 }

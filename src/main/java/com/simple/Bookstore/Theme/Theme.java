@@ -19,7 +19,7 @@ public class Theme {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "profile_id", nullable = false)
+    @JoinColumn(name = "profile_id")
     private Profile profile;
 
     @ManyToMany(mappedBy = "savedThemes")

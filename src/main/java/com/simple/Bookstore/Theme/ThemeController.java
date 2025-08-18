@@ -26,7 +26,7 @@ public class ThemeController {
             @PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
         Page<ThemeResponseDTO> response = themeService
-                .getPublishedOrOwnedUnpublishedThemes(user, pageable);
+                .findPublishedOrOwnedUnpublishedThemes(user, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -89,19 +89,12 @@ public class ThemeController {
     }
 
     @PostMapping("/{id}/css")
-    public ResponseEntity<String> updateCssTheme(
+    public ResponseEntity<ThemeResponseDTO> updateCssTheme(
             @PathVariable("id") Long id,
             @AuthenticationPrincipal User user
-    ) {
-        try {
-            themeService.updateCssTheme(id, user);
-            return ResponseEntity.ok("Successfully updated css theme");
-        } catch (
-                IOException e
-        ) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update CSS file: " + e.getMessage());
-        }
+    ) throws IOException, ThemeNotFoundException {
+        ThemeResponseDTO response = themeService.updateCssTheme(id, user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/search")

@@ -10,11 +10,15 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ThemeService {
-    Page<ThemeResponseDTO> getPublishedOrOwnedUnpublishedThemes(User user, Pageable pageable);
+    ThemeResponseDTO findDefaultTheme() throws IllegalStateException;
 
-    List<ThemeResponseDTO> getThemesByUser(User user);
+    Page<ThemeResponseDTO> findPublishedOrOwnedUnpublishedThemes(User user, Pageable pageable);
 
-    ThemeResponseDTO getPublishedThemeById(Long id);
+    List<ThemeResponseDTO> findThemesByUser(User user);
+
+    ThemeResponseDTO findThemeById(Long id);
+
+    ThemeResponseDTO findPublishedThemeById(Long id);
 
     ThemeResponseDTO createTheme(User user, ThemeRequestDTO request);
 
@@ -31,8 +35,6 @@ public interface ThemeService {
     void deleteThemeFromSavedThemes(Long id, User user);
 
     Theme loadThemeFromYaml(File yamlFile) throws IOException;
-
-    ThemeResponseDTO findThemeById(Long id);
 
     Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable);
 
