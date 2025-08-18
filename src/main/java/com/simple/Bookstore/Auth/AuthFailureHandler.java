@@ -19,6 +19,10 @@ public class AuthFailureHandler implements AuthenticationFailureHandler {
             HttpServletResponse response,
             AuthenticationException exception
     ) throws IOException, ServletException {
-        redirectStrategy.sendRedirect(request, response, "/?login_error=true");
+        String referer = request.getHeader("Referer");
+        String redirectUrl = (referer != null && !referer.isEmpty())
+                ? referer + "?login_error=true"
+                : "/?login_error=true";
+        redirectStrategy.sendRedirect(request, response, redirectUrl);
     }
 }
