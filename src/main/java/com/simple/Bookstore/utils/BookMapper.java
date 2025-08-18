@@ -6,7 +6,7 @@ import com.simple.Bookstore.Review.Review;
 
 import java.util.OptionalDouble;
 
-public class BookDtoConverter {
+public class BookMapper {
     public static Book createDtoToBook(BookRequestDTO dto) {
         Book book = new Book();
         book.setTitle(dto.title());

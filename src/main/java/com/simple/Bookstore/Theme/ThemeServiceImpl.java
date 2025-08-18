@@ -8,7 +8,7 @@ import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserRepository;
-import com.simple.Bookstore.utils.ThemeDtoConverter;
+import com.simple.Bookstore.utils.ThemeMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,11 +50,11 @@ public class ThemeServiceImpl implements ThemeService {
         if (user == null) {
             return themeRepository
                     .findByPublishedIsTrue(pageable)
-                    .map(ThemeDtoConverter::themeToResponseDTO);
+                    .map(ThemeMapper::themeToResponseDTO);
         } else {
             return themeRepository
                     .findByPublishedOrOwnedUnpublishedThemes(user, pageable)
-                    .map(ThemeDtoConverter::themeToResponseDTO);
+                    .map(ThemeMapper::themeToResponseDTO);
         }
     }
 
@@ -63,7 +63,7 @@ public class ThemeServiceImpl implements ThemeService {
         return themeRepository
                 .findByProfileUser(user)
                 .stream()
-                .map(ThemeDtoConverter::themeToResponseDTO)
+                .map(ThemeMapper::themeToResponseDTO)
                 .toList();
     }
 
@@ -71,17 +71,17 @@ public class ThemeServiceImpl implements ThemeService {
     public ThemeResponseDTO getPublishedThemeById(Long id) throws ThemeNotFoundException {
         return themeRepository
                 .findByIdAndPublishedIsTrue(id)
-                .map(ThemeDtoConverter::themeToResponseDTO)
+                .map(ThemeMapper::themeToResponseDTO)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
     }
 
     @Override
     public ThemeResponseDTO createTheme(User user, ThemeRequestDTO request) {
         Profile profile = user.getProfile();
-        Theme theme = ThemeDtoConverter.requestDtoToTheme(profile, request);
+        Theme theme = ThemeMapper.requestDtoToTheme(profile, request);
         profileRepository.save(profile);
         Theme savedTheme = themeRepository.save(theme);
-        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
+        return ThemeMapper.themeToResponseDTO(savedTheme);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ThemeServiceImpl implements ThemeService {
         theme.setBase06(request.base06());
         theme.setBase07(request.base07());
         Theme savedTheme = themeRepository.save(theme);
-        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
+        return ThemeMapper.themeToResponseDTO(savedTheme);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class ThemeServiceImpl implements ThemeService {
         }
         theme.setPublished(true);
         Theme savedTheme = themeRepository.save(theme);
-        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
+        return ThemeMapper.themeToResponseDTO(savedTheme);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class ThemeServiceImpl implements ThemeService {
         theme.getProfilesUsing().forEach(userUsing -> userUsing.getSavedThemes().remove(theme));
         theme.getProfilesUsing().clear();
         Theme savedTheme = themeRepository.save(theme);
-        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
+        return ThemeMapper.themeToResponseDTO(savedTheme);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class ThemeServiceImpl implements ThemeService {
         theme.getProfilesUsing().add(user.getProfile());
         userRepository.save(managedUser);
         Theme savedTheme = themeRepository.save(theme);
-        return ThemeDtoConverter.themeToResponseDTO(savedTheme);
+        return ThemeMapper.themeToResponseDTO(savedTheme);
     }
 
     @Override
@@ -188,7 +188,7 @@ public class ThemeServiceImpl implements ThemeService {
     public ThemeResponseDTO findThemeById(Long id) {
         return themeRepository
                 .findById(id)
-                .map(ThemeDtoConverter::themeToResponseDTO)
+                .map(ThemeMapper::themeToResponseDTO)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
     }
 
@@ -196,7 +196,7 @@ public class ThemeServiceImpl implements ThemeService {
     public Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable) {
         return themeRepository
                 .searchThemes(query, userId, pageable)
-                .map(ThemeDtoConverter::projectionToResponseDTO);
+                .map(ThemeMapper::projectionToResponseDTO);
     }
 
     @Override
@@ -240,14 +240,14 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public ThemeResponseDTO updateCssTheme(Long id, User user) throws IOException, ThemeNotFoundException {
         String cssContent = getThemeAsCss(id, user, 25);
-        String filename = "generated-variables.css";
+        String filename = "variables.css";
         Path path = Paths.get("src/main/resources/static/css/" + filename);
         if (!Files.exists(path.getParent())) {
             Files.createDirectories(path.getParent());
         }
         Files.write(path, cssContent.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         return themeRepository.findById(id)
-                .map(ThemeDtoConverter::themeToResponseDTO)
+                .map(ThemeMapper::themeToResponseDTO)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
 
     }

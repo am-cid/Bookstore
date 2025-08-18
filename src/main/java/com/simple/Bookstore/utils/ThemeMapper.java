@@ -6,14 +6,23 @@ import com.simple.Bookstore.Theme.ThemeProjection;
 import com.simple.Bookstore.Theme.ThemeRequestDTO;
 import com.simple.Bookstore.Theme.ThemeResponseDTO;
 
-public class ThemeDtoConverter {
+public class ThemeMapper {
     public static ThemeResponseDTO themeToResponseDTO(Theme theme) {
+        long userId = theme.getProfile() != null
+                ? theme.getProfile().getId()
+                : 0;
+        String username = theme.getProfile() != null
+                ? theme.getProfile().getUser().getUsername()
+                : null;
+        String displayName = theme.getProfile() != null
+                ? theme.getProfile().getDisplayName()
+                : null;
         return new ThemeResponseDTO(
                 theme.getId(),
                 theme.getName(),
-                theme.getProfile().getUser().getId(),
-                theme.getProfile().getUser().getUsername(),
-                theme.getProfile().getDisplayName(),
+                userId,
+                username,
+                displayName,
                 theme.getBase00(),
                 theme.getBase01(),
                 theme.getBase02(),

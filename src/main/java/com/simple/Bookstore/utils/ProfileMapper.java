@@ -5,21 +5,21 @@ import com.simple.Bookstore.Profile.ProfileResponseDTO;
 
 import java.util.stream.Collectors;
 
-public class ProfileDtoConverter {
+public class ProfileMapper {
     public static ProfileResponseDTO profileToResponseDTO(Profile profile) {
         return new ProfileResponseDTO(
                 profile.getDisplayName(),
                 profile.getOwnedThemes()
                         .stream()
-                        .map(ThemeDtoConverter::themeToResponseDTO)
+                        .map(ThemeMapper::themeToResponseDTO)
                         .collect(Collectors.toSet()),
                 profile.getSavedThemes()
                         .stream()
-                        .map(ThemeDtoConverter::themeToResponseDTO)
+                        .map(ThemeMapper::themeToResponseDTO)
                         .collect(Collectors.toSet()),
                 profile.getSavedBooks()
                         .stream()
-                        .map(BookDtoConverter::bookToSearchResultDTO)
+                        .map(BookMapper::bookToSearchResultDTO)
                         .collect(Collectors.toSet())
         );
     }
