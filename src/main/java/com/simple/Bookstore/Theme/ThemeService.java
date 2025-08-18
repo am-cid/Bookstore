@@ -43,4 +43,16 @@ public interface ThemeService {
     String getThemeAsCss(Long id, User user, int steps);
 
     ThemeResponseDTO updateCssTheme(Long id, User user) throws IOException, ThemeNotFoundException;
+
+    /**
+     * @param user User / null: when anonymous, this is null
+     * @return ThemeResponseDTO / null: Returns the currently used theme by the
+     * authenticated user. If the user is anonymous or is an authenticated user
+     * but did not override the default theme, this will return null, which
+     * indicates that there is no override for the default theme.
+     * @throws IllegalStateException when the database cannot find the default
+     *                               theme, which should be there as the first
+     *                               entry
+     */
+    ThemeResponseDTO findThemeUsed(User user) throws IllegalStateException;
 }

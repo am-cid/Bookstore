@@ -56,34 +56,34 @@
         </div>
     </div>
     <!-- LATEST REVIEW -->
-    <div class="sidebar-left-div" th:if="${latestReview}">
+    <div class="sidebar-left-div" th:if="${_latestReview}">
         <p class="sidebar-left-title">Latest Review</p>
         <div class="sidebar-left-list">
             <a class="sidebar-left-list-item"
-               th:href="@{/api/v1/books/{id}(id=${latestReview.bookId()})}"
-               th:text="${latestReview.bookTitle()}"></a>
+               th:href="@{/api/v1/books/{id}(id=${_latestReview.bookId()})}"
+               th:text="${_latestReview.bookTitle()}"></a>
             <div class="flex-row space-between sidebar-left-list-item">
                 <p class="rating-score">
-                    <b><span th:text="${latestReview.rating()}"></span> / 5</b>
+                    <b><span th:text="${_latestReview.rating()}"></span> / 5</b>
                 </p>
-                <p th:text="${latestReviewDate}"></p>
+                <p th:text="${_latestReviewDate}"></p>
             </div>
             <div class="sidebar-left-list-item"
-                 th:if="${latestReview.content() != null && !latestReview.content().isEmpty()}">
-                <th:block th:if="${latestReview.content().length() > 100}">
-                    <p th:text="${#strings.abbreviate(latestReview.content(), 100)}"></p>
+                 th:if="${_latestReview.content() != null && !_latestReview.content().isEmpty()}">
+                <th:block th:if="${_latestReview.content().length() > 100}">
+                    <p th:text="${#strings.abbreviate(_latestReview.content(), 100)}"></p>
                 </th:block>
-                <th:block th:unless="${latestReview.content().length() > 100}">
-                    <p th:text="${latestReview.content()}"></p>
+                <th:block th:unless="${_latestReview.content().length() > 100}">
+                    <p th:text="${_latestReview.content()}"></p>
                 </th:block>
             </div>
             <div class="sidebar-left-list-item"
-                 th:unless="${latestReview.content() != null && !latestReview.content().isEmpty()}">
+                 th:unless="${_latestReview.content() != null && !_latestReview.content().isEmpty()}">
                 <p class="gray-text">No content was provided for this review</p>
             </div>
             <div>
                 <p class="float-right">
-                    - <span th:text="${latestReview.userDisplayName()}"></span>
+                    - <span th:text="${_latestReview.userDisplayName()}"></span>
                 </p>
             </div>
         </div>
