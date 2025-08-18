@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Order(5)
+@Order(4)
 public class CommentSeeder implements CommandLineRunner {
 
     private final CommentRepository commentRepo;

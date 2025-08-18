@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@Order(6)
+@Order(5)
 @RequiredArgsConstructor
 public class ThemeSeeder implements CommandLineRunner {
     private final ThemeRepository themeRepository;

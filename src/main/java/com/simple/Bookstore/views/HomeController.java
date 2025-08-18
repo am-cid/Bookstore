@@ -30,7 +30,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String showHomePage(
-            Model model, @AuthenticationPrincipal User user
+            Model model,
+            @AuthenticationPrincipal User user
     ) {
         ThemeResponseDTO themeUsed = themeService.findThemeUsed(user);
         String themeUsedAsInlineCss = themeUsed != null

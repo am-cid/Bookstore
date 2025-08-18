@@ -45,14 +45,6 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeResponseDTO findDefaultTheme() throws IllegalStateException {
-        return themeRepository
-                .findById(1L)
-                .map(ThemeMapper::themeToResponseDTO)
-                .orElseThrow(() -> new IllegalStateException("Default theme not found"));
-    }
-
-    @Override
     public Page<ThemeResponseDTO> findPublishedOrOwnedUnpublishedThemes(User user, Pageable pageable) {
         if (user == null) {
             return themeRepository
@@ -271,7 +263,7 @@ public class ThemeServiceImpl implements ThemeService {
 
     @Override
     public ThemeResponseDTO findThemeUsed(User user) throws IllegalStateException {
-        if (user == null)
+        if (user == null || user.getProfile().getThemeUsed() == null)
             return null;
 
         ThemeResponseDTO themeUsed = ThemeMapper.themeToResponseDTO(

@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-@Order(3)
+@Order(2)
 public class BookSeeder implements CommandLineRunner {
     private final BookRepository bookRepo;
 

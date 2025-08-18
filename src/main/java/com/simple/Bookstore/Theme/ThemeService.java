@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ThemeService {
-    ThemeResponseDTO findDefaultTheme() throws IllegalStateException;
-
     Page<ThemeResponseDTO> findPublishedOrOwnedUnpublishedThemes(User user, Pageable pageable);
 
     List<ThemeResponseDTO> findThemesByUser(User user);

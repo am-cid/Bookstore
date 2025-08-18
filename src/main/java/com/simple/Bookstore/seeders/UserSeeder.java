@@ -3,7 +3,6 @@ package com.simple.Bookstore.seeders;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.Role.Role;
-import com.simple.Bookstore.Theme.Theme;
 import com.simple.Bookstore.Theme.ThemeRepository;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserRepository;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@Order(2)
+@Order(1)
 public class UserSeeder implements CommandLineRunner {
 
     private static final String USER1_USERNAME = "user1";
@@ -71,14 +70,10 @@ public class UserSeeder implements CommandLineRunner {
             profile.setUser(savedUser);
             profile.setDisplayName(username);
             profile.setPublic(isPublic);
-            Theme defaultTheme = themeRepository
-                    .findById(1L)
-                    .orElseThrow(() -> new IllegalStateException("Default theme not found"));
-            profile.setThemeUsed(defaultTheme);
             Profile savedProfile = profileRepository.save(profile);
 
             savedUser.setProfile(savedProfile);
-            User newlySaved = userRepository.save(savedUser);
+            userRepository.save(savedUser);
             log.info("Created new user (with role {}): {}", role.toString(), savedUser.getUsername());
         } else {
             log.info("{} already exists: {}", role.toString(), username);

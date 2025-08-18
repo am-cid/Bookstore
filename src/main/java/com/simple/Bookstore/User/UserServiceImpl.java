@@ -5,7 +5,6 @@ import com.simple.Bookstore.Exceptions.UsernameAlreadyTakenException;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.Role.Role;
-import com.simple.Bookstore.Theme.Theme;
 import com.simple.Bookstore.Theme.ThemeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,10 +42,6 @@ public class UserServiceImpl implements UserService {
         profile.setUser(savedUser);
         profile.setDisplayName(request.displayName() != null ? request.displayName() : request.username());
         profile.setPublic(request.isPublic());
-        Theme defaultTheme = themeRepository
-                .findById(1L)
-                .orElseThrow(() -> new IllegalStateException("Default theme not found"));
-        profile.setThemeUsed(defaultTheme);
         Profile savedProfile = profileRepository.save(profile);
 
         savedUser.setProfile(savedProfile);
