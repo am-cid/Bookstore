@@ -7,10 +7,6 @@
 </head>
 <body>
 
-<!--/*@thymesVar id="bannerBooks" type="java.util.List<com.simple.Bookstore.Book.BookSearchResultDTO>"*/-->
-<!--/*@thymesVar id="latestUploads" type="java.util.List<com.simple.Bookstore.Book.BookSearchResultDTO>"*/-->
-<!--/*@thymesVar id="availableBooks" type="java.util.List<com.simple.Bookstore.Book.BookSearchResultDTO>"*/-->
-
 <div class="flex-column" id="main-content" th:fragment="main-content">
     <!-- SLIDING BANNER -->
     <div id="sliding-banner" th:if="${bannerBooks != null and !#lists.isEmpty(bannerBooks)}">

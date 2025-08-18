@@ -1,4 +1,4 @@
-@import url("generated-variables.css");
+@import url("variables.css");
 
 @font-face {
     font-family: 'Cherry Bomb One';
@@ -328,9 +328,10 @@ body {
     flex-direction: column;
     max-width: 175px;
     min-width: 175px;
+    row-gap: 20px;
 }
 
-#login-form-heading {
+.sidebar-right-heading {
     display: flex;
     flex-direction: column;
 }
@@ -340,37 +341,42 @@ body {
     padding: 0 0 0 43px;
 }
 
-#login-form-heading circle {
+.sidebar-right-heading circle {
     fill: var(--color-07, #FFF2D3);
 }
 
-#login-form-heading .circle-outline {
+.sidebar-right-heading .circle-outline {
     fill: var(--color-02, #F61590);
 }
 
-#login-form-heading .svg-text-heading .text-outline-outer {
+.sidebar-right-heading .svg-text-heading .text-outline-outer {
     fill: none;
     paint-order: stroke;
     stroke: var(--color-02, #F61590);
     stroke-linejoin: round;
     stroke-width: 12;
 }
-#login-form-heading .svg-text-heading .text-outline-middle {
+.sidebar-right-heading .svg-text-heading .text-outline-middle {
     fill: none;
     paint-order: stroke;
     stroke: var(--color-07, #FFF2D3);
     stroke-linejoin: round;
     stroke-width: 8;
 }
-#login-form-heading .svg-text-heading .text-outline-inner {
+.sidebar-right-heading .svg-text-heading .text-outline-inner {
     fill: none;
     paint-order: stroke;
     stroke: var(--color-02, #F61590);
     stroke-linejoin: round;
     stroke-width: 4;
 }
-#login-form-heading .svg-text-heading .text-fill {
+.sidebar-right-heading .svg-text-heading .text-fill {
     fill: var(--color-07, #FFF2D3);
+}
+
+#theme-heading svg {
+    font-size: 26px;
+    padding: 0 0 0 45px;
 }
 
 #login-form {
