@@ -1,4 +1,4 @@
-package com.simple.Bookstore.init;
+package com.simple.Bookstore.seeders;
 
 import com.simple.Bookstore.Book.Book;
 import com.simple.Bookstore.Book.BookRepository;
@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-@Order(2)
+@Order(3)
 public class BookSeeder implements CommandLineRunner {
     private final BookRepository bookRepo;
 

@@ -1,4 +1,4 @@
-package com.simple.Bookstore.init;
+package com.simple.Bookstore.seeders;
 
 import com.simple.Bookstore.Comment.Comment;
 import com.simple.Bookstore.Comment.CommentRepository;
@@ -7,6 +7,7 @@ import com.simple.Bookstore.Review.ReviewRepository;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -15,9 +16,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-@Order(4)
+@Order(5)
 public class CommentSeeder implements CommandLineRunner {
 
     private final CommentRepository commentRepo;
@@ -39,7 +41,7 @@ public class CommentSeeder implements CommandLineRunner {
         List<User> users = userRepo.findAll();
 
         if (reviews.isEmpty() || users.isEmpty()) {
-            System.out.println("Warning: Cannot seed comments. Review or User entities not found.");
+            log.warn("Cannot seed comments. Review or User entities not found.");
             return;
         }
 
@@ -65,6 +67,6 @@ public class CommentSeeder implements CommandLineRunner {
         comment3.setEdited(false);
 
         commentRepo.saveAll(List.of(comment1, comment2, comment3));
-        System.out.println("Seeded " + commentRepo.count() + " comments.");
+        log.info("Seeded {} comments.", commentRepo.count());
     }
 }

@@ -1,4 +1,4 @@
-package com.simple.Bookstore.init;
+package com.simple.Bookstore.seeders;
 
 import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Theme.Theme;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@Order(5)
+@Order(6)
 @RequiredArgsConstructor
 public class ThemeSeeder implements CommandLineRunner {
     private final ThemeRepository themeRepository;
@@ -26,6 +26,10 @@ public class ThemeSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        activeProfile = (activeProfile == null || activeProfile.isBlank()) ? "dev" : activeProfile;
+        if (!activeProfile.equals("dev"))
+            return;
+
         log.info("Seeding themes...");
         seedThemesForUser(adminUsername);
         seedThemesForUser("user1");
@@ -33,10 +37,6 @@ public class ThemeSeeder implements CommandLineRunner {
     }
 
     private void seedThemesForUser(String username) {
-        activeProfile = (activeProfile == null || activeProfile.isBlank()) ? "dev" : activeProfile;
-        if (!activeProfile.equals("dev"))
-            return;
-
         User user = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
@@ -48,16 +48,16 @@ public class ThemeSeeder implements CommandLineRunner {
             publishedTheme.setName(pubName);
             publishedTheme.setProfile(user.getProfile());
             publishedTheme.setPublished(true);
-            // THEME: cupcake by chriskempson
-            // https://github.com/chriskempson/base16-default-schemes/blob/master/cupcake.yaml
-            publishedTheme.setBase00("585062");
-            publishedTheme.setBase01("72677E");
-            publishedTheme.setBase02("8b8198");
-            publishedTheme.setBase03("a59daf");
-            publishedTheme.setBase04("bfb9c6");
-            publishedTheme.setBase05("d8d5dd");
-            publishedTheme.setBase06("f2f1f4");
-            publishedTheme.setBase07("fbf1f2");
+            // THEME: ocean by chriskempson
+            // https://github.com/chriskempson/base16-default-schemes/blob/master/ocean.yaml
+            publishedTheme.setBase00("2B303B");
+            publishedTheme.setBase01("343D46");
+            publishedTheme.setBase02("4F5B66");
+            publishedTheme.setBase03("65737E");
+            publishedTheme.setBase04("A7ADBA");
+            publishedTheme.setBase05("C0C5CE");
+            publishedTheme.setBase06("DFE1E8");
+            publishedTheme.setBase07("EFF1F5");
             themeRepository.save(publishedTheme);
             log.info("Created published theme for {}: {}", username, pubName);
         }
@@ -69,16 +69,16 @@ public class ThemeSeeder implements CommandLineRunner {
             unpublishedTheme.setName(unpubName);
             unpublishedTheme.setProfile(user.getProfile());
             unpublishedTheme.setPublished(false);
-            // THEME: mangagamer theme by am-cid
-            // based off the colors of the website https://www.mangagamer.com
-            unpublishedTheme.setBase00("A40E60");
-            unpublishedTheme.setBase01("FF0000");
-            unpublishedTheme.setBase02("F61590");
-            unpublishedTheme.setBase03("F88B9E");
-            unpublishedTheme.setBase04("FFD376");
-            unpublishedTheme.setBase05("AAFFB1");
-            unpublishedTheme.setBase06("FFE2E7");
-            unpublishedTheme.setBase07("FFF2D3");
+            // THEME: cupcake by chriskempson
+            // https://github.com/chriskempson/base16-default-schemes/blob/master/cupcake.yaml
+            unpublishedTheme.setBase00("585062");
+            unpublishedTheme.setBase01("72677E");
+            unpublishedTheme.setBase02("8b8198");
+            unpublishedTheme.setBase03("a59daf");
+            unpublishedTheme.setBase04("bfb9c6");
+            unpublishedTheme.setBase05("d8d5dd");
+            unpublishedTheme.setBase06("f2f1f4");
+            unpublishedTheme.setBase07("fbf1f2");
             themeRepository.save(unpublishedTheme);
             log.info("Created unpublished theme for {}: {}", username, unpubName);
         }

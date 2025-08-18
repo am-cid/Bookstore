@@ -1,8 +1,10 @@
-package com.simple.Bookstore.init;
+package com.simple.Bookstore.seeders;
 
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.Role.Role;
+import com.simple.Bookstore.Theme.Theme;
+import com.simple.Bookstore.Theme.ThemeRepository;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@Order(1)
+@Order(2)
 public class UserSeeder implements CommandLineRunner {
 
     private static final String USER1_USERNAME = "user1";
@@ -23,6 +25,7 @@ public class UserSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProfileRepository profileRepository;
+    private final ThemeRepository themeRepository;
     @Value("${BS_USERNAME:admin}")
     private String adminUsername;
     @Value("${BS_PASSWORD:1234}")
@@ -30,10 +33,16 @@ public class UserSeeder implements CommandLineRunner {
     @Value("${spring.profiles.active:dev}")
     private String activeProfile;
 
-    public UserSeeder(UserRepository userRepository, PasswordEncoder passwordEncoder, ProfileRepository profileRepository) {
+    public UserSeeder(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            ProfileRepository profileRepository,
+            ThemeRepository themeRepository
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileRepository = profileRepository;
+        this.themeRepository = themeRepository;
     }
 
     @Override
@@ -62,10 +71,14 @@ public class UserSeeder implements CommandLineRunner {
             profile.setUser(savedUser);
             profile.setDisplayName(username);
             profile.setPublic(isPublic);
+            Theme defaultTheme = themeRepository
+                    .findById(1L)
+                    .orElseThrow(() -> new IllegalStateException("Default theme not found"));
+            profile.setThemeUsed(defaultTheme);
             Profile savedProfile = profileRepository.save(profile);
 
             savedUser.setProfile(savedProfile);
-            userRepository.save(savedUser);
+            User newlySaved = userRepository.save(savedUser);
             log.info("Created new user (with role {}): {}", role.toString(), savedUser.getUsername());
         } else {
             log.info("{} already exists: {}", role.toString(), username);

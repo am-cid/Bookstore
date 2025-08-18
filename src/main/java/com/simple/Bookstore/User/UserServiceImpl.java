@@ -5,6 +5,8 @@ import com.simple.Bookstore.Exceptions.UsernameAlreadyTakenException;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.Role.Role;
+import com.simple.Bookstore.Theme.Theme;
+import com.simple.Bookstore.Theme.ThemeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProfileRepository profileRepository;
+    private final ThemeRepository themeRepository;
 
     @Override
     public Optional<User> findByUsername(String username) {
@@ -29,6 +32,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameAlreadyTakenException(request.username());
         }
 
+
         User user = new User();
         user.setUsername(request.username());
         user.setPassword(passwordEncoder.encode(request.password()));
@@ -39,6 +43,10 @@ public class UserServiceImpl implements UserService {
         profile.setUser(savedUser);
         profile.setDisplayName(request.displayName() != null ? request.displayName() : request.username());
         profile.setPublic(request.isPublic());
+        Theme defaultTheme = themeRepository
+                .findById(1L)
+                .orElseThrow(() -> new IllegalStateException("Default theme not found"));
+        profile.setThemeUsed(defaultTheme);
         Profile savedProfile = profileRepository.save(profile);
 
         savedUser.setProfile(savedProfile);

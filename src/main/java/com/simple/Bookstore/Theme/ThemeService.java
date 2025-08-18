@@ -30,6 +30,8 @@ public interface ThemeService {
 
     ThemeResponseDTO saveThemeForUser(Long id, User user);
 
+    ThemeResponseDTO setThemeForUser(Long id, User user);
+
     void deleteTheme(Long id, User user);
 
     void deleteThemeFromSavedThemes(Long id, User user);

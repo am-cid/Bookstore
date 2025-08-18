@@ -1,4 +1,4 @@
-package com.simple.Bookstore.init;
+package com.simple.Bookstore.seeders;
 
 import com.simple.Bookstore.Book.Book;
 import com.simple.Bookstore.Book.BookRepository;
@@ -7,6 +7,7 @@ import com.simple.Bookstore.Review.ReviewRepository;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -15,9 +16,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-@Order(3)
+@Order(4)
 public class ReviewSeeder implements CommandLineRunner {
 
     private final ReviewRepository reviewRepo;
@@ -38,7 +40,7 @@ public class ReviewSeeder implements CommandLineRunner {
         List<Book> books = bookRepo.findAll();
         List<User> users = userRepo.findAll();
         if (books.isEmpty() || users.isEmpty()) {
-            System.out.println("Warning: Cannot seed reviews. Book or User entities not found.");
+            log.warn("Cannot seed reviews. Book or User entities not found.");
             return;
         }
 
@@ -67,6 +69,6 @@ public class ReviewSeeder implements CommandLineRunner {
         review3.setEdited(false);
 
         reviewRepo.saveAll(List.of(review1, review2, review3));
-        System.out.println("Seeded " + reviewRepo.count() + " reviews.");
+        log.info("Seeded {} reviews.", reviewRepo.count());
     }
 }

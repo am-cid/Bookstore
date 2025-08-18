@@ -1,5 +1,6 @@
 package com.simple.Bookstore.Theme;
 
+import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserService;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +78,15 @@ public class ThemeController {
     ) {
         themeService.deleteThemeFromSavedThemes(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{id}/set")
+    public ResponseEntity<ThemeResponseDTO> setThemeForCurrentUser(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user
+    ) {
+        ThemeResponseDTO response = themeService.setThemeForUser(id, user);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(value = "/{id}/css", produces = "text/css")

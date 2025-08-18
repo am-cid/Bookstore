@@ -22,8 +22,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -44,6 +42,14 @@ public class ThemeServiceImpl implements ThemeService {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
         this.yamlMapper = new ObjectMapper(new YAMLFactory());
+    }
+
+    @Override
+    public ThemeResponseDTO findDefaultTheme() throws IllegalStateException {
+        return themeRepository
+                .findById(1L)
+                .map(ThemeMapper::themeToResponseDTO)
+                .orElseThrow(() -> new IllegalStateException("Default theme not found"));
     }
 
     @Override
@@ -166,6 +172,16 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
+    public ThemeResponseDTO setThemeForUser(Long id, User user) {
+        Theme theme = themeRepository
+                .findById(id)
+                .orElseThrow(() -> new ThemeNotFoundException(id));
+        user.getProfile().setThemeUsed(theme);
+        userRepository.save(user);
+        return ThemeMapper.themeToResponseDTO(theme);
+    }
+
+    @Override
     @Transactional
     public void deleteThemeFromSavedThemes(Long id, User user) {
         Theme theme = themeRepository.findById(id)
@@ -256,4 +272,5 @@ public class ThemeServiceImpl implements ThemeService {
 
 
     }
+
 }
