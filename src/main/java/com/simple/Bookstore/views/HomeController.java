@@ -34,18 +34,18 @@ public class HomeController {
             @AuthenticationPrincipal User user
     ) {
         ThemeResponseDTO themeUsed = themeService.findThemeUsed(user);
-        String themeUsedAsInlineCss = themeUsed != null
-                ? CssGenerator.toInlineCss(
-                List.of(
-                        themeUsed.base00(),
-                        themeUsed.base01(),
-                        themeUsed.base02(),
-                        themeUsed.base03(),
-                        themeUsed.base04(),
-                        themeUsed.base05(),
-                        themeUsed.base06(),
-                        themeUsed.base07()))
+        List<String> themeColors = themeUsed != null
+                ? List.of(
+                themeUsed.base00(),
+                themeUsed.base01(),
+                themeUsed.base02(),
+                themeUsed.base03(),
+                themeUsed.base04(),
+                themeUsed.base05(),
+                themeUsed.base06(),
+                themeUsed.base07())
                 : null;
+        String themeUsedAsInlineCss = CssGenerator.toInlineCss(themeColors);
         model.addAttribute("_overrideTheme", themeUsedAsInlineCss);
 
         // center content data

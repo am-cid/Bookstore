@@ -15,9 +15,10 @@ public class CssGenerator {
      * in th:utext, or null, indicating there was an error parsing the hex code of
      * the colors given
      */
-    public static String toInlineCss(
-            List<String> colors
-    ) {
+    public static String toInlineCss(List<String> colors) {
+        if (colors == null || colors.isEmpty())
+            return null;
+
         List<String> interpolatedColors = ColorUtils
                 .getInterpolatedColors(
                         Color.decode("#" + colors.get(3)),
