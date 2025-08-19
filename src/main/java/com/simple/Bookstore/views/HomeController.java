@@ -33,6 +33,7 @@ public class HomeController {
             Model model,
             @AuthenticationPrincipal User user
     ) {
+        model.addAttribute("user", user);
         ThemeResponseDTO themeUsed = themeService.findThemeUsed(user);
         List<String> themeColors = themeUsed != null
                 ? List.of(
@@ -47,6 +48,7 @@ public class HomeController {
                 : null;
         String themeUsedAsInlineCss = CssGenerator.toInlineCss(themeColors);
         model.addAttribute("_overrideTheme", themeUsedAsInlineCss);
+        model.addAttribute("_overrideThemeUsed", themeUsed);
 
         // center content data
         List<BookSearchResultDTO> latestBooks = bookService.findLatestNBooks(10); // Find more than needed to fill all sections

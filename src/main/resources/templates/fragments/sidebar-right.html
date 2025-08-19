@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Bookstore Fragment: sidebar-right</title>
@@ -8,9 +10,8 @@
 <body>
 
 <div id="sidebar-right" th:fragment="sidebar-right">
-    <div id="theme-changer"></div>
-    <div id="login-div">
-        <div id="login-form-heading">
+    <div id="login-div" sec:authorize="isAnonymous()">
+        <div class="sidebar-right-heading" id="login-form-heading">
             <div th:replace="~{fragments/svg-heading-surrounded-by-circles :: svgHeading('LOG IN')}"></div>
         </div>
         <div id="login-form">
@@ -37,9 +38,51 @@
             </form>
         </div>
     </div>
-    <!-- idk what to do here yet.
-    magagamer.com put weekly top rated here
-    but i kinda want a max 10 list of themes (with live preview??) to be put here -->
+    <div id="your-account-div" sec:authorize="isAuthenticated()">
+        <strong id="your-account-title">Your Account</strong>
+        <form action="#" id="your-account-details" method="post" th:action="@{/logout}">
+            <p id="your-account-welcome">Welcome <strong th:text="${user.getProfile().getDisplayName()}"></strong></p>
+            <a th:href="@{/profile/{username}(username=${user.getUsername()})}">My Account</a>
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+    <div class="sidebar-right-div" id="theme-div">
+        <div class="sidebar-right-heading" id="theme-heading">
+            <div th:replace="~{fragments/svg-heading-surrounded-by-circles :: svgHeading('THEME')}"></div>
+        </div>
+        <!-- show used theme with swatch 8 colors -->
+        <div class="sidebar-right-content">
+            <div class="theme-div">
+                <ul class="theme-colors-list">
+                    <li class="theme-color" style="background-color: var(--color-00, #A40E60)"></li>
+                    <li class="theme-color" style="background-color: var(--color-01, #FF0000)"></li>
+                    <li class="theme-color" style="background-color: var(--color-02, #F61590)"></li>
+                    <li class="theme-color" style="background-color: var(--color-03, #F88B9E)"></li>
+                    <li class="theme-color" style="background-color: var(--color-04, #FFD376)"></li>
+                    <li class="theme-color" style="background-color: var(--color-05, #AAFFB1)"></li>
+                    <li class="theme-color" style="background-color: var(--color-06, #FFE2E7)"></li>
+                    <li class="theme-color" style="background-color: var(--color-07, #FFF2D3)"></li>
+                </ul>
+                <th:block th:if="${_overrideThemeUsed != null}">
+                    <p class="theme-details">
+                        <strong th:text="${_overrideThemeUsed.name()}"></strong> by
+                        <a th:href="@{/profile/{username}(username=${user.getUsername()})}"
+                           th:text="${user.getProfile().getDisplayName()}"></a>
+                    </p>
+                </th:block>
+                <th:block th:if="${_overrideThemeUsed == null}">
+                    <strong>Default Mangagamer Theme</strong>
+                </th:block>
+            </div>
+            <!-- change theme link to change theme page -->
+            <th:block sec:authorize="isAnonymous()">
+                <a th:href="@{/register?change_theme=true}">Change Theme</a>
+            </th:block>
+            <th:block sec:authorize="isAuthenticated()">
+                <a th:href="@{/theme/search}">Change Theme</a>
+            </th:block>
+        </div>
+    </div>
 </div>
 
 </body>

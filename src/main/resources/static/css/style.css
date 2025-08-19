@@ -26,15 +26,13 @@ body {
     margin: 0 0 -8px 10px;
     z-index: 9999;
     color: var(--color-02, #F61590);
-    text-shadow:
-            -2px -2px 0 var(--color-07, #FFF2D3),
-            2px -2px 0 var(--color-07, #FFF2D3),
-            -2px  2px 0 var(--color-07, #FFF2D3),
-            2px  2px 0 var(--color-07, #FFF2D3), /* inner border */
-            -4px -4px 0 var(--color-02, #F61590),
-            4px -4px 0 var(--color-02, #F61590),
-            -4px  4px 0 var(--color-02, #F61590),
-            4px  4px 0 var(--color-02, #F61590); /* outer border */
+    text-shadow: -2px -2px 0 var(--color-07, #FFF2D3),
+    2px -2px 0 var(--color-07, #FFF2D3),
+    -2px 2px 0 var(--color-07, #FFF2D3),
+    2px 2px 0 var(--color-07, #FFF2D3), /* inner border */ -4px -4px 0 var(--color-02, #F61590),
+    4px -4px 0 var(--color-02, #F61590),
+    -4px 4px 0 var(--color-02, #F61590),
+    4px 4px 0 var(--color-02, #F61590); /* outer border */
     overflow: visible;
 }
 
@@ -44,8 +42,8 @@ body {
     display: flex;
     flex-direction: column;
     background-image: url("/static/img/site-logo.png");
-    background-position:center;
-    background-repeat:repeat-y;
+    background-position: center;
+    background-repeat: repeat-y;
     height: 100%;
     width: 1030px;
 }
@@ -124,7 +122,7 @@ body {
     padding-right: 10px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 }
 
 #sliding-banner {
@@ -145,6 +143,7 @@ body {
     max-height: 200px;
     min-height: 200px;
 }
+
 #sliding-banner-thumbs {
     margin-top: 5px;
 }
@@ -207,6 +206,7 @@ body {
     stroke-linejoin: round;
     stroke-width: 8;
 }
+
 #main-content-div .svg-text-heading .text-outline-inner {
     fill: none;
     paint-order: stroke;
@@ -214,6 +214,7 @@ body {
     stroke-linejoin: round;
     stroke-width: 4;
 }
+
 #main-content-div .svg-text-heading .text-fill {
     fill: var(--color-02, #F61590);
 }
@@ -280,43 +281,37 @@ body {
 .genre-color-style-00 {
     background-color: var(--color-05, #AAFFB1);
     color: var(--genre-text-color-00, #334321);
-    text-shadow:
-            -0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-             0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-            -0.05rem  0.05rem 0 var(--color-07, #FFF2D3),
-             0.05rem  0.05rem 0 var(--color-07, #FFF2D3), /* inner border */
-            -0.07rem -0.07rem 0 var(--genre-text-color-00, #334321),
-             0.07rem -0.07rem 0 var(--genre-text-color-00, #334321),
-            -0.07rem  0.07rem 0 var(--genre-text-color-00, #334321),
-             0.07rem  0.07rem 0 var(--genre-text-color-00, #334321); /* outer border */
+    text-shadow: -0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
+    0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
+    -0.05rem 0.05rem 0 var(--color-07, #FFF2D3),
+    0.05rem 0.05rem 0 var(--color-07, #FFF2D3), /* inner border */ -0.07rem -0.07rem 0 var(--genre-text-color-00, #334321),
+    0.07rem -0.07rem 0 var(--genre-text-color-00, #334321),
+    -0.07rem 0.07rem 0 var(--genre-text-color-00, #334321),
+    0.07rem 0.07rem 0 var(--genre-text-color-00, #334321); /* outer border */
 }
 
 .genre-color-style-01 {
     background-color: var(--color-04, #FFD376);
     color: var(--genre-text-color-01, #356618);
-    text-shadow:
-            -0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-             0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-            -0.05rem  0.05rem 0 var(--color-07, #FFF2D3),
-             0.05rem  0.05rem 0 var(--color-07, #FFF2D3), /* inner border */
-            -0.07rem -0.07rem 0 var(--genre-text-color-01, #356618),
-             0.07rem -0.07rem 0 var(--genre-text-color-01, #356618),
-            -0.07rem  0.07rem 0 var(--genre-text-color-01, #356618),
-             0.07rem  0.07rem 0 var(--genre-text-color-01, #356618); /* outer border */
+    text-shadow: -0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
+    0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
+    -0.05rem 0.05rem 0 var(--color-07, #FFF2D3),
+    0.05rem 0.05rem 0 var(--color-07, #FFF2D3), /* inner border */ -0.07rem -0.07rem 0 var(--genre-text-color-01, #356618),
+    0.07rem -0.07rem 0 var(--genre-text-color-01, #356618),
+    -0.07rem 0.07rem 0 var(--genre-text-color-01, #356618),
+    0.07rem 0.07rem 0 var(--genre-text-color-01, #356618); /* outer border */
 }
 
 .genre-color-style-02 {
     background-color: var(--color-03, #F88B9E);
     color: var(--genre-text-color-02, #237C24);
-    text-shadow:
-            -0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-             0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-            -0.05rem  0.05rem 0 var(--color-07, #FFF2D3),
-             0.05rem  0.05rem 0 var(--color-07, #FFF2D3), /* inner border */
-            -0.07rem -0.07rem 0 var(--genre-text-color-02, #237C24),
-             0.07rem -0.07rem 0 var(--genre-text-color-02, #237C24),
-            -0.07rem  0.07rem 0 var(--genre-text-color-02, #237C24),
-             0.07rem  0.07rem 0 var(--genre-text-color-02, #237C24); /* outer border */
+    text-shadow: -0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
+    0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
+    -0.05rem 0.05rem 0 var(--color-07, #FFF2D3),
+    0.05rem 0.05rem 0 var(--color-07, #FFF2D3), /* inner border */ -0.07rem -0.07rem 0 var(--genre-text-color-02, #237C24),
+    0.07rem -0.07rem 0 var(--genre-text-color-02, #237C24),
+    -0.07rem 0.07rem 0 var(--genre-text-color-02, #237C24),
+    0.07rem 0.07rem 0 var(--genre-text-color-02, #237C24); /* outer border */
 }
 
 .hidden-genre {
@@ -328,7 +323,7 @@ body {
     flex-direction: column;
     max-width: 175px;
     min-width: 175px;
-    row-gap: 20px;
+    row-gap: 10px;
 }
 
 .sidebar-right-heading {
@@ -356,6 +351,7 @@ body {
     stroke-linejoin: round;
     stroke-width: 12;
 }
+
 .sidebar-right-heading .svg-text-heading .text-outline-middle {
     fill: none;
     paint-order: stroke;
@@ -363,6 +359,7 @@ body {
     stroke-linejoin: round;
     stroke-width: 8;
 }
+
 .sidebar-right-heading .svg-text-heading .text-outline-inner {
     fill: none;
     paint-order: stroke;
@@ -370,6 +367,7 @@ body {
     stroke-linejoin: round;
     stroke-width: 4;
 }
+
 .sidebar-right-heading .svg-text-heading .text-fill {
     fill: var(--color-07, #FFF2D3);
 }
@@ -396,6 +394,87 @@ body {
     margin-bottom: 10px;
 }
 
+.sidebar-right-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--color-06, #FFE2E7);
+    border: 2px solid var(--color-02, #F61590);
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: -5px;
+}
+
+#your-account-div {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-02, #F61590);
+    border-radius: 5px;
+    margin: 0 0 10px 0;
+}
+
+#your-account-title {
+    margin: auto;
+    color: var(--color-06, #FFE2E7);
+    padding-bottom: 5px;
+    padding-top: 5px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#your-account-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--color-06, #FFE2E7);
+    border: 2px solid var(--color-02, #F61590);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 2px;
+}
+
+#your-account-welcome {
+    margin: 0;
+}
+
+.theme-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.theme-colors-list {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+    list-style: none;
+}
+
+.theme-color {
+    flex: 1 1 calc(12.5% - 10px);
+    aspect-ratio: 1;
+}
+
+.theme-color:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.theme-color:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.theme-details {
+    margin: 0;
+}
+
 #footer {
     display: flex;
     flex-direction: row;
@@ -411,10 +490,12 @@ body {
 .float-right {
     float: right;
 }
+
 .flex-row {
     display: flex;
     flex-direction: row;
 }
+
 .flex-column {
     display: flex;
     flex-direction: column;
@@ -423,6 +504,7 @@ body {
 .space-between {
     justify-content: space-between;
 }
+
 .gray-text {
     color: gray;
 }
