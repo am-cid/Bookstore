@@ -266,14 +266,9 @@ public class ThemeServiceImpl implements ThemeService {
         if (user == null || user.getProfile().getThemeUsed() == null)
             return null;
 
-        ThemeResponseDTO themeUsed = ThemeMapper.themeToResponseDTO(
+        return ThemeMapper.themeToResponseDTO(
                 user.getProfile().getThemeUsed()
         );
-        boolean isDefaultTheme = themeUsed.id().equals(1L);
-        if (isDefaultTheme)
-            return null;
-
-        return themeUsed;
     }
 
 }
