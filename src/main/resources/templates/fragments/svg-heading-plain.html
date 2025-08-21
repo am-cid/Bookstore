@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div style="z-index: 9999; display: inline-block; line-height: 1;"
+     th:fragment="svgHeading(text, viewWidth, viewHeight)">
+    <svg class="svg-text-heading" preserveAspectRatio="xMinYMid meet"
+         style="overflow:visible; height:1em;"
+         th:attr="viewBox='0 0 ' + ${viewWidth} + ' ' + ${viewHeight}"
+         xmlns="http://www.w3.org/2000/svg">
+        <!-- outline -->
+        <text class="text-outline-outer"
+              th:text="${text}"
+              x="0"
+              y="0">
+        </text>
+        <!-- outline -->
+        <text class="text-outline-inner"
+              th:text="${text}"
+              x="0"
+              y="0">
+        </text>
+        <!-- fill -->
+        <text class="text-fill"
+              th:text="${text}"
+              x="0"
+              y="0">
+        </text>
+    </svg>
+</div>
+</body>
+</html>
