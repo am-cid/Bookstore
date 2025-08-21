@@ -40,7 +40,7 @@
     </div>
     <div id="your-account-div" sec:authorize="isAuthenticated()">
         <strong id="your-account-title">Your Account</strong>
-        <form action="#" id="your-account-details" method="post" th:action="@{/logout}">
+        <form action="#" id="your-account-details" method="post" th:action="@{/api/v1/auth/logout}">
             <p id="your-account-welcome">Welcome <strong th:text="${user.getProfile().getDisplayName()}"></strong></p>
             <a th:href="@{/profile/{username}(username=${user.getUsername()})}">My Account</a>
             <button type="submit">Logout</button>
@@ -66,8 +66,8 @@
                 <th:block th:if="${_overrideThemeUsed != null}">
                     <p class="theme-details">
                         <strong th:text="${_overrideThemeUsed.name()}"></strong> by
-                        <a th:href="@{/profile/{username}(username=${user.getUsername()})}"
-                           th:text="${user.getProfile().getDisplayName()}"></a>
+                        <a th:href="@{/profile/{username}(username=${_overrideThemeUsed.username()})}"
+                           th:text="${_overrideThemeUsed.userDisplayName()}"></a>
                     </p>
                 </th:block>
                 <th:block th:if="${_overrideThemeUsed == null}">
