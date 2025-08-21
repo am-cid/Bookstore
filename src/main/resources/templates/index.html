@@ -7,7 +7,12 @@
     <title>Bookstore</title>
     <link href="/css/style.css" rel="stylesheet">
     <script src="http://localhost:35729/livereload.js"></script>
-    <th:block th:if="${_overrideTheme != null}" th:utext="${_overrideTheme}"></th:block>
+    <th:block th:if="${_overrideTheme != null}"
+            th:utext="${_overrideTheme}">
+    </th:block>
+    <!-- START PAGE SPECIFIC CSS -->
+    <link href="/css/index.css" rel="stylesheet">
+    <!-- END PAGE SPECIFIC CSS -->
 </head>
 <body>
 
