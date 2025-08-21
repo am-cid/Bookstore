@@ -20,23 +20,6 @@ body {
     height: 100%;
 }
 
-.cherry-bomb-one-regular {
-    font-family: "Cherry Bomb One", system-ui;
-    padding: 5px 0 0 0;
-    margin: 0 0 -8px 10px;
-    z-index: 9999;
-    color: var(--color-02, #F61590);
-    text-shadow: -2px -2px 0 var(--color-07, #FFF2D3),
-    2px -2px 0 var(--color-07, #FFF2D3),
-    -2px 2px 0 var(--color-07, #FFF2D3),
-    2px 2px 0 var(--color-07, #FFF2D3), /* inner border */ -4px -4px 0 var(--color-02, #F61590),
-    4px -4px 0 var(--color-02, #F61590),
-    -4px 4px 0 var(--color-02, #F61590),
-    4px 4px 0 var(--color-02, #F61590); /* outer border */
-    overflow: visible;
-}
-
-
 #body-div {
     margin: auto;
     display: flex;
@@ -46,19 +29,205 @@ body {
     background-repeat: repeat-y;
     height: 100%;
     width: 1030px;
+    box-shadow: 0 0 15px black;
 }
 
 #header {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    justify-content: space-between;
+}
+
+#header-left-div {
+    display: grid;
+    grid-template-rows: 15% 45% 20% 10%;
+}
+
+#header-slogan {
+    margin-top: 0;
+    margin-left: 10px;
+    color: var(--color-06, #FFE2E7);
+    font-size: 18px;
+
+    .text-outline-inner {
+        fill: none;
+        paint-order: stroke;
+        stroke: var(--color-02, #F61590);
+        stroke-linejoin: round;
+        stroke-width: 6;
+    }
+
+    .text-fill {
+        fill: var(--color-06, #FFE2E7);
+    }
+}
+
+#header-logo-div {
+    text-align: center;
+    font-size: 60px;
+    margin: -5px 0 -10px 0;
+}
+
+.letter-oval {
+    fill: var(--color-06, #FFE2E7);
+    stroke: var(--color-02, #F61590);
+    stroke-width: 2px;
+    opacity: 1;
+}
+
+.logo-letter-outline {
+    stroke: black;
+    stroke-width: 5px;
+    fill: none;
+}
+
+#logo-letter-0 {
+    fill: var(--color-00, #A40E60);
+}
+
+#logo-letter-1 {
+    fill: var(--color-01, #FF0000);
+}
+
+#logo-letter-2 {
+    fill: var(--color-02, #F61590);
+}
+
+#logo-letter-3 {
+    fill: var(--color-03, #F88B9E);
+}
+
+#logo-letter-4 {
+    fill: var(--color-04, #FFD376);
+}
+
+#logo-letter-5 {
+    fill: var(--color-03, #F88B9E);
+}
+
+#logo-letter-6 {
+    fill: var(--color-02, #F61590);
+}
+
+#logo-letter-7 {
+    fill: var(--color-01, #FF0000);
+}
+
+#logo-letter-8 {
+    fill: var(--color-00, #A40E60);
+}
+
+#header-logo-link {
+    font-size: 20px;
+    text-align: center;
+
+    .text-underline-outline {
+        stroke: var(--color-02, #F61590);
+        stroke-width: 8;
+    }
+
+    .text-underline {
+        stroke: var(--color-03, #F88B9E);
+        stroke-width: 4;
+    }
+
+    .text-outline {
+        fill: none;
+        paint-order: stroke;
+        stroke: var(--color-06, #FFE2E7);
+        stroke-linejoin: round;
+        stroke-width: 4;
+    }
+
+    .text-fill {
+        fill: var(--color-02, #F61590);
+    }
+}
+
+#header-navbar {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-self: center;
+    justify-content: space-around;
+    gap: 0;
+    width: 70%;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    overflow: hidden;
+    background-color: var(--color-07, #FFF2D3);
+    border: 2px solid var(--color-02, #F61590);
+    border-radius: 10px;
+}
+
+#header-navbar li {
+    display: flex;
     align-items: center;
+    text-align: center;
+    height: 100%;
+    font-size: 20px;
+    padding: 0 10px;
+
+    .text-outline-outer {
+        fill: none;
+        paint-order: stroke;
+        stroke: var(--color-02, #F61590);
+        stroke-linejoin: round;
+        stroke-width: 8;
+    }
+
+    .text-outline-inner {
+        fill: none;
+        paint-order: stroke;
+        stroke: var(--color-06, #FFE2E7);
+        stroke-linejoin: round;
+        stroke-width: 4;
+    }
+
+    .text-fill {
+        fill: var(--color-02, #F61590);
+    }
+}
+
+#header-navbar li:hover {
+    background-color: var(--color-04, #FFD376);
+}
+
+#header-right-div {
+    display: grid;
+    grid-template-rows: 15% 45% 20% 10%;
+    justify-content: end;
 }
 
 #header-top-right-div {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    align-self: end;
+}
+
+.header-top-right-button {
+    font-size: 16px;
+    background-color: var(--color-02, #F61590);
+    border: 1px solid var(--color-06, #FFE2E7);
+    color: var(--color-06, #FFE2E7);
+    font-weight: bolder;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px;
+    box-shadow: inset 1px 1px 4px var(--color-06, #FFE2E7);
+}
+
+#header-bottom-right-div {
+    align-self: start;
+    grid-row: 3;
+}
+
+#header-support {
+    padding-left: 25px;
+    border-bottom-left-radius: 50px;
+}
+
+#header-about-us {
+    border-bottom-right-radius: 15px;
 }
 
 #main-layout {
@@ -115,62 +284,6 @@ body {
     display: none;
 }
 
-}
-
-}
-
-}
-
-}
-
-}
-
-}
-
-}
-
-
-
-}
-
-    background-color: var(--color-07, #FFF2D3);
-}
-
-    display: flex;
-}
-
-}
-
-}
-
-}
-
-}
-
-}
-
-    display: flex;
-    flex-direction: row;
-}
-
-    display: flex;
-    flex-direction: column;
-}
-
-}
-
-}
-
-    display: flex;
-    flex-direction: column;
-}
-
-}
-
-}
-
-}
-
 #sidebar-right {
     display: flex;
     flex-direction: column;
@@ -190,7 +303,7 @@ body {
 }
 
 .sidebar-right-heading circle {
-    fill: var(--color-07, #FFF2D3);
+    fill: var(--color-06, #FFE2E7);
 }
 
 .sidebar-right-heading .circle-outline {
@@ -208,7 +321,7 @@ body {
 .sidebar-right-heading .svg-text-heading .text-outline-middle {
     fill: none;
     paint-order: stroke;
-    stroke: var(--color-07, #FFF2D3);
+    stroke: var(--color-06, #FFE2E7);
     stroke-linejoin: round;
     stroke-width: 8;
 }
@@ -222,7 +335,7 @@ body {
 }
 
 .sidebar-right-heading .svg-text-heading .text-fill {
-    fill: var(--color-07, #FFF2D3);
+    fill: var(--color-06, #FFE2E7);
 }
 
 #theme-heading svg {
