@@ -3,7 +3,6 @@ package com.simple.Bookstore.Theme;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
-import com.simple.Bookstore.Exceptions.UnauthorizedException;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.User.User;
@@ -67,6 +66,14 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
+    public ThemeResponseDTO findThemeById(Long id) {
+        return themeRepository
+                .findById(id)
+                .map(ThemeMapper::themeToResponseDTO)
+                .orElseThrow(() -> new ThemeNotFoundException(id));
+    }
+
+    @Override
     public ThemeResponseDTO findPublishedThemeById(Long id) throws ThemeNotFoundException {
         return themeRepository
                 .findByIdAndPublishedIsTrue(id)
@@ -84,12 +91,13 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeResponseDTO updateTheme(Long id, ThemeRequestDTO request, User user) {
+    public ThemeResponseDTO updateTheme(Long id, ThemeRequestDTO request, User user)
+            throws ThemeNotFoundException {
         Theme theme = themeRepository
                 .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
         if (!user.getId().equals(theme.getProfile().getUser().getId())) {
-            throw new UnauthorizedException("You are not authorized to edit this theme");
+            throw new ThemeNotFoundException(id);
         }
         theme.setName(request.name());
         theme.setBase00(request.base00());
@@ -105,12 +113,13 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public void deleteTheme(Long id, User user) {
+    public void deleteTheme(Long id, User user)
+            throws ThemeNotFoundException {
         Theme theme = themeRepository
                 .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
         if (!user.getId().equals(theme.getProfile().getUser().getId())) {
-            throw new IllegalStateException("You are not user of theme " + theme.getName());
+            throw new ThemeNotFoundException(id);
         }
         theme.getProfilesUsing().forEach(profile -> profile.getSavedThemes().remove(theme));
         themeRepository.delete(theme);
@@ -118,12 +127,13 @@ public class ThemeServiceImpl implements ThemeService {
 
     @Override
     @Transactional
-    public ThemeResponseDTO publishTheme(Long id, User user) {
+    public ThemeResponseDTO publishTheme(Long id, User user)
+            throws ThemeNotFoundException {
         Theme theme = themeRepository
                 .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
         if (!user.getId().equals(theme.getProfile().getUser().getId())) {
-            throw new IllegalStateException("You are not user of theme " + theme.getName());
+            throw new ThemeNotFoundException(id);
         }
         theme.setPublished(true);
         Theme savedTheme = themeRepository.save(theme);
@@ -132,12 +142,12 @@ public class ThemeServiceImpl implements ThemeService {
 
     @Override
     @Transactional
-    public ThemeResponseDTO makeThemePrivate(Long id, User user) {
+    public ThemeResponseDTO makeThemePrivate(Long id, User user) throws ThemeNotFoundException {
         Theme theme = themeRepository
                 .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
         if (!user.getId().equals(theme.getProfile().getUser().getId())) {
-            throw new IllegalStateException("You are not user of theme " + theme.getName());
+            throw new ThemeNotFoundException(id);
         }
         theme.setPublished(false);
         theme.getProfilesUsing().forEach(userUsing -> userUsing.getSavedThemes().remove(theme));
@@ -148,43 +158,56 @@ public class ThemeServiceImpl implements ThemeService {
 
     @Override
     @Transactional
-    public ThemeResponseDTO saveThemeForUser(Long id, User user) {
+    public ThemeResponseDTO saveThemeForUser(Long id, User user) throws ThemeNotFoundException {
         Theme theme = themeRepository
-                .findByIdAndPublishedIsTrue(id)
+                .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
+        if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
+            throw new ThemeNotFoundException(id);
+        }
         // need to re-get user since the User passed in is from @AuthenticationPrincipal,
         // which is outside the @Transactional block of this method.
         // This was a headache and a half!
         User managedUser = userRepository.findById(user.getId()).get();
-        managedUser.getProfile().getSavedThemes().add(theme);
+        Profile profile = managedUser.getProfile();
+        profile.getSavedThemes().add(theme);
         theme.getProfilesUsing().add(user.getProfile());
-        userRepository.save(managedUser);
+        profileRepository.save(profile);
         Theme savedTheme = themeRepository.save(theme);
         return ThemeMapper.themeToResponseDTO(savedTheme);
     }
 
     @Override
-    public ThemeResponseDTO setThemeForUser(Long id, User user) {
+    public ThemeResponseDTO setThemeForUser(Long id, User user) throws ThemeNotFoundException {
         Theme theme = themeRepository
                 .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
-        user.getProfile().setThemeUsed(theme);
-        userRepository.save(user);
+        if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
+            throw new ThemeNotFoundException(id);
+        }
+        Profile profile = user.getProfile();
+        profile.setThemeUsed(theme);
+        profileRepository.save(profile);
         return ThemeMapper.themeToResponseDTO(theme);
     }
 
     @Override
     @Transactional
-    public void deleteThemeFromSavedThemes(Long id, User user) {
-        Theme theme = themeRepository.findById(id)
+    public void deleteThemeFromSavedThemes(Long id, User user) throws ThemeNotFoundException {
+        Theme theme = themeRepository
+                .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
+        if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
+            throw new ThemeNotFoundException(id);
+        }
         // need to re-get user since the User passed in is from @AuthenticationPrincipal,
         // which is outside the @Transactional block of this method.
         // This was a headache and a half!
         User managedUser = userRepository.findById(user.getId()).get();
-        managedUser.getProfile().getSavedThemes().remove(theme);
+        Profile profile = managedUser.getProfile();
+        profile.getSavedThemes().remove(theme);
         theme.getProfilesUsing().remove(user.getProfile());
-        userRepository.save(managedUser);
+        profileRepository.save(profile);
         themeRepository.save(theme);
     }
 
@@ -194,23 +217,17 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeResponseDTO findThemeById(Long id) {
-        return themeRepository
-                .findById(id)
-                .map(ThemeMapper::themeToResponseDTO)
-                .orElseThrow(() -> new ThemeNotFoundException(id));
-    }
-
-    @Override
-    public Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable) {
+    public Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable)
+            throws ThemeNotFoundException {
         return themeRepository
                 .searchThemes(query, userId, pageable)
                 .map(ThemeMapper::projectionToResponseDTO);
     }
 
     @Override
-    public String getThemeAsCss(Long id, User user, int steps) {
-        Theme theme = themeRepository.findById(id)
+    public String getThemeAsCss(Long id, User user, int steps) throws ThemeNotFoundException {
+        Theme theme = themeRepository
+                .findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(id));
         if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
             throw new ThemeNotFoundException(id);
@@ -262,7 +279,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeResponseDTO findThemeUsed(User user) throws IllegalStateException {
+    public ThemeResponseDTO findThemeUsed(User user) {
         if (user == null || user.getProfile().getThemeUsed() == null)
             return null;
 

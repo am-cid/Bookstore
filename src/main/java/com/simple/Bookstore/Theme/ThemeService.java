@@ -20,25 +20,25 @@ public interface ThemeService {
 
     ThemeResponseDTO createTheme(User user, ThemeRequestDTO request);
 
-    ThemeResponseDTO updateTheme(Long id, ThemeRequestDTO request, User user);
+    ThemeResponseDTO updateTheme(Long id, ThemeRequestDTO request, User user) throws ThemeNotFoundException;
 
-    ThemeResponseDTO publishTheme(Long id, User user);
+    ThemeResponseDTO publishTheme(Long id, User user) throws ThemeNotFoundException;
 
-    ThemeResponseDTO makeThemePrivate(Long id, User user);
+    ThemeResponseDTO makeThemePrivate(Long id, User user) throws ThemeNotFoundException;
 
-    ThemeResponseDTO saveThemeForUser(Long id, User user);
+    ThemeResponseDTO saveThemeForUser(Long id, User user) throws ThemeNotFoundException;
 
-    ThemeResponseDTO setThemeForUser(Long id, User user);
+    ThemeResponseDTO setThemeForUser(Long id, User user) throws ThemeNotFoundException;
 
-    void deleteTheme(Long id, User user);
+    void deleteTheme(Long id, User user) throws ThemeNotFoundException;
 
-    void deleteThemeFromSavedThemes(Long id, User user);
+    void deleteThemeFromSavedThemes(Long id, User user) throws ThemeNotFoundException;
 
     Theme loadThemeFromYaml(File yamlFile) throws IOException;
 
-    Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable);
+    Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable) throws ThemeNotFoundException;
 
-    String getThemeAsCss(Long id, User user, int steps);
+    String getThemeAsCss(Long id, User user, int steps) throws ThemeNotFoundException;
 
     ThemeResponseDTO updateCssTheme(Long id, User user) throws IOException, ThemeNotFoundException;
 
@@ -52,5 +52,5 @@ public interface ThemeService {
      *                               theme, which should be there as the first
      *                               entry
      */
-    ThemeResponseDTO findThemeUsed(User user) throws IllegalStateException;
+    ThemeResponseDTO findThemeUsed(User user);
 }
