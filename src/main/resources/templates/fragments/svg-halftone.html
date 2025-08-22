@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div id="halftone-bg" style="display: inline-block; line-height: 1;"
+     th:fragment="halftoneSvg(tiltDegree, rows, circles, maxRadius, circleColor, width, height)">
+    <svg preserveAspectRatio="xMinYMid meet"
+         th:attr="width=${width}, height=${height}, viewBox='0 0 650 300', style='transform: rotate(' + ${tiltDegree} + 'deg);'"
+         xmlns="http://www.w3.org/2000/svg">
+        <g th:attr="fill=${circleColor}">
+            <th:block th:each="rowIndex : ${#numbers.sequence(0, rows)}">
+                <th:block th:each="circleIndex : ${#numbers.sequence(0, circles)}">
+                    <circle th:attr="
+                        cx=${circleIndex * 25 + 25},
+                        cy=${(rowIndex + 1) * 25},
+                        r=${maxRadius - rowIndex}" />
+                </th:block>
+            </th:block>
+        </g>
+    </svg>
+</div>
+
+</body>
+</html>

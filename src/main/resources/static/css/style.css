@@ -34,20 +34,29 @@ body {
 
 #header {
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 55% 45%;
     justify-content: space-between;
+    height: 160px;
+    overflow: hidden;
+    position: relative;
+}
+
+#halftone-bg {
+    position: absolute;
+    z-index: -9999;
+    margin: -60px -10px;
 }
 
 #header-left-div {
     display: grid;
-    grid-template-rows: 15% 45% 20% 10%;
+    grid-template-rows: 20% 40% 20% 20%;
 }
 
 #header-slogan {
     margin-top: 0;
     margin-left: 10px;
     color: var(--color-06, #FFE2E7);
-    font-size: 18px;
+    font-size: 16px;
 
     .text-outline-inner {
         fill: none;
@@ -117,6 +126,10 @@ body {
     fill: var(--color-00, #A40E60);
 }
 
+#header-logo-link-div {
+    justify-self: center;
+}
+
 #header-logo-link {
     font-size: 20px;
     text-align: center;
@@ -150,15 +163,15 @@ body {
     justify-self: center;
     justify-content: space-around;
     gap: 0;
-    width: 70%;
-    height: 30px;
+    width: 60%;
+    height: 26px;
     margin: 0;
     padding: 0;
     list-style-type: none;
     overflow: hidden;
     background-color: var(--color-07, #FFF2D3);
     border: 2px solid var(--color-02, #F61590);
-    border-radius: 10px;
+    border-radius: 15px;
 }
 
 #header-navbar li {
@@ -166,7 +179,7 @@ body {
     align-items: center;
     text-align: center;
     height: 100%;
-    font-size: 20px;
+    font-size: 16px;
     padding: 0 10px;
 
     .text-outline-outer {
@@ -197,11 +210,11 @@ body {
 #header-right-div {
     display: grid;
     grid-template-rows: 15% 45% 20% 10%;
-    justify-content: end;
 }
 
 #header-top-right-div {
     align-self: end;
+    justify-self: end;
 }
 
 .header-top-right-button {
@@ -217,7 +230,7 @@ body {
 }
 
 #header-bottom-right-div {
-    align-self: start;
+    align-self: end;
     grid-row: 3;
 }
 
@@ -228,6 +241,30 @@ body {
 
 #header-about-us {
     border-bottom-right-radius: 15px;
+}
+
+#search-input {
+    width: 66%;
+}
+
+#search-button {
+    font-size: 13px;
+    text-align: center;
+
+    .text-outline-inner {
+        fill: none;
+        paint-order: stroke;
+        stroke: var(--color-02, #F61590);
+        stroke-linejoin: round;
+        stroke-width: 3;
+    }
+
+    .text-fill {
+        fill: var(--color-06, #FFE2E7);
+    }
+}
+
+#search-button:hover {
 }
 
 #main-layout {

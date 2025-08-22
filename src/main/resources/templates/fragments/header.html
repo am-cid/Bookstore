@@ -9,13 +9,14 @@
 
 <header th:fragment="header">
     <div id="header">
+        <div th:replace="~{fragments/svg-halftone :: halftoneSvg(-5, 8, 65, 10, 'var(--color-02)', '1030px', '160px')}"></div>
         <div id="header-left-div">
             <div id="header-slogan">
-                <div th:replace="~{fragments/svg-heading-plain :: svgHeading('Books I have at home :D', 200, 18)}"></div>
+                <div th:replace="~{fragments/svg-heading-plain :: svgHeading('Books I have at home :D', 179, 16)}"></div>
             </div>
             <div id="header-logo-div">
                 <a href="/">
-                    <div style="z-index: 9999;">
+                    <div style="z-index: 9999; display: inline-block">
                         <svg class="svg-text-heading" preserveAspectRatio="xMinYMid meet"
                              style="overflow:visible; height:1em;"
                              viewBox="0 0 340 60"
@@ -50,19 +51,21 @@
                     </div>
                 </a>
             </div>
-            <a href="https://github.com/am-cid/bookstore" id="header-logo-link" target="_blank">
-                <div th:replace="~{fragments/svg-heading-strikethrough-behind ::
+            <div id="header-logo-link-div">
+                <a href="https://github.com/am-cid/bookstore" id="header-logo-link" target="_blank">
+                    <div th:replace="~{fragments/svg-heading-strikethrough-behind ::
                     svgHeading('github.com/am-cid/bookstore', 340, 21)}"></div>
-            </a>
+                </a>
+            </div>
             <ul id="header-navbar">
                 <li><a th:href="@{/books/search}">
-                    <div th:replace="~{fragments/svg-heading-plain :: svgHeading('BOOKS', 70, 20)}"></div>
+                    <div th:replace="~{fragments/svg-heading-plain :: svgHeading('BOOKS', 54, 16)}"></div>
                 </a></li>
                 <li><a th:href="@{/themes/search}">
-                    <div th:replace="~{fragments/svg-heading-plain :: svgHeading('THEMES', 82, 20)}"></div>
+                    <div th:replace="~{fragments/svg-heading-plain :: svgHeading('THEMES', 66, 16)}"></div>
                 </a></li>
                 <li><a th:href="@{/profile/search}">
-                    <div th:replace="~{fragments/svg-heading-plain :: svgHeading('COMMUNITY', 130, 20)}"></div>
+                    <div th:replace="~{fragments/svg-heading-plain :: svgHeading('COMMUNITY', 103, 16)}"></div>
                 </a></li>
             </ul>
         </div>
@@ -77,8 +80,15 @@
             </div>
             <div id="header-bottom-right-div">
                 <form action="/books/search" method="get">
-                    <input name="query" type="text">
-                    <button type="submit">Search</button>
+                    <select name="goods_type">
+                        <option selected="" value="0">Books</option>
+                        <option value="1">Themes</option>
+                        <option value="3">Profiles</option>
+                    </select>
+                    <input id="search-input" name="query" type="text">
+                    <button id="search-button" type="submit">
+                        <th:block th:replace="~{/fragments/svg-heading-plain :: svgHeading('SEARCH', 52, 13)}"></th:block>
+                    </button>
                 </form>
             </div>
         </div>
