@@ -20,7 +20,7 @@
                              'Book ' + book.id : book.title + '\n' + book.author
                  )}" />
                 </div>
-                <div class="book-list-item-details">
+                <div class="list-item-details">
                     <a th:href="@{/api/v1/books/{id}(id=${book.id})}"
                        th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></a>
                     <b class="rating-score" th:if="${book.averageRating != null}">

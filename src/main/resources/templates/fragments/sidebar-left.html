@@ -16,7 +16,7 @@
             <th:block th:each="author, authorStat: ${authors}">
                 <a class="sidebar-left-list-item"
                    th:classappend="${authorStat.index >= 10 ? 'more-item' : ''}"
-                   th:href="@{/api/v1/books/search?query={q}(q=${author})}"
+                   th:href="@{/search(query=${author}, type='BOOK')}"
                    th:text="${author}"></a>
             </th:block>
             <div th:if="${#lists.size(authors) > 10}">
@@ -39,7 +39,7 @@
             <th:block th:each="genre, genreStat: ${genres}">
                 <a class="sidebar-left-list-item"
                    th:classappend="${genreStat.index >= 10 ? 'more-item' : ''}"
-                   th:href="@{/api/v1/books/search?genres={q}(q=${genre.name()})}"
+                   th:href="@{/search(genres=${genre.name()}, type='BOOK')}"
                    th:text="${genre.displayName}"></a>
             </th:block>
             <div th:if="${#lists.size(genres) > 10}">

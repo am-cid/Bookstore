@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="pagination-nav" th:fragment="pagination(page, searchType, query, genres, rating)">
+    <p class="pagination-title">Page: </p>
+    <ul class="pagination-list">
+<!--        <li class="page-item" th:if="${!page.first}">-->
+<!--            <th:block th:if="${#strings.isEmpty(query)}">-->
+<!--                <a class="page-link"-->
+<!--                   tabindex="-1"-->
+<!--                   th:href="@{/search(type=${searchType}, genres=${genres}, rating=${rating}, page=${page.number - 1})}">-->
+<!--                    Previous-->
+<!--                </a>-->
+<!--            </th:block>-->
+<!--            <th:block th:unless="${#strings.isEmpty(query)}">-->
+<!--                <a class="page-link"-->
+<!--                   tabindex="-1"-->
+<!--                   th:href="@{/search(type=${searchType}, query=${query}, genres=${genres}, rating=${rating}, page=${page.number - 1})}">-->
+<!--                    Previous-->
+<!--                </a>-->
+<!--            </th:block>-->
+<!--        </li>-->
+
+        <th:block th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}">
+            <li class="page-item">
+                <th:block th:if="${i == page.number}">
+                    <strong class="active" th:text="${i + 1}"></strong>
+                </th:block>
+                <th:block th:unless="${i == page.number}">
+                    <th:block th:if="${#strings.isEmpty(query)}">
+                        <a class="page-link"
+                           th:href="@{/search(type=${searchType}, genres=${genres}, rating=${rating}, page=${i})}">
+                            <span th:text="${i + 1}"></span>
+                        </a>
+                    </th:block>
+                    <th:block th:unless="${#strings.isEmpty(query)}">
+                        <a class="page-link"
+                           th:href="@{/search(type=${searchType}, query=${query}, genres=${genres}, rating=${rating}, page=${i})}">
+                            <span th:text="${i + 1}"></span>
+                        </a>
+                    </th:block>
+                </th:block>
+            </li>
+        </th:block>
+
+<!--        <li class="page-item" th:if="${!page.last}">-->
+<!--            <th:block th:if="${#strings.isEmpty(query)}">-->
+<!--                <a class="page-link"-->
+<!--                   th:href="@{/search(type=${searchType}, genres=${genres}, rating=${rating}, page=${page.number + 1})}">-->
+<!--                    Next-->
+<!--                </a>-->
+<!--            </th:block>-->
+<!--            <th:block th:unless="${#strings.isEmpty(query)}">-->
+<!--                <a class="page-link"-->
+<!--                   th:href="@{/search(type=${searchType}, query=${query}, genres=${genres}, rating=${rating}, page=${page.number + 1})}">-->
+<!--                    Next-->
+<!--                </a>-->
+<!--            </th:block>-->
+<!--        </li>-->
+    </ul>
+</nav>
+
+</body>
+</html>

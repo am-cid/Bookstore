@@ -79,15 +79,15 @@
                 </a>
             </div>
             <div id="header-bottom-right-div">
-                <form action="/books/search" method="get">
-                    <select name="goods_type">
-                        <option selected="" value="0">Books</option>
-                        <option value="1">Themes</option>
-                        <option value="3">Profiles</option>
+                <form action="/search" method="get">
+                    <select name="type">
+                        <option value="BOOK">Books</option>
+                        <option value="THEME">Themes</option>
+                        <option value="PROFILE">Profiles</option>
                     </select>
                     <input id="search-input" name="query" type="text">
                     <button id="search-button" type="submit">
-                        <th:block th:replace="~{/fragments/svg-heading-plain :: svgHeading('SEARCH', 52, 13)}"></th:block>
+                        <th:block th:replace="~{/fragments/svg-fragments/heading-plain :: svgHeading('SEARCH', 52, 13)}"></th:block>
                     </button>
                 </form>
             </div>

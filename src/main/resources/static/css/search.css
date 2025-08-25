@@ -1,0 +1,130 @@
+.pagination-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+}
+
+.pagination-title {
+    margin: 0;
+}
+
+.pagination-list {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    list-style: none;
+    margin: 0 20px 0 0;
+    padding: 0 0 0 5px;
+}
+
+.page-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.page-item .active {
+    font-size: 1.25em;
+}
+
+.search-result-content-div {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    row-gap: 2em;
+}
+
+.search-result-content-div svg {
+    font-size: 32px;
+    padding: 0 0 0 10px;
+    margin-bottom: -40px;
+}
+
+.search-result-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 20px;
+    width: 656px;
+    background-color: var(--color-06, #FFE2E7);
+    border: 2px solid var(--color-02, #F61590);
+    border-top: 7px solid var(--color-02, #F61590);
+    border-bottom: 7px solid var(--color-02, #F61590);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.search-result-item {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border: 2px solid var(--color-00, #A40E60);
+}
+
+.search-result-item-details-div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.search-result-item-title {
+    background-color: var(--color-04, #FFD376);
+
+    a {
+        padding: 0 5px;
+    }
+}
+
+.list-item-details {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: repeat(3, auto);
+    margin-left: 15px;
+}
+
+.search-result-desc {
+    margin: 0;
+}
+
+.search-result-genres {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 5px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* SHARED */
+#main-content-div {
+    width: 700px;
+    max-width: 700px;
+    border: 2px solid var(--color-00, #A40E60);
+    background-color: var(--color-07, #FFF2D3);
+}
+
+#main-content-div .svg-text-heading .text-outline-outer {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-02, #F61590);
+    stroke-linejoin: round;
+    stroke-width: 8;
+}
+
+#main-content-div .svg-text-heading .text-outline-inner {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-07, #FFF2D3);
+    stroke-linejoin: round;
+    stroke-width: 4;
+}
+
+#main-content-div .svg-text-heading .text-fill {
+    fill: var(--color-02, #F61590);
+}
+
+.rating-score {
+    color: var(--color-01, #FF0000);
+}
+

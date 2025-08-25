@@ -1,0 +1,40 @@
+#main-content {
+    max-width: 700px;
+    min-width: 700px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#main-content-div {
+    width: 700px;
+    max-width: 700px;
+    border: 2px solid var(--color-00, #A40E60);
+    background-color: var(--color-07, #FFF2D3);
+}
+
+#main-content-div .svg-text-heading .text-outline-outer {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-02, #F61590);
+    stroke-linejoin: round;
+    stroke-width: 8;
+}
+
+#main-content-div .svg-text-heading .text-outline-inner {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-07, #FFF2D3);
+    stroke-linejoin: round;
+    stroke-width: 4;
+}
+
+#main-content-div .svg-text-heading .text-fill {
+    fill: var(--color-02, #F61590);
+}
+
+.rating-score {
+    color: var(--color-01, #FF0000);
+}

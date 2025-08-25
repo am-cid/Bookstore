@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="search-result-content-div" th:fragment="search-results">
+    <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading('SEARCH BOOKS', 255)}"></div>
+    <div class="search-result-content">
+        <th:block th:if="${!results.hasContent()}">No results found...</th:block>
+        <div class="search-result-item" th:each="book, i : ${results}">
+            <div class="search-result-item-image">
+                <img th:alt="'search-result-item-image-' + ${book.id}"
+                     th:src="${book.frontImage != null ?
+                                     book.frontImage : 'https://placehold.co/100x140?text=' +
+                                         (#strings.isEmpty(book.title) ?
+                                             'Book ' + book.id : book.title + '\n' + book.author
+                                 )}" />
+            </div>
+            <div class="search-result-item-details-div">
+                <div class="search-result-item-title">
+                    <a th:href="@{/api/v1/books/{id}(id=${book.id})}"
+                       th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></a>
+                </div>
+                <div class="list-item-details">
+                    <strong th:if="${book.averageRating != null}">Rating: </strong>
+                    <b class="rating-score" th:if="${book.averageRating != null}">
+                        <span th:text="${book.averageRating}"></span> / 5
+                    </b>
+                    <strong>Description: </strong>
+                    <p class="search-result-desc" th:text="${book.description}"></p>
+                    <strong>Genre/s: </strong>
+                    <ul class="search-result-genres">
+                        <li class="genre-oval"
+                            th:classappend="${genre.getStyleClass()}"
+                            th:each="genre, iter : ${#lists.toList(book.genres)}"
+                            th:if="${iter.index < 5}"
+                            th:text="${genre.displayName}">
+                        </li>
+                        <li class="genre-oval hidden-genre"
+                            th:classappend="${genre.getStyleClass()}"
+                            th:each="genre, iter : ${#lists.toList(book.genres)}"
+                            th:if="${iter.index >= 5}"
+                            th:text="${genre.displayName}"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/genre-expand.js}"></script>
+</div>
+
+</body>
+</html>
