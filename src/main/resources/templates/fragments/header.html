@@ -9,10 +9,10 @@
 
 <header th:fragment="header">
     <div id="header">
-        <div th:replace="~{fragments/svg-halftone :: halftoneSvg(-5, 8, 65, 10, 'var(--color-02)', '1030px', '160px')}"></div>
+        <div th:replace="~{fragments/svg-fragments/halftone :: halftoneSvg(-5, 8, 65, 10, 'var(--color-02)', '1030px', '160px')}"></div>
         <div id="header-left-div">
             <div id="header-slogan">
-                <div th:replace="~{fragments/svg-heading-plain :: svgHeading('Books I have at home :D', 179, 16)}"></div>
+                <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Books I have at home :D', 179, 16)}"></div>
             </div>
             <div id="header-logo-div">
                 <a href="/">
@@ -53,19 +53,19 @@
             </div>
             <div id="header-logo-link-div">
                 <a href="https://github.com/am-cid/bookstore" id="header-logo-link" target="_blank">
-                    <div th:replace="~{fragments/svg-heading-strikethrough-behind ::
+                    <div th:replace="~{fragments/svg-fragments/heading-strikethrough-behind ::
                     svgHeading('github.com/am-cid/bookstore', 340, 21)}"></div>
                 </a>
             </div>
             <ul id="header-navbar">
                 <li><a th:href="@{/books/search}">
-                    <div th:replace="~{fragments/svg-heading-plain :: svgHeading('BOOKS', 54, 16)}"></div>
+                    <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('BOOKS', 54, 16)}"></div>
                 </a></li>
                 <li><a th:href="@{/themes/search}">
-                    <div th:replace="~{fragments/svg-heading-plain :: svgHeading('THEMES', 66, 16)}"></div>
+                    <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('THEMES', 66, 16)}"></div>
                 </a></li>
                 <li><a th:href="@{/profile/search}">
-                    <div th:replace="~{fragments/svg-heading-plain :: svgHeading('COMMUNITY', 103, 16)}"></div>
+                    <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('COMMUNITY', 103, 16)}"></div>
                 </a></li>
             </ul>
         </div>

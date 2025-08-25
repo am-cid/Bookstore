@@ -12,7 +12,7 @@
 <div id="sidebar-right" th:fragment="sidebar-right">
     <div id="login-div" sec:authorize="isAnonymous()">
         <div class="sidebar-right-heading" id="login-form-heading">
-            <div th:replace="~{fragments/svg-heading-surrounded-by-circles :: svgHeading('LOG IN')}"></div>
+            <div th:replace="~{fragments/svg-fragments/heading-surrounded-by-circles :: svgHeading('LOG IN')}"></div>
         </div>
         <div id="login-form">
             <form method="post" th:action="@{/api/v1/auth/login}">
@@ -48,7 +48,7 @@
     </div>
     <div class="sidebar-right-div" id="theme-div">
         <div class="sidebar-right-heading" id="theme-heading">
-            <div th:replace="~{fragments/svg-heading-surrounded-by-circles :: svgHeading('THEME')}"></div>
+            <div th:replace="~{fragments/svg-fragments/heading-surrounded-by-circles :: svgHeading('THEME')}"></div>
         </div>
         <!-- show used theme with swatch 8 colors -->
         <div class="sidebar-right-content">

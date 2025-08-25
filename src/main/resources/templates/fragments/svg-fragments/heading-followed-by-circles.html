@@ -3,7 +3,7 @@
 <body>
 
 <div style="z-index: 9999; display: inline-block; line-height: 1;"
-     th:fragment="svgHeading(text)">
+     th:fragment="svgHeading(text, circleCx)">
     <svg class="svg-text-heading" preserveAspectRatio="xMinYMid meet"
          style="overflow:visible; height:1em;"
          viewBox="0 0 1 35"
@@ -11,7 +11,7 @@
         <!-- circle with gradient colors-->
         <circle cy="18"
                 r="4.5"
-                th:cx="${290 + i * 18}"
+                th:cx="${circleCx + i * 18}"
                 th:each="i : ${#numbers.sequence(0, 24)}"
                 th:style="'fill: var(' + ${varName} + ', ' + ${fallbackColor} + ');'"
                 th:with="varName='--interpolated-color-' + (${i} < 10 ? '0' : '') + ${i},
