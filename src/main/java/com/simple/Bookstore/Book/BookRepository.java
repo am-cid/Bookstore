@@ -45,7 +45,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             nativeQuery = true)
     List<BookSearchResultProjection> findTopNRatedBooks(@Param("n") int n);
 
-
     @Query(value = """
             SELECT b.id, b.title, b.author, b.description, b.front_image, b.back_image, b.spine_image,
                    AVG(r.rating) AS averageRating
@@ -55,18 +54,30 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             GROUP BY b.id
             HAVING (:rating IS NULL OR AVG(r.rating) >= :rating)
             ORDER BY GREATEST(word_similarity(:query, b.title), word_similarity(:query, b.author)) DESC
+            """, countQuery = """
+            SELECT COUNT(DISTINCT b.id)
+            FROM book b
+            LEFT JOIN review r ON b.id = r.book_id
+            WHERE (:query IS NULL OR :query <% b.title OR :query <% b.author)
+            GROUP BY b.id
+            HAVING (:rating IS NULL OR AVG(r.rating) >= :rating)
             """,
-            countQuery = """
-                    SELECT COUNT(DISTINCT b.id)
-                    FROM book b
-                    LEFT JOIN review r ON b.id = r.book_id
-                    WHERE (:query IS NULL OR :query <% b.title OR :query <% b.author)
-                    GROUP BY b.id
-                    HAVING (:rating IS NULL OR AVG(r.rating) >= :rating)
-                    """,
             nativeQuery = true)
     Page<BookSearchResultProjection> searchBooks(@Param("query") String query,
                                                  @Param("rating") Double rating,
                                                  Pageable pageable);
 
+    @Query(value = """
+            SELECT b.id, b.title, b.author, b.description, b.front_image, b.back_image, b.spine_image,
+                   AVG(r.rating) AS averageRating
+            FROM book b
+            LEFT JOIN review r ON b.id = r.book_id
+            GROUP BY b.id
+            """, countQuery = """
+            SELECT COUNT(DISTINCT b.id)
+            FROM book b
+            LEFT JOIN review r ON b.id = r.book_id
+            GROUP BY b.id
+            """, nativeQuery = true)
+    Page<BookSearchResultProjection> findAllAsPage(Pageable pageable);
 }

@@ -53,7 +53,8 @@ public class BookController {
             @RequestParam(required = false) String query,
             @RequestParam(required = false) Set<Genre> genres,
             @RequestParam(required = false) Double rating,
-            @PageableDefault(size = 10, page = 0) Pageable pageable) {
+            @PageableDefault(size = 10, page = 0) Pageable pageable
+    ) {
         Page<BookSearchResultDTO> booksPage = bookService.searchBooks(query, genres, rating, pageable);
         return ResponseEntity.ok(booksPage);
     }

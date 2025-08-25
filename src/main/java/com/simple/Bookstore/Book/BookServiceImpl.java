@@ -120,29 +120,30 @@ public class BookServiceImpl implements BookService {
         if (query == null && genres == null && rating == null) {
             // return none if no parameters
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
-        } else if (query == null && rating == null) {
+        } else if (query == null && genres != null) {
             // return all then filter by genre if genre is the only parameter
-            List<BookSearchResultDTO> filteredDTOs = bookRepo
-                    .findAll()
+            Page<BookSearchResultProjection> bookPage = bookRepo.findAllAsPage(pageable);
+            List<BookSearchResultDTO> filteredDTOs = bookPage
                     .stream()
-                    .map(BookMapper::bookToSearchResultDTO)
+                    .map(projection -> BookMapper.searchResultProjectionToDTO(projection, bookRepo))
                     .filter(dto -> dto
                             .genres()
                             .stream()
-                            .anyMatch(genres::contains)
+                            .anyMatch(genres.isEmpty() ? (Genre genre) -> true : genres::contains)
                     )
                     .toList();
-            return new PageImpl<>(filteredDTOs, pageable, filteredDTOs.size());
+            return new PageImpl<>(filteredDTOs, pageable, bookPage.getTotalElements());
         } else {
             // filter normally
-            List<BookSearchResultDTO> filteredDTOs = bookRepo
-                    .searchBooks(query, rating, pageable)
+            Page<BookSearchResultProjection> bookPage = bookRepo.searchBooks(query, rating, pageable);
+            List<BookSearchResultDTO> filteredDTOs = bookPage
                     .stream()
                     .map(projection -> BookMapper.searchResultProjectionToDTO(projection, bookRepo))
                     .filter(dto -> genres == null || dto.genres().stream()
-                            .anyMatch(genres::contains))
+                            .anyMatch(genres.isEmpty() ? (Genre genre) -> true : genres::contains)
+                    )
                     .toList();
-            return new PageImpl<>(filteredDTOs, pageable, filteredDTOs.size());
+            return new PageImpl<>(filteredDTOs, pageable, bookPage.getTotalElements());
         }
     }
 
