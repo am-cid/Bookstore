@@ -23,7 +23,10 @@ public class Theme {
     private Profile profile;
 
     @ManyToMany(mappedBy = "savedThemes")
-    private Set<Profile> profilesUsing = new HashSet<>();
+    private Set<Profile> savedByProfiles = new HashSet<>();
+
+    @OneToMany(mappedBy = "usedTheme")
+    private Set<Profile> usedByProfiles = new HashSet<>();
 
     @Column(nullable = false)
     private boolean published = false;

@@ -33,4 +33,24 @@ public class ThemeViewController {
         profileService.unsetThemeAndUseDefaultTheme(user);
         return new RedirectView(referer);
     }
+
+    @PostMapping("/profile/saved-themes")
+    public RedirectView saveTheme(
+            @RequestParam("themeId") Long themeId,
+            @AuthenticationPrincipal User user,
+            @RequestHeader("Referer") String referer
+    ) {
+        profileService.saveTheme(themeId, user);
+        return new RedirectView(referer);
+    }
+
+    @PostMapping(path = "/profile/saved-themes", params = {"_method=delete"})
+    public RedirectView unsaveTheme(
+            @RequestParam("themeId") Long themeId,
+            @AuthenticationPrincipal User user,
+            @RequestHeader("Referer") String referer
+    ) {
+        profileService.unsaveTheme(themeId, user);
+        return new RedirectView(referer);
+    }
 }

@@ -5,6 +5,7 @@ import com.simple.Bookstore.Genre.Genre;
 import com.simple.Bookstore.Profile.ProfileService;
 import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Search.SearchType;
+import com.simple.Bookstore.Theme.ThemeResponseDTO;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
 import lombok.RequiredArgsConstructor;
@@ -58,8 +59,15 @@ public class SearchController {
                                 pageable
                         )
                 );
-                model.addAttribute("currentTheme",
-                        themeService.findThemeUsed(user)
+                model.addAttribute("usedTheme",
+                        themeService.findUsedTheme(user)
+                );
+                model.addAttribute("savedThemeIds",
+                        themeService
+                                .findSavedThemes(user)
+                                .stream()
+                                .map(ThemeResponseDTO::id)
+                                .toList()
                 );
             }
             case PROFILE ->

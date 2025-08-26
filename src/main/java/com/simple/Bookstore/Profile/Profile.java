@@ -35,8 +35,8 @@ public class Profile {
     private Set<Book> savedBooks = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name="profile_theme_used")
-    private Theme themeUsed;
+    @JoinColumn(name = "profile_used_theme")
+    private Theme usedTheme;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Theme> ownedThemes = new HashSet<>();

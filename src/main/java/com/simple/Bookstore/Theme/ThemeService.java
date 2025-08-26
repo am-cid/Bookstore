@@ -48,5 +48,7 @@ public interface ThemeService {
      *                               theme, which should be there as the first
      *                               entry
      */
-    ThemeResponseDTO findThemeUsed(User user);
+    ThemeResponseDTO findUsedTheme(User user);
+
+    List<ThemeResponseDTO> findSavedThemes(User user);
 }

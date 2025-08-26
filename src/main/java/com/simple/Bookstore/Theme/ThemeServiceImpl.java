@@ -118,7 +118,8 @@ public class ThemeServiceImpl implements ThemeService {
         if (!user.getId().equals(theme.getProfile().getUser().getId())) {
             throw new ThemeNotFoundException(id);
         }
-        theme.getProfilesUsing().forEach(profile -> profile.getSavedThemes().remove(theme));
+        theme.getSavedByProfiles().forEach(profile -> profile.getSavedThemes().remove(theme));
+        theme.getUsedByProfiles().forEach(profile -> profile.setUsedTheme(null));
         themeRepository.delete(theme);
     }
 
@@ -147,8 +148,10 @@ public class ThemeServiceImpl implements ThemeService {
             throw new ThemeNotFoundException(id);
         }
         theme.setPublished(false);
-        theme.getProfilesUsing().forEach(userUsing -> userUsing.getSavedThemes().remove(theme));
-        theme.getProfilesUsing().clear();
+        theme.getSavedByProfiles().forEach(profile -> profile.getSavedThemes().remove(theme));
+        theme.getSavedByProfiles().clear();
+        theme.getUsedByProfiles().forEach(profile -> profile.setUsedTheme(null));
+        theme.getUsedByProfiles().clear();
         Theme savedTheme = themeRepository.save(theme);
         return ThemeMapper.themeToResponseDTO(savedTheme);
     }
@@ -168,8 +171,8 @@ public class ThemeServiceImpl implements ThemeService {
         User managedUser = userRepository.findById(user.getId()).get();
         Profile profile = managedUser.getProfile();
         profile.getSavedThemes().add(theme);
-        theme.getProfilesUsing().add(user.getProfile());
-        profileRepository.save(profile);
+        Profile savedProfile = profileRepository.save(profile);
+        theme.getSavedByProfiles().add(savedProfile);
         Theme savedTheme = themeRepository.save(theme);
         return ThemeMapper.themeToResponseDTO(savedTheme);
     }
@@ -189,8 +192,8 @@ public class ThemeServiceImpl implements ThemeService {
         User managedUser = userRepository.findById(user.getId()).get();
         Profile profile = managedUser.getProfile();
         profile.getSavedThemes().remove(theme);
-        theme.getProfilesUsing().remove(user.getProfile());
-        profileRepository.save(profile);
+        Profile savedProfile = profileRepository.save(profile);
+        theme.getSavedByProfiles().remove(savedProfile);
         themeRepository.save(theme);
     }
 
@@ -254,13 +257,29 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeResponseDTO findThemeUsed(User user) {
-        if (user == null || user.getProfile().getThemeUsed() == null)
+    public ThemeResponseDTO findUsedTheme(User user) {
+        if (user == null || user.getProfile().getUsedTheme() == null)
             return null;
 
         return ThemeMapper.themeToResponseDTO(
-                user.getProfile().getThemeUsed()
+                user.getProfile().getUsedTheme()
         );
     }
 
+    @Override
+    @Transactional
+    public List<ThemeResponseDTO> findSavedThemes(User user) {
+        if (user == null)
+            return List.of();
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepository.findById(user.getId()).get();
+        return managedUser
+                .getProfile()
+                .getSavedThemes()
+                .stream()
+                .map(ThemeMapper::themeToResponseDTO)
+                .toList();
+    }
 }

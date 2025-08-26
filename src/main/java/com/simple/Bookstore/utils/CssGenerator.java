@@ -1,11 +1,8 @@
 package com.simple.Bookstore.utils;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.awt.*;
 import java.util.List;
 
-@Slf4j
 public class CssGenerator {
     /**
      * Returns the inline &lt;style&gt;...&lt;/style&gt; of the given base08 theme.

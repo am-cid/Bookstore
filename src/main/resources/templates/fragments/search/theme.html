@@ -39,11 +39,24 @@
                     <div class="list-item-details">
                         <form action="#" method="post" th:action="@{/profile/theme}">
                             <input name="themeId" th:value="${theme.id}" type="hidden" />
-                            <button th:if="${currentTheme == null}" type="submit">Apply</button>
-                            <th:block th:if="${currentTheme != null}">
-                                <i th:if="${currentTheme.id == theme.id}">In Use</i>
-                                <button th:if="${currentTheme.id != theme.id}" type="submit">Apply</button>
+                            <button th:if="${usedTheme == null}" type="submit">Apply</button>
+                            <th:block th:if="${usedTheme != null}">
+                                <i th:if="${usedTheme.id == theme.id}">In Use</i>
+                                <button th:if="${usedTheme.id != theme.id}" type="submit">Apply</button>
                             </th:block>
+                        </form>
+                        <form action="#" method="post"
+                              th:action="@{/profile/saved-themes}"
+                              th:if="${!#lists.contains(savedThemeIds, theme.id)}">
+                            <input name="themeId" th:value="${theme.id}" type="hidden" />
+                            <button type="submit">Save</button>
+                        </form>
+                        <form action="#" method="post"
+                              th:action="@{/profile/saved-themes}"
+                              th:if="${#lists.contains(savedThemeIds, theme.id)}">
+                            <input name="_method" type="hidden" value="delete" />
+                            <input name="themeId" th:value="${theme.id}" type="hidden" />
+                            <button type="submit">Unsave</button>
                         </form>
                     </div>
                 </th:block>

@@ -28,7 +28,7 @@ public class HeaderAndSidebarsModelAttributes {
             ThemeService themeService
     ) {
         model.addAttribute("user", user);
-        ThemeResponseDTO themeUsed = themeService.findThemeUsed(user);
+        ThemeResponseDTO themeUsed = themeService.findUsedTheme(user);
         List<String> themeColors = themeUsed != null
                 ? List.of(
                 themeUsed.base00(),

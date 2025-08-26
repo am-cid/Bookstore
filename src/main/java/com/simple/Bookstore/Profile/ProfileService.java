@@ -13,5 +13,9 @@ public interface ProfileService {
 
     void unsetThemeAndUseDefaultTheme(User user) throws UnauthorizedException;
 
+    ProfileResponseDTO saveTheme(Long id, User user) throws UnauthorizedException, ThemeNotFoundException;
+
+    void unsaveTheme(Long id, User user) throws UnauthorizedException, ThemeNotFoundException;
+
     Page<ProfileResponseDTO> searchProfiles(String query, User user, Pageable pageable);
 }

@@ -6,17 +6,20 @@ import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Theme.Theme;
 import com.simple.Bookstore.Theme.ThemeRepository;
 import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.User.UserRepository;
 import com.simple.Bookstore.utils.ProfileMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
     private final ThemeRepository themeRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ProfileResponseDTO findByUsername(String username, User user) {
@@ -34,6 +37,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    @Transactional
     public ProfileResponseDTO setTheme(Long id, User user) throws UnauthorizedException, ThemeNotFoundException {
         if (user == null) {
             throw new UnauthorizedException("You are not logged in");
@@ -44,9 +48,14 @@ public class ProfileServiceImpl implements ProfileService {
         if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
             throw new ThemeNotFoundException(id);
         }
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
         Profile profile = user.getProfile();
-        profile.setThemeUsed(theme);
+        profile.setUsedTheme(theme);
         Profile savedProfile = profileRepository.save(profile);
+        theme.getUsedByProfiles().add(profile);
+        themeRepository.save(theme);
         return ProfileMapper.profileToResponseDTO(savedProfile);
     }
 
@@ -56,8 +65,51 @@ public class ProfileServiceImpl implements ProfileService {
             throw new UnauthorizedException("You are not logged in");
         }
         Profile profile = user.getProfile();
-        profile.setThemeUsed(null);
-        profileRepository.save(profile);
+        Theme usedTheme = profile.getUsedTheme();
+        profile.setUsedTheme(null);
+        Profile savedProfile = profileRepository.save(profile);
+        usedTheme.getUsedByProfiles().remove(savedProfile);
+    }
+
+    @Override
+    @Transactional
+    public ProfileResponseDTO saveTheme(Long id, User user) throws UnauthorizedException, ThemeNotFoundException {
+        Theme theme = themeRepository
+                .findById(id)
+                .orElseThrow(() -> new ThemeNotFoundException(id));
+        if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
+            throw new ThemeNotFoundException(id);
+        }
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepository.findById(user.getId()).get();
+        Profile profile = managedUser.getProfile();
+        profile.getSavedThemes().add(theme);
+        Profile savedProfile = profileRepository.save(profile);
+        theme.getSavedByProfiles().add(savedProfile);
+        themeRepository.save(theme);
+        return ProfileMapper.profileToResponseDTO(savedProfile);
+    }
+
+    @Override
+    @Transactional
+    public void unsaveTheme(Long id, User user) throws UnauthorizedException {
+        Theme theme = themeRepository
+                .findById(id)
+                .orElseThrow(() -> new ThemeNotFoundException(id));
+        if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
+            throw new ThemeNotFoundException(id);
+        }
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepository.findById(user.getId()).get();
+        Profile profile = managedUser.getProfile();
+        profile.getSavedThemes().remove(theme);
+        Profile savedProfile = profileRepository.save(profile);
+        theme.getSavedByProfiles().remove(savedProfile);
+        themeRepository.save(theme);
     }
 
     @Override

@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -117,34 +116,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<BookSearchResultDTO> searchBooks(String query, Set<Genre> genres, Double rating, Pageable pageable) {
-        if (query == null && genres == null && rating == null) {
-            // return none if no parameters
-            return new PageImpl<>(new ArrayList<>(), pageable, 0);
-        } else if (query == null && genres != null) {
-            // return all then filter by genre if genre is the only parameter
-            Page<BookSearchResultProjection> bookPage = bookRepo.findAllAsPage(pageable);
-            List<BookSearchResultDTO> filteredDTOs = bookPage
-                    .stream()
-                    .map(projection -> BookMapper.searchResultProjectionToDTO(projection, bookRepo))
-                    .filter(dto -> dto
-                            .genres()
-                            .stream()
-                            .anyMatch(genres.isEmpty() ? (Genre genre) -> true : genres::contains)
-                    )
-                    .toList();
-            return new PageImpl<>(filteredDTOs, pageable, bookPage.getTotalElements());
-        } else {
-            // filter normally
-            Page<BookSearchResultProjection> bookPage = bookRepo.searchBooks(query, rating, pageable);
-            List<BookSearchResultDTO> filteredDTOs = bookPage
-                    .stream()
-                    .map(projection -> BookMapper.searchResultProjectionToDTO(projection, bookRepo))
-                    .filter(dto -> genres == null || dto.genres().stream()
-                            .anyMatch(genres.isEmpty() ? (Genre genre) -> true : genres::contains)
-                    )
-                    .toList();
-            return new PageImpl<>(filteredDTOs, pageable, bookPage.getTotalElements());
-        }
+        Page<BookSearchResultProjection> bookPage = bookRepo.searchBooks(query, rating, pageable);
+        List<BookSearchResultDTO> filteredDTOs = bookPage
+                .stream()
+                .map(projection -> BookMapper.searchResultProjectionToDTO(projection, bookRepo))
+                .filter(dto -> genres == null || dto.genres().stream()
+                        .anyMatch(genres.isEmpty() ? (Genre genre) -> true : genres::contains)
+                )
+                .toList();
+        return new PageImpl<>(filteredDTOs, pageable, bookPage.getTotalElements());
     }
 
     // HELPERS
