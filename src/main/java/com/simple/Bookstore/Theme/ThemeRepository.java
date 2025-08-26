@@ -38,25 +38,24 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
             LEFT JOIN profile p ON p.id = t.profile_id
             LEFT JOIN users u ON u.id = p.user_id
             WHERE (
-                (:query IS NULL OR :query <% t.name)
+                (:query IS NULL OR :query = '' OR :query <% t.name)
                 AND (
                     t.published = true
                     OR (:profileId IS NOT NULL AND t.profile_id = :profileId)
                 )
             )
             ORDER BY GREATEST(word_similarity(:query, t.name)) DESC
+            """, countQuery = """
+            SELECT COUNT(DISTINCT t.id)
+            FROM theme t
+            WHERE (
+                (:query IS NULL OR :query = '' OR :query <% t.name)
+                AND (
+                    t.published = true
+                    OR (:profileId IS NOT NULL AND t.profile_id = :profileId)
+                )
+            )
             """,
-            countQuery = """
-                        SELECT COUNT(*)
-                        FROM theme t
-                        WHERE (
-                            (:query IS NULL OR :query <% t.name)
-                            AND (
-                                t.published = true
-                                OR (:profileId IS NOT NULL AND t.profile_id = :profileId)
-                            )
-                        )
-                    """,
             nativeQuery = true)
     Page<ThemeProjection> searchThemes(@Param("query") String query,
                                        @Param("profileId") Long profileId,

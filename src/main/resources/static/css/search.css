@@ -66,10 +66,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 0;
 
     ul {
-        height: 100%;
+        height: calc(100% - 20px);
     }
 }
 

@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class HomeController {
+public class HomeViewController {
     private final BookService bookService;
     private final ReviewService reviewService;
     private final ThemeService themeService;

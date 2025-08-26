@@ -50,7 +50,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                    AVG(r.rating) AS averageRating
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id
-            WHERE (:query IS NULL OR :query <% b.title OR :query <% b.author)
+            WHERE (:query IS NULL OR :query = '' OR :query <% b.title OR :query <% b.author)
             GROUP BY b.id
             HAVING (:rating IS NULL OR AVG(r.rating) >= :rating)
             ORDER BY GREATEST(word_similarity(:query, b.title), word_similarity(:query, b.author)) DESC
@@ -58,7 +58,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             SELECT COUNT(DISTINCT b.id)
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id
-            WHERE (:query IS NULL OR :query <% b.title OR :query <% b.author)
+            WHERE (:query IS NULL OR :query = '' OR :query <% b.title OR :query <% b.author)
             GROUP BY b.id
             HAVING (:rating IS NULL OR AVG(r.rating) >= :rating)
             """,

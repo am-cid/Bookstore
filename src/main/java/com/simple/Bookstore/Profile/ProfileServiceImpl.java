@@ -123,7 +123,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Page<ProfileResponseDTO> searchProfiles(String query, User user, Pageable pageable) {
         return profileRepository
-                .searchProfiles(query, user, pageable)
+                .searchProfiles(query, user.getId(), pageable)
                 .map(ProfileMapper::projectionToResponseDTO);
     }
 }

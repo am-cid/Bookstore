@@ -21,7 +21,7 @@ import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
-public class SearchController {
+public class SearchViewController {
     private final BookService bookService;
     private final ThemeService themeService;
     private final ProfileService profileService;
