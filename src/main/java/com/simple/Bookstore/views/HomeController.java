@@ -39,7 +39,6 @@ public class HomeController {
         model.addAttribute("latestUploads", latestBooks.subList(0, Math.min(4, latestBooks.size())));
         model.addAttribute("availableBooks", bookService.findRelevantBooks());
 
-
         return "index";
     }
 }

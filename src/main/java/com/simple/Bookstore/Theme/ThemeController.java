@@ -1,6 +1,5 @@
 package com.simple.Bookstore.Theme;
 
-import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/themes")
@@ -60,51 +57,6 @@ public class ThemeController {
     public ResponseEntity<Void> deleteTheme(@PathVariable Long id, @AuthenticationPrincipal User user) {
         themeService.deleteTheme(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping("/{id}/save")
-    public ResponseEntity<ThemeResponseDTO> saveThemeForCurrentUser(
-            @PathVariable Long id,
-            @AuthenticationPrincipal User user
-    ) {
-        ThemeResponseDTO response = themeService.saveThemeForUser(id, user);
-        return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("/{id}/save")
-    public ResponseEntity<Void> removeThemeForCurrentUser(
-            @PathVariable Long id,
-            @AuthenticationPrincipal User user
-    ) {
-        themeService.deleteThemeFromSavedThemes(id, user);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping("/{id}/set")
-    public ResponseEntity<ThemeResponseDTO> setThemeForCurrentUser(
-            @PathVariable Long id,
-            @AuthenticationPrincipal User user
-    ) {
-        ThemeResponseDTO response = themeService.setThemeForUser(id, user);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping(value = "/{id}/css", produces = "text/css")
-    public String getThemeCss(
-            @PathVariable Long id,
-            @AuthenticationPrincipal User user,
-            @RequestParam(defaultValue = "25") int steps
-    ) {
-        return themeService.getThemeAsCss(id, user, steps);
-    }
-
-    @PostMapping("/{id}/css")
-    public ResponseEntity<ThemeResponseDTO> updateCssTheme(
-            @PathVariable("id") Long id,
-            @AuthenticationPrincipal User user
-    ) throws IOException, ThemeNotFoundException {
-        ThemeResponseDTO response = themeService.updateCssTheme(id, user);
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/search")

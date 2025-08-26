@@ -21,6 +21,12 @@ public class ProfileMapper {
                         .stream()
                         .map(BookMapper::bookToSearchResultDTO)
                         .collect(Collectors.toSet())
+
+    public static ProfileResponseDTO projectionToResponseDTO(ProfileProjection projection) {
+        return new ProfileResponseDTO(
+                projection.getId(),
+                projection.getUsername(),
+                projection.getDisplayName()
         );
     }
 }

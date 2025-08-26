@@ -3,6 +3,7 @@ package com.simple.Bookstore.Theme;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
+import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.User.User;
@@ -17,10 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -178,20 +175,6 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeResponseDTO setThemeForUser(Long id, User user) throws ThemeNotFoundException {
-        Theme theme = themeRepository
-                .findById(id)
-                .orElseThrow(() -> new ThemeNotFoundException(id));
-        if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
-            throw new ThemeNotFoundException(id);
-        }
-        Profile profile = user.getProfile();
-        profile.setThemeUsed(theme);
-        profileRepository.save(profile);
-        return ThemeMapper.themeToResponseDTO(theme);
-    }
-
-    @Override
     @Transactional
     public void deleteThemeFromSavedThemes(Long id, User user) throws ThemeNotFoundException {
         Theme theme = themeRepository
@@ -219,8 +202,15 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable)
             throws ThemeNotFoundException {
+        Long profileId = userId == null
+                ? null
+                : userRepository
+                .findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId))
+                .getProfile()
+                .getId();
         return themeRepository
-                .searchThemes(query, userId, pageable)
+                .searchThemes(query, profileId, pageable)
                 .map(ThemeMapper::projectionToResponseDTO);
     }
 
@@ -261,21 +251,6 @@ public class ThemeServiceImpl implements ThemeService {
 
         css.append("}");
         return css.toString();
-    }
-
-    @Override
-    public ThemeResponseDTO updateCssTheme(Long id, User user) throws IOException, ThemeNotFoundException {
-        String cssContent = getThemeAsCss(id, user, 25);
-        String filename = "variables.css";
-        Path path = Paths.get("src/main/resources/static/css/" + filename);
-        if (!Files.exists(path.getParent())) {
-            Files.createDirectories(path.getParent());
-        }
-        Files.write(path, cssContent.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        return themeRepository.findById(id)
-                .map(ThemeMapper::themeToResponseDTO)
-                .orElseThrow(() -> new ThemeNotFoundException(id));
-
     }
 
     @Override

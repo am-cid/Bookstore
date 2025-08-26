@@ -28,8 +28,6 @@ public interface ThemeService {
 
     ThemeResponseDTO saveThemeForUser(Long id, User user) throws ThemeNotFoundException;
 
-    ThemeResponseDTO setThemeForUser(Long id, User user) throws ThemeNotFoundException;
-
     void deleteTheme(Long id, User user) throws ThemeNotFoundException;
 
     void deleteThemeFromSavedThemes(Long id, User user) throws ThemeNotFoundException;
@@ -39,8 +37,6 @@ public interface ThemeService {
     Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable) throws ThemeNotFoundException;
 
     String getThemeAsCss(Long id, User user, int steps) throws ThemeNotFoundException;
-
-    ThemeResponseDTO updateCssTheme(Long id, User user) throws IOException, ThemeNotFoundException;
 
     /**
      * @param user User / null: when anonymous, this is null

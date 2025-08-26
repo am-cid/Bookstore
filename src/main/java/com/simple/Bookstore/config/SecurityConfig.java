@@ -61,6 +61,9 @@ public class SecurityConfig {
                                 "/", "/static/**", "/css/**", "/js/**", "/img/**",
                                 "/fonts/**"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/profile/**"
+                        ).permitAll()
                         // require authentication for everything else
                         .anyRequest().authenticated()
                 )

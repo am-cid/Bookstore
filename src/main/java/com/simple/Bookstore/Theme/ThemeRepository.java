@@ -30,17 +30,18 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
     @Query(value = """
             SELECT t.id, t.name,
-                   t.user_id AS userId,
+                   t.profile_id AS profileId,
                    u.username AS username,
-                   u.display_name AS userDisplayName,
+                   p.display_name AS userDisplayName,
                    t.base00, t.base01, t.base02, t.base03, t.base04, t.base05, t.base06, t.base07
             FROM theme t
-            LEFT JOIN users u ON u.id = t.user_id
+            LEFT JOIN profile p ON p.id = t.profile_id
+            LEFT JOIN users u ON u.id = p.user_id
             WHERE (
                 (:query IS NULL OR :query <% t.name)
                 AND (
                     t.published = true
-                    OR (:userId IS NOT NULL AND t.user_id = :userId)
+                    OR (:profileId IS NOT NULL AND t.profile_id = :profileId)
                 )
             )
             ORDER BY GREATEST(word_similarity(:query, t.name)) DESC
@@ -52,12 +53,12 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
                             (:query IS NULL OR :query <% t.name)
                             AND (
                                 t.published = true
-                                OR (:userId IS NOT NULL AND t.user_id = :userId)
+                                OR (:profileId IS NOT NULL AND t.profile_id = :profileId)
                             )
                         )
                     """,
             nativeQuery = true)
     Page<ThemeProjection> searchThemes(@Param("query") String query,
-                                       @Param("userId") Long userId,
+                                       @Param("profileId") Long profileId,
                                        Pageable pageable);
 }
