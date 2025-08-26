@@ -2,6 +2,7 @@ package com.simple.Bookstore.Theme;
 
 public record ThemeRequestDTO(
         String name,
+        String description,
         boolean published,
         String base00,
         String base01,

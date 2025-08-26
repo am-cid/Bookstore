@@ -97,6 +97,7 @@ public class ThemeServiceImpl implements ThemeService {
             throw new ThemeNotFoundException(id);
         }
         theme.setName(request.name());
+        theme.setDescription(request.description());
         theme.setBase00(request.base00());
         theme.setBase01(request.base01());
         theme.setBase02(request.base02());

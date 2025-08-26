@@ -35,8 +35,10 @@
                            th:text="${#strings.isEmpty(theme.userDisplayName) ? theme.username : theme.userDisplayName}"></a>
                     </p>
                 </div>
-                <th:block th:if="${user != null}">
-                    <div class="list-item-details">
+                <div class="list-item-details">
+                    <strong>Description: </strong>
+                    <p class="search-result-desc" th:text="${theme.description}"></p>
+                    <th:block th:if="${user != null}">
                         <form action="#" method="post" th:action="@{/profile/theme}">
                             <input name="themeId" th:value="${theme.id}" type="hidden" />
                             <button th:if="${usedTheme == null}" type="submit">Apply</button>
@@ -58,8 +60,8 @@
                             <input name="themeId" th:value="${theme.id}" type="hidden" />
                             <button type="submit">Unsave</button>
                         </form>
-                    </div>
-                </th:block>
+                    </th:block>
+                </div>
             </div>
         </div>
     </div>

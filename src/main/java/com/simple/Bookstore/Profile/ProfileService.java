@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProfileService {
+    ProfileResponseDTO findOwn(User user);
+
     ProfileResponseDTO findByUsername(String username, User user);
 
     ProfileResponseDTO setTheme(Long id, User user) throws UnauthorizedException, ThemeNotFoundException;

@@ -20,6 +20,7 @@ public class ThemeMapper {
         return new ThemeResponseDTO(
                 theme.getId(),
                 theme.getName(),
+                theme.getDescription(),
                 userId,
                 username,
                 displayName,
@@ -38,6 +39,7 @@ public class ThemeMapper {
         Theme theme = new Theme();
         theme.setProfile(profile);
         theme.setName(request.name());
+        theme.setDescription(request.description());
         theme.setPublished(request.published());
         theme.setBase00(request.base00());
         theme.setBase01(request.base01());
@@ -54,6 +56,7 @@ public class ThemeMapper {
         return new ThemeResponseDTO(
                 projection.getId(),
                 projection.getName(),
+                projection.getDescription(),
                 projection.getUserId(),
                 projection.getUsername(),
                 projection.getUserDisplayName(),

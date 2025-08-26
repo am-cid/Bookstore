@@ -16,6 +16,13 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
     private final ProfileService profileService;
 
+    @GetMapping("/me")
+    public ResponseEntity<ProfileResponseDTO> getOwnProfile(
+            @AuthenticationPrincipal User user
+    ) {
+        return ResponseEntity.ok(profileService.findOwn(user));
+    }
+
     @GetMapping("/{username}")
     public ResponseEntity<ProfileResponseDTO> getProfile(
             @PathVariable String username,

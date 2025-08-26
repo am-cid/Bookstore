@@ -5,6 +5,8 @@ public interface ThemeProjection {
 
     String getName();
 
+    String getDescription();
+
     Long getUserId();
 
     String getUsername();

@@ -22,6 +22,14 @@ public class ProfileServiceImpl implements ProfileService {
     private final UserRepository userRepository;
 
     @Override
+    public ProfileResponseDTO findOwn(User user) {
+        if (user == null) {
+            throw new UnauthorizedException("You are not logged in");
+        }
+        return ProfileMapper.profileToResponseDTO(user.getProfile());
+    }
+
+    @Override
     public ProfileResponseDTO findByUsername(String username, User user) {
         if (user != null && user.getUsername().equals(username)) {
             return profileRepository

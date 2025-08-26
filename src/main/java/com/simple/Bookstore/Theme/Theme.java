@@ -17,6 +17,7 @@ public class Theme {
     private Long id;
     @Column(nullable = false)
     private String name;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "profile_id")

@@ -3,6 +3,7 @@ package com.simple.Bookstore.Theme;
 public record ThemeResponseDTO(
         Long id,
         String name,
+        String description,
         Long profileId,
         String username,
         String userDisplayName,

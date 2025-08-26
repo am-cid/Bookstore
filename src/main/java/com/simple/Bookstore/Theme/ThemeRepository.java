@@ -29,7 +29,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
     Page<Theme> findByPublishedOrOwnedUnpublishedThemes(@Param("user") User user, Pageable pageable);
 
     @Query(value = """
-            SELECT t.id, t.name,
+            SELECT t.id, t.name, t.description,
                    t.profile_id AS profileId,
                    u.username AS username,
                    p.display_name AS userDisplayName,

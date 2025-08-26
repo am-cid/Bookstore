@@ -46,6 +46,7 @@ public class ThemeSeeder implements CommandLineRunner {
         if (themeRepository.findByName(pubName).isEmpty()) {
             Theme publishedTheme = new Theme();
             publishedTheme.setName(pubName);
+            publishedTheme.setDescription("ocean by chriskempson");
             publishedTheme.setProfile(user.getProfile());
             publishedTheme.setPublished(true);
             // THEME: ocean by chriskempson
@@ -67,6 +68,7 @@ public class ThemeSeeder implements CommandLineRunner {
         if (themeRepository.findByName(unpubName).isEmpty()) {
             Theme unpublishedTheme = new Theme();
             unpublishedTheme.setName(unpubName);
+            unpublishedTheme.setDescription("cupcake by chriskempson");
             unpublishedTheme.setProfile(user.getProfile());
             unpublishedTheme.setPublished(false);
             // THEME: cupcake by chriskempson
