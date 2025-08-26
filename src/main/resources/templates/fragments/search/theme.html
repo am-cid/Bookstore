@@ -35,33 +35,37 @@
                            th:text="${#strings.isEmpty(theme.userDisplayName) ? theme.username : theme.userDisplayName}"></a>
                     </p>
                 </div>
-                <div class="list-item-details">
-                    <strong>Description: </strong>
-                    <p class="search-result-desc" th:text="${theme.description}"></p>
-                    <th:block th:if="${user != null}">
-                        <form action="#" method="post" th:action="@{/profile/theme}">
-                            <input name="themeId" th:value="${theme.id}" type="hidden" />
-                            <button th:if="${usedTheme == null}" type="submit">Apply</button>
-                            <th:block th:if="${usedTheme != null}">
-                                <i th:if="${usedTheme.id == theme.id}">In Use</i>
-                                <button th:if="${usedTheme.id != theme.id}" type="submit">Apply</button>
-                            </th:block>
-                        </form>
-                        <form action="#" method="post"
-                              th:action="@{/profile/saved-themes}"
-                              th:if="${!#lists.contains(savedThemeIds, theme.id)}">
-                            <input name="themeId" th:value="${theme.id}" type="hidden" />
-                            <button type="submit">Save</button>
-                        </form>
-                        <form action="#" method="post"
-                              th:action="@{/profile/saved-themes}"
-                              th:if="${#lists.contains(savedThemeIds, theme.id)}">
-                            <input name="_method" type="hidden" value="delete" />
-                            <input name="themeId" th:value="${theme.id}" type="hidden" />
-                            <button type="submit">Unsave</button>
-                        </form>
-                    </th:block>
-                </div>
+                <th:block th:if="${!#strings.isEmpty(theme.description) || user != null}">
+                    <div class="list-item-details">
+                        <th:block th:if="${!#strings.isEmpty(theme.description)}">
+                            <strong>Description: </strong>
+                            <p class="search-result-desc" th:text="${theme.description}"></p>
+                        </th:block>
+                        <th:block th:if="${user != null}">
+                            <form action="#" class="apply-form" method="post" th:action="@{/profile/theme}">
+                                <input name="themeId" th:value="${theme.id}" type="hidden" />
+                                <button th:if="${usedTheme == null}" type="submit">Apply</button>
+                                <th:block th:if="${usedTheme != null}">
+                                    <i th:if="${usedTheme.id == theme.id}">In Use</i>
+                                    <button th:if="${usedTheme.id != theme.id}" type="submit">Apply</button>
+                                </th:block>
+                            </form>
+                            <form action="#" method="post"
+                                  th:action="@{/profile/saved-themes}"
+                                  th:if="${!#lists.contains(savedThemeIds, theme.id)}">
+                                <input name="themeId" th:value="${theme.id}" type="hidden" />
+                                <button type="submit">Save</button>
+                            </form>
+                            <form action="#" method="post"
+                                  th:action="@{/profile/saved-themes}"
+                                  th:if="${#lists.contains(savedThemeIds, theme.id)}">
+                                <input name="_method" type="hidden" value="delete" />
+                                <input name="themeId" th:value="${theme.id}" type="hidden" />
+                                <button type="submit">Unsave</button>
+                            </form>
+                        </th:block>
+                    </div>
+                </th:block>
             </div>
         </div>
     </div>
