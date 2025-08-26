@@ -32,14 +32,14 @@
                 <th:block th:if="${i == page.number}">
                     <strong class="active" th:text="${i + 1}"></strong>
                 </th:block>
-                <th:block th:unless="${i == page.number}">
+                <th:block th:if="${i != page.number}">
                     <th:block th:if="${#strings.isEmpty(query)}">
                         <a class="page-link"
                            th:href="@{/search(type=${searchType}, genres=${genres}, rating=${rating}, page=${i})}">
                             <span th:text="${i + 1}"></span>
                         </a>
                     </th:block>
-                    <th:block th:unless="${#strings.isEmpty(query)}">
+                    <th:block th:if="${!#strings.isEmpty(query)}">
                         <a class="page-link"
                            th:href="@{/search(type=${searchType}, query=${query}, genres=${genres}, rating=${rating}, page=${i})}">
                             <span th:text="${i + 1}"></span>

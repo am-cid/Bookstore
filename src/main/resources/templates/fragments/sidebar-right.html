@@ -69,18 +69,18 @@
                         <a th:href="@{/profile/{username}(username=${_overrideThemeUsed.username()})}"
                            th:text="${_overrideThemeUsed.userDisplayName()}"></a>
                     </p>
+                    <form action="#" method="post" th:action="@{/profile/theme}">
+                        <input name="_method" type="hidden" value="delete" />
+                        <button type="submit">Unset Theme</button>
+                    </form>
                 </th:block>
-                <th:block th:if="${_overrideThemeUsed == null}">
-                    <strong>Default Mangagamer Theme</strong>
-                </th:block>
+                <strong th:if="${_overrideThemeUsed == null}">
+                    Default Mangagamer Theme
+                </strong>
             </div>
             <!-- change theme link to change theme page -->
-            <th:block sec:authorize="isAnonymous()">
-                <a th:href="@{/register?change_theme=true}">Change Theme</a>
-            </th:block>
-            <th:block sec:authorize="isAuthenticated()">
-                <a th:href="@{/theme/search}">Change Theme</a>
-            </th:block>
+            <a sec:authorize="isAnonymous()" th:href="@{/register?change_theme=true}">Change Theme</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/search(type='THEME')}">Change Theme</a>
         </div>
     </div>
 </div>

@@ -65,26 +65,6 @@
     margin-bottom: -40px;
 }
 
-#main-content-div .svg-text-heading .text-outline-outer {
-    fill: none;
-    paint-order: stroke;
-    stroke: var(--color-02, #F61590);
-    stroke-linejoin: round;
-    stroke-width: 8;
-}
-
-#main-content-div .svg-text-heading .text-outline-inner {
-    fill: none;
-    paint-order: stroke;
-    stroke: var(--color-07, #FFF2D3);
-    stroke-linejoin: round;
-    stroke-width: 4;
-}
-
-#main-content-div .svg-text-heading .text-fill {
-    fill: var(--color-02, #F61590);
-}
-
 .book-list-content {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

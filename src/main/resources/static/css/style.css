@@ -449,10 +449,10 @@ body {
 .theme-colors-list {
     display: flex;
     flex-direction: row;
-    width: 90%;
     justify-content: center;
     background: rgba(0, 0, 0, 0.1);
     padding: 10px;
+    margin: 0;
     border-radius: 10px;
     list-style: none;
 }
@@ -460,6 +460,7 @@ body {
 .theme-color {
     flex: 1 1 calc(12.5% - 10px);
     aspect-ratio: 1;
+    width: 17px;
 }
 
 .theme-color:first-child {

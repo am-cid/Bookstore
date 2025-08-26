@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="search-result-content-div" th:fragment="search-results">
+    <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading('SEARCH THEME', 255)}"></div>
+    <div class="search-result-content">
+        <i th:if="${user == null}">Login to change theme</i>
+        <th:block th:if="${!results.hasContent()}">No results found...</th:block>
+        <div class="search-result-item" th:each="theme, i : ${results}">
+            <div class="search-result-item-image">
+                <ul class="theme-colors-list">
+                    <li class="theme-color" th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
+                    <li class="theme-color" th:style="'background-color: #' + ${theme.base01} " th:title="'#' + ${theme.base01}"></li>
+                    <li class="theme-color" th:style="'background-color: #' + ${theme.base02} " th:title="'#' + ${theme.base02}"></li>
+                    <li class="theme-color" th:style="'background-color: #' + ${theme.base03} " th:title="'#' + ${theme.base03}"></li>
+                    <li class="theme-color" th:style="'background-color: #' + ${theme.base04} " th:title="'#' + ${theme.base04}"></li>
+                    <li class="theme-color" th:style="'background-color: #' + ${theme.base05} " th:title="'#' + ${theme.base05}"></li>
+                    <li class="theme-color" th:style="'background-color: #' + ${theme.base06} " th:title="'#' + ${theme.base06}"></li>
+                    <li class="theme-color" th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
+                </ul>
+            </div>
+            <div class="search-result-item-details-div">
+                <div class="search-result-item-title">
+                    <p>
+                        <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
+                           th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
+                        by
+                        <a th:href="@{/api/v1/profile/{username}(username=${theme.username})}"
+                           th:text="${#strings.isEmpty(theme.userDisplayName) ? theme.username : theme.userDisplayName}"></a>
+                    </p>
+                </div>
+                <th:block th:if="${user != null}">
+                    <div class="list-item-details">
+                        <form action="#" method="post" th:action="@{/profile/theme}">
+                            <input name="themeId" th:value="${theme.id}" type="hidden" />
+                            <button th:if="${currentTheme == null}" type="submit">Apply</button>
+                            <th:block th:if="${currentTheme != null}">
+                                <i th:if="${currentTheme.id == theme.id}">In Use</i>
+                                <button th:if="${currentTheme.id != theme.id}" type="submit">Apply</button>
+                            </th:block>
+                        </form>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/genre-expand.js}"></script>
+</div>
+
+</body>
+</html>

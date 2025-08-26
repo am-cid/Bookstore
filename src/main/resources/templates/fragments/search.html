@@ -13,15 +13,14 @@
              th:replace="~{fragments/search/pagination :: pagination(${results}, ${searchType}, ${queryParam}, ${genresParam}, ${ratingParam})}"></div>
         <th:block th:switch="${searchType}">
             <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).BOOK}">
-                <div th:replace="~{fragments/search/search-book :: search-results}"></div>
+                <div th:replace="~{fragments/search/book :: search-results}"></div>
             </th:block>
             <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).THEME}">
-                TODO
-<!--                <div th:replace="~{fragments/search-theme :: search-results}"></div>-->
+                <div th:replace="~{fragments/search/theme :: search-results}"></div>
             </th:block>
             <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).PROFILE}">
                 TODO
-<!--                <div th:replace="~{fragments/search-profile :: search-results}"></div>-->
+<!--                <div th:replace="~{fragments/search/profile :: search-results}"></div>-->
             </th:block>
         </th:block>
     </div>

@@ -69,16 +69,16 @@
                 <p th:text="${_latestReviewDate}"></p>
             </div>
             <div class="sidebar-left-list-item"
-                 th:if="${_latestReview.content() != null && !_latestReview.content().isEmpty()}">
+                 th:if="${!#strings.isEmpty(_latestReview.content())}">
                 <th:block th:if="${_latestReview.content().length() > 100}">
                     <p th:text="${#strings.abbreviate(_latestReview.content(), 100)}"></p>
                 </th:block>
-                <th:block th:unless="${_latestReview.content().length() > 100}">
+                <th:block th:if="${_latestReview.content().length() <= 100}">
                     <p th:text="${_latestReview.content()}"></p>
                 </th:block>
             </div>
             <div class="sidebar-left-list-item"
-                 th:unless="${_latestReview.content() != null && !_latestReview.content().isEmpty()}">
+                 th:if="${#strings.isEmpty(_latestReview.content())}">
                 <p class="gray-text">No content was provided for this review</p>
             </div>
             <div>
