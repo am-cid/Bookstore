@@ -8,6 +8,8 @@ import com.simple.Bookstore.Theme.ThemeRepository;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.utils.ProfileMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -56,5 +58,12 @@ public class ProfileServiceImpl implements ProfileService {
         Profile profile = user.getProfile();
         profile.setThemeUsed(null);
         profileRepository.save(profile);
+    }
+
+    @Override
+    public Page<ProfileResponseDTO> searchProfiles(String query, User user, Pageable pageable) {
+        return profileRepository
+                .searchProfiles(query, user, pageable)
+                .map(ProfileMapper::projectionToResponseDTO);
     }
 }

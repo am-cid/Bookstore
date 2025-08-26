@@ -26,4 +26,15 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
                 or (p.isPublic = false AND p.user = :user)
             """)
     Page<Profile> findPublicOrOwnPrivateProfile(@Param("user") User user, Pageable pageable);
+
+    @Query("""
+            SELECT p.id, p.user.username, p.displayName from Profile p
+            WHERE p.isPublic = true
+                or (p.isPublic = false AND p.user = :user)
+            """)
+    Page<ProfileProjection> searchProfiles(
+            @Param("query") String query,
+            @Param("user") User user,
+            Pageable pageable
+    );
 }

@@ -8,7 +8,6 @@ import com.simple.Bookstore.Search.SearchType;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,21 +43,30 @@ public class SearchController {
         model.addAttribute("queryParam", query);
         model.addAttribute("genresParam", genres);
         model.addAttribute("ratingParam", rating);
-        Page<?> results = switch (searchType) {
+        switch (searchType) {
             case BOOK ->
-                    bookService.searchBooks(query, genres, rating, pageable);
-            case THEME ->
-                    themeService.searchThemes(
-                            query,
-                            (user != null)
-                                    ? user.getId()
-                                    : null,
-                            pageable
+                    model.addAttribute("results",
+                            bookService.searchBooks(query, genres, rating, pageable)
                     );
+            case THEME -> {
+                model.addAttribute("results",
+                        themeService.searchThemes(
+                                query,
+                                (user != null)
+                                        ? user.getId()
+                                        : null,
+                                pageable
+                        )
+                );
+                model.addAttribute("currentTheme",
+                        themeService.findThemeUsed(user)
+                );
+            }
             case PROFILE ->
-                    profileService.searchProfiles(query, user, pageable);
-        };
-        model.addAttribute("results", results);
+                    model.addAttribute("results",
+                            profileService.searchProfiles(query, user, pageable)
+                    );
+        }
         return "search";
     }
 }
