@@ -38,7 +38,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
             LEFT JOIN profile p ON p.id = t.profile_id
             LEFT JOIN users u ON u.id = p.user_id
             WHERE (
-                (:query IS NULL OR :query = '' OR :query <% t.name)
+                (:query IS NULL OR :query = '' OR :query <% t.name OR :query <% u.username OR :query <% p.display_name)
                 AND (
                     t.published = true
                     OR (:profileId IS NOT NULL AND t.profile_id = :profileId)
@@ -47,14 +47,21 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
             ORDER BY
                 CASE
                     WHEN :query IS NULL OR :query = '' THEN EXTRACT(EPOCH FROM t.date)
-                    ELSE GREATEST(word_similarity(:query, t.name), 0)
+                    ELSE GREATEST(
+                        word_similarity(:query, t.name),
+                        word_similarity(:query, u.username),
+                        word_similarity(:query, p.display_name),
+                        0
+                    )
                 END, t.id
             DESC
             """, countQuery = """
             SELECT COUNT(DISTINCT t.id)
             FROM theme t
+            LEFT JOIN profile p ON p.id = t.profile_id
+            LEFT JOIN users u ON u.id = p.user_id
             WHERE (
-                (:query IS NULL OR :query = '' OR :query <% t.name)
+                (:query IS NULL OR :query = '' OR :query <% t.name OR :query <% u.username OR :query <% p.display_name)
                 AND (
                     t.published = true
                     OR (:profileId IS NOT NULL AND t.profile_id = :profileId)

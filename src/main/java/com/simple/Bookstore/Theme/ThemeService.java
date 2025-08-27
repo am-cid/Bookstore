@@ -32,7 +32,16 @@ public interface ThemeService {
 
     void deleteThemeFromSavedThemes(Long id, User user) throws ThemeNotFoundException;
 
-    Theme loadThemeFromYaml(File yamlFile) throws IOException;
+    /**
+     * Use to create a request to create a theme from a yaml scheme.
+     *
+     * @param yamlFile
+     * @param published
+     * @param customDescription String/null - leave empty to use yamlScheme.author as the description
+     * @return
+     * @throws IOException
+     */
+    ThemeRequestDTO loadThemeFromYaml(File yamlFile, boolean published, String customDescription) throws IOException;
 
     Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable) throws ThemeNotFoundException;
 

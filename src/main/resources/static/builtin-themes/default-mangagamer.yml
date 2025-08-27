@@ -1,10 +1,50 @@
 # COLORS BASED OFF https://www.mangagamer.com (well, the entire site is based off mangagamer so...)
 
-base00: A40E60 # main content container border
-base01: FF0000 # rating font color
-base02: F61590 # sidebar left border, sidebar left heading bg, main content inner div border, main content heading fill, base heading outer outline, themes section button text outline
-base03: F88B9E # body color, start color for interpolation, genre oval bg color 1
-base04: FFD376 # end color for interpolation, genre oval bg color 2
-base05: AAFFB1 # genre oval bg color 3
-base06: FFE2E7 # sidebar left bg, sidebar left heading font color, search button bg, main content inner div color
-base07: FFF2D3 # main content div bg, main content heading inner outline, themes section button bg, themes section button text inner outline
+scheme: "Mangagamer"
+author: "am-cid (https://github.com/am-cid)"
+base00: A40E60
+base01: FF0000
+base02: F61590
+base03: F88B9E
+base04: FFD376
+base05: AAFFB1
+base06: FFE2E7
+base07: FFF2D3
+
+# COLOR GUIDE
+# 0
+#   center content div border
+# 1
+#   rating font color
+# 2
+#   sidebar left border,
+#   sidebar left heading bg,
+#   center content inner div border,
+#   center content heading fill,
+#   base heading outer outline,
+#   themes section button text outline
+# 3
+#   body color,
+#   start color for interpolation,
+#   genre oval bg base color 1
+#   genre oval text base color 1
+#   genre oval outline base color 1
+# 4
+#   end color for interpolation,
+#   genre oval bg base color 2
+#   genre oval text base color 2
+#   genre oval outline base color 2
+# 5
+#   genre oval bg base color 3
+#   genre oval text base color 3
+#   genre oval outline base color 3
+# 6
+#   sidebar left bg,
+#   sidebar left heading font color,
+#   search button bg,
+#   center content inner div color
+# 7
+#   center content div bg,
+#   center content heading inner outline,
+#   themes section button bg,
+#   themes section button text inner outline

@@ -1,8 +1,8 @@
 package com.simple.Bookstore.seeders;
 
 import com.simple.Bookstore.Exceptions.UserNotFoundException;
-import com.simple.Bookstore.Theme.Theme;
-import com.simple.Bookstore.Theme.ThemeRepository;
+import com.simple.Bookstore.Theme.ThemeRequestDTO;
+import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Component
@@ -19,55 +24,22 @@ import java.util.List;
 @Order(5)
 @RequiredArgsConstructor
 public class ThemeSeeder implements CommandLineRunner {
-    private final ThemeRepository themeRepository;
+    private static final String THEMES_DIRECTORY = "classpath:/static/builtin-themes/";
+    private final ThemeService themeService;
     private final UserRepository userRepository;
     @Value("${BS_USERNAME:admin}")
     private String adminUsername;
     @Value("${spring.profiles.active:dev}")
     private String activeProfile;
 
-    private static Theme createTheme(
-            String pubName,
-            User user,
-            String description,
-            boolean published,
-            String base00,
-            String base01,
-            String base02,
-            String base03,
-            String base04,
-            String base05,
-            String base06,
-            String base07
-    ) {
-        Theme publishedTheme = new Theme();
-        publishedTheme.setName(pubName);
-        publishedTheme.setDescription(description);
-        publishedTheme.setProfile(user.getProfile());
-        publishedTheme.setPublished(published);
-        publishedTheme.setBase00(base00);
-        publishedTheme.setBase01(base01);
-        publishedTheme.setBase02(base02);
-        publishedTheme.setBase03(base03);
-        publishedTheme.setBase04(base04);
-        publishedTheme.setBase05(base05);
-        publishedTheme.setBase06(base06);
-        publishedTheme.setBase07(base07);
-
-        log.info(
-                "Seeded new {} theme for {}: {}",
-                (published ? "published" : "unpublished"),
-                user.getUsername(),
-                pubName
-        );
-        return publishedTheme;
-    }
-
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws IOException {
         activeProfile = (activeProfile == null || activeProfile.isBlank()) ? "dev" : activeProfile;
         if (!activeProfile.equals("dev"))
             return;
+
+        log.info("Seeding builtin themes...");
+        seedBuiltinThemes();
 
         log.info("Seeding themes...");
         seedThemesForUser(adminUsername);
@@ -75,15 +47,51 @@ public class ThemeSeeder implements CommandLineRunner {
         seedThemesForUser("user2");
     }
 
+    private void seedBuiltinThemes() throws IOException {
+        User admin = userRepository
+                .findByUsername(adminUsername)
+                .orElseThrow(() -> new UserNotFoundException(adminUsername));
+
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource[] themeRepos = resolver.getResources(THEMES_DIRECTORY + "*");
+        for (Resource themeRepo : themeRepos) {
+            if (Files.isDirectory(Paths.get(themeRepo.getURI()))) {
+                log.info("Is theme repo. Trying to find themes in {}...", themeRepo.getFilename());
+                Resource[] ymlFiles = resolver.getResources(THEMES_DIRECTORY + themeRepo.getFilename() + "/*.y*ml");
+                for (Resource ymlFile : ymlFiles) {
+                    log.info("Seeding theme {}...", ymlFile.getFilename());
+                    ThemeRequestDTO request = themeService.loadThemeFromYaml(
+                            ymlFile.getFile(),
+                            true,
+                            null
+                    );
+                    themeService.createTheme(admin, request);
+                }
+            } else if (
+                    themeRepo.isFile()
+                            && themeRepo.getFilename().startsWith("default-")
+                            && themeRepo.getFilename().endsWith(".yml") || themeRepo.getFilename().endsWith(".yaml")
+            ) {
+                log.info("Is default theme file. Seeding default theme {}...", themeRepo.getFilename());
+                ThemeRequestDTO request = themeService.loadThemeFromYaml(
+                        themeRepo.getFile(),
+                        true,
+                        "colors based off https://www.mangagamer.com (well, the entire site is based off mangagamer so...)"
+                );
+                themeService.createTheme(admin, request);
+            }
+        }
+    }
+
     private void seedThemesForUser(String username) {
         User user = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
-        List<Theme> themes = List.of(
-                createTheme(
-                        // THEME: ocean by chriskempson
-                        // https://github.com/chriskempson/base16-default-schemes/blob/master/ocean.yaml
-                        "ocean-" + username + "-published", user,
+        List<ThemeRequestDTO> themes = List.of(
+                // THEME: ocean by chriskempson
+                // https://github.com/chriskempson/base16-default-schemes/blob/master/ocean.yaml
+                new ThemeRequestDTO(
+                        "ocean-" + username + "-published",
                         "ocean by chriskempson", true,
                         "2B303B",
                         "343D46",
@@ -94,10 +102,10 @@ public class ThemeSeeder implements CommandLineRunner {
                         "DFE1E8",
                         "EFF1F5"
                 ),
-                createTheme(
-                        // THEME: cupcake by chriskempson
-                        // https://github.com/chriskempson/base16-default-schemes/blob/master/cupcake.yaml
-                        "cupcake-" + username + "-published", user,
+                // THEME: cupcake by chriskempson
+                // https://github.com/chriskempson/base16-default-schemes/blob/master/cupcake.yaml
+                new ThemeRequestDTO(
+                        "cupcake-" + username + "-published",
                         "cupcake by chriskempson", true,
                         "585062",
                         "72677E",
@@ -108,10 +116,10 @@ public class ThemeSeeder implements CommandLineRunner {
                         "f2f1f4",
                         "fbf1f2"
                 ),
-                createTheme(
-                        // THEME: default dark by chriskempson
-                        // https://github.com/chriskempson/base16-default-schemes/blob/master/default-dark.yaml
-                        "default.dark-" + username + "-published", user,
+                // THEME: default dark by chriskempson
+                // https://github.com/chriskempson/base16-default-schemes/blob/master/default-dark.yaml
+                new ThemeRequestDTO(
+                        "default.dark-" + username + "-published",
                         "default dark by chriskempson", true,
                         "181818",
                         "282828",
@@ -122,10 +130,10 @@ public class ThemeSeeder implements CommandLineRunner {
                         "e8e8e8",
                         "f8f8f8"
                 ),
-                createTheme(
-                        // THEME: default light by chriskempson
-                        // https://github.com/chriskempson/base16-default-schemes/blob/master/default-light.yaml
-                        "default.light-" + username + "-published", user,
+                // THEME: default light by chriskempson
+                // https://github.com/chriskempson/base16-default-schemes/blob/master/default-light.yaml
+                new ThemeRequestDTO(
+                        "default.light-" + username + "-published",
                         "default light by chriskempson", true,
                         "f8f8f8",
                         "e8e8e8",
@@ -136,10 +144,10 @@ public class ThemeSeeder implements CommandLineRunner {
                         "282828",
                         "181818"
                 ),
-                createTheme(
-                        // THEME: eighties by chriskempson
-                        // https://github.com/chriskempson/base16-default-schemes/blob/master/eighties.yaml
-                        "eighties-" + username + "-unpublished", user,
+                // THEME: eighties by chriskempson
+                // https://github.com/chriskempson/base16-default-schemes/blob/master/eighties.yaml
+                new ThemeRequestDTO(
+                        "eighties-" + username + "-unpublished",
                         "eighties by chriskempson", false,
                         "2d2d2d",
                         "393939",
@@ -150,10 +158,10 @@ public class ThemeSeeder implements CommandLineRunner {
                         "e8e6df",
                         "f2f0ec"
                 ),
-                createTheme(
-                        // THEME: mocha by chriskempson
-                        // https://github.com/chriskempson/base16-default-schemes/blob/master/mocha.yaml
-                        "mocha-" + username + "-unpublished", user,
+                // THEME: mocha by chriskempson
+                // https://github.com/chriskempson/base16-default-schemes/blob/master/mocha.yaml
+                new ThemeRequestDTO(
+                        "mocha-" + username + "-unpublished",
                         "mocha by chriskempson", false,
                         "3B3228",
                         "534636",
@@ -165,7 +173,15 @@ public class ThemeSeeder implements CommandLineRunner {
                         "f5eeeb"
                 )
         );
+        themes.forEach(theme -> {
+            themeService.createTheme(user, theme);
+            log.info(
+                    "Seeded new {} theme for {}: {}",
+                    (theme.published() ? "published" : "unpublished"),
+                    user.getUsername(),
+                    theme.name()
+            );
+        });
         log.info("Seeded {} themes", themes.size());
-        themeRepository.saveAll(themes);
     }
 }

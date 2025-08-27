@@ -1,10 +1,8 @@
 package com.simple.Bookstore.utils;
 
 import com.simple.Bookstore.Profile.Profile;
-import com.simple.Bookstore.Theme.Theme;
-import com.simple.Bookstore.Theme.ThemeProjection;
-import com.simple.Bookstore.Theme.ThemeRequestDTO;
-import com.simple.Bookstore.Theme.ThemeResponseDTO;
+import com.simple.Bookstore.Theme.*;
+import com.simple.Bookstore.User.User;
 
 public class ThemeMapper {
     public static ThemeResponseDTO themeToResponseDTO(Theme theme) {
@@ -70,6 +68,67 @@ public class ThemeMapper {
                 projection.getBase05(),
                 projection.getBase06(),
                 projection.getBase07()
+        );
+    }
+
+    /**
+     * @param user
+     * @param yamlScheme
+     * @param published
+     * @param customDescription String/null - leave empty to use yamlScheme.author as the description
+     * @return
+     */
+    public static Theme base16YamlToTheme(
+            User user,
+            ThemeFromBase16Yaml yamlScheme,
+            boolean published,
+            String customDescription
+    ) {
+        Theme theme = new Theme();
+        theme.setName(yamlScheme.scheme());
+        theme.setDescription(
+                customDescription == null || customDescription.isEmpty()
+                        ? String.format("Maintained by %s", yamlScheme.author())
+                        : customDescription
+        );
+        theme.setProfile(user.getProfile());
+        theme.setPublished(published);
+        theme.setBase00(yamlScheme.base00());
+        theme.setBase01(yamlScheme.base01());
+        theme.setBase02(yamlScheme.base02());
+        theme.setBase03(yamlScheme.base03());
+        theme.setBase04(yamlScheme.base04());
+        theme.setBase05(yamlScheme.base05());
+        theme.setBase06(yamlScheme.base06());
+        theme.setBase07(yamlScheme.base07());
+        return theme;
+    }
+
+    /**
+     * @param yamlScheme
+     * @param published
+     * @param customDescription String/null - leave empty to use yamlScheme.author as the description
+     * @return
+     */
+    public static ThemeRequestDTO base16YamlToRequestDTO(
+            ThemeFromBase16Yaml yamlScheme,
+            boolean published,
+            String customDescription
+    ) {
+        return new ThemeRequestDTO(
+                yamlScheme.scheme(),
+                customDescription == null || customDescription.isEmpty()
+                        ? String.format("Maintained by %s", yamlScheme.author())
+                        : customDescription,
+                published,
+                yamlScheme.base00(),
+                yamlScheme.base01(),
+                yamlScheme.base02(),
+                yamlScheme.base03(),
+                yamlScheme.base04(),
+                yamlScheme.base05(),
+                yamlScheme.base06(),
+                yamlScheme.base07()
         );
     }
 }

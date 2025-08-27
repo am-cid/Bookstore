@@ -199,8 +199,9 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Theme loadThemeFromYaml(File yamlFile) throws IOException {
-        return yamlMapper.readValue(yamlFile, Theme.class);
+    public ThemeRequestDTO loadThemeFromYaml(File yamlFile, boolean published, String customDescription) throws IOException {
+        ThemeFromBase16Yaml yamlScheme = yamlMapper.readValue(yamlFile, ThemeFromBase16Yaml.class);
+        return ThemeMapper.base16YamlToRequestDTO(yamlScheme, published, customDescription);
     }
 
     @Override
