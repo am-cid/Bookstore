@@ -7,8 +7,14 @@ to SVG, from headings to the site logo, enabling dynamic color changes when the
 site theme is changed. Images where images make sense still exist e.g. book
 covers.
 
-The website supports theme customization through a custom built theming engine consuming
-Base16 colors (using the first 8 base colors).
+The website supports theme customization through a custom built theming engine
+consuming Base16 colors (using the first 8 base colors). Besides the default
+mangagamer theme, there are 182 available themes. These themes are from
+[base16-schemes-source](https://github.com/chriskempson/base16-schemes-source).
+In fact, I made the
+[default mangagamer theme](/src/main/resources/static/builtin-themes/default-mangagamer.yml)
+keeping how the first 8 colors of base16 schemes are chosen in mind: darker to
+lighter colors (reverse if light theme).
 
 ## Getting Started
 ### For Users
