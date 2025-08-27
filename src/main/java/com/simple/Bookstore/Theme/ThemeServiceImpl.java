@@ -253,6 +253,14 @@ public class ThemeServiceImpl implements ThemeService {
                         String.format("  --genre-text-color-%02d: %s;%n", i, genreTextColors.get(i))
                 ));
 
+        // font colors
+        boolean isDarkTheme = ColorUtils.isDarkTheme(
+                Color.decode("#" + theme.getBase00()),
+                Color.decode("#" + theme.getBase07())
+        );
+        css.append(String.format("  --font-color: %s;%n", isDarkTheme ? "white" : "black"));
+        css.append(String.format("  --link-color: %s;%n", isDarkTheme ? "lightblue" : "blue"));
+
         css.append("}");
         return css.toString();
     }

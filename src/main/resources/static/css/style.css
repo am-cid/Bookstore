@@ -16,6 +16,11 @@ body {
     padding: 0;
     background-color: var(--color-03, #F88B9E);
     height: 100%;
+    color: var(--font-color, black);
+
+    a {
+        color: var(--link-color, blue);
+    }
 }
 
 #body-div {
@@ -262,20 +267,19 @@ body {
     }
 }
 
-#search-button:hover {
-}
-
 #main-layout {
     display: flex;
     flex-direction: row;
-    padding-top: 10px;
+    padding-top: 20px;
+    border-top: 2px solid var(--color-04, #FFD376);
 }
 
 #sidebar-left {
     display: flex;
     flex-direction: column;
-    max-width: 135px;
-    min-width: 135px;
+    max-width: 119px;
+    min-width: 119px;
+    padding: 0 4px 0 12px;
 }
 
 .sidebar-left-div {
@@ -322,9 +326,10 @@ body {
 #sidebar-right {
     display: flex;
     flex-direction: column;
-    max-width: 175px;
-    min-width: 175px;
     row-gap: 10px;
+    max-width: 160px;
+    min-width: 160px;
+    padding: 0 12px 0 3px;
 }
 
 .sidebar-right-heading {

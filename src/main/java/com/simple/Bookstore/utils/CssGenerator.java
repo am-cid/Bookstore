@@ -23,6 +23,12 @@ public class CssGenerator {
                         27
                 )
                 .subList(1, 26);
+        List<String> genreBgColors = ColorUtils
+                .adjustGenreBgColors(
+                        Color.decode("#" + colors.get(3)),
+                        Color.decode("#" + colors.get(4)),
+                        Color.decode("#" + colors.get(5))
+                );
         List<String> genreTextColors = ColorUtils
                 .getGenreTextColors(
                         Color.decode("#" + colors.get(3)),
@@ -39,8 +45,35 @@ public class CssGenerator {
             return null;
         if (!appendColors(css, "interpolated-color", interpolatedColors))
             return null;
+        if (!appendColors(css, "genre-bg-color", genreBgColors))
+            return null;
         if (!appendColors(css, "genre-text-color", genreTextColors))
             return null;
+
+        boolean isDarkTheme = ColorUtils.isDarkTheme(
+                Color.decode("#" + colors.getFirst()),
+                Color.decode("#" + colors.getLast())
+        );
+        // genreTextColors outline color
+        for (int i = 0; i < genreBgColors.size(); i++) {
+            Color c = Color.decode("#" + genreTextColors.get(i));
+            css.append("    --genre-outline-color-")
+                    .append(String.format("%02d", i))
+                    .append(": #")
+                    .append(ColorUtils.isBright(c)
+                            ? (isDarkTheme ? colors.get(7) : colors.get(0))
+                            : (isDarkTheme ? colors.get(0) : colors.get(7))
+                    )
+                    .append(";\n");
+        }
+
+        // font colors
+        css.append("    --font-color: ")
+                .append(isDarkTheme ? "white" : "black")
+                .append(";\n");
+        css.append("    --link-color: ")
+                .append(isDarkTheme ? "lightblue" : "blue")
+                .append(";\n");
 
         return css.append("}\n")
                 .append("</style>\n")

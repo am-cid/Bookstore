@@ -15,10 +15,10 @@
 .genre-color-style-00 {
     background-color: var(--color-05, #AAFFB1);
     color: var(--genre-text-color-00, #334321);
-    text-shadow: -0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-    0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-    -0.05rem 0.05rem 0 var(--color-07, #FFF2D3),
-    0.05rem 0.05rem 0 var(--color-07, #FFF2D3), /* inner border */ -0.07rem -0.07rem 0 var(--genre-text-color-00, #334321),
+    text-shadow: -0.05rem -0.05rem 0 var(--genre-outline-color-00, #FFF2D3),
+    0.05rem -0.05rem 0 var(--genre-outline-color-00, #FFF2D3),
+    -0.05rem 0.05rem 0 var(--genre-outline-color-00, #FFF2D3),
+    0.05rem 0.05rem 0 var(--genre-outline-color-00, #FFF2D3), /* inner border */ -0.07rem -0.07rem 0 var(--genre-text-color-00, #334321),
     0.07rem -0.07rem 0 var(--genre-text-color-00, #334321),
     -0.07rem 0.07rem 0 var(--genre-text-color-00, #334321),
     0.07rem 0.07rem 0 var(--genre-text-color-00, #334321); /* outer border */
@@ -27,10 +27,10 @@
 .genre-color-style-01 {
     background-color: var(--color-04, #FFD376);
     color: var(--genre-text-color-01, #356618);
-    text-shadow: -0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-    0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-    -0.05rem 0.05rem 0 var(--color-07, #FFF2D3),
-    0.05rem 0.05rem 0 var(--color-07, #FFF2D3), /* inner border */ -0.07rem -0.07rem 0 var(--genre-text-color-01, #356618),
+    text-shadow: -0.05rem -0.05rem 0 var(--genre-outline-color-01, #FFF2D3),
+    0.05rem -0.05rem 0 var(--genre-outline-color-01, #FFF2D3),
+    -0.05rem 0.05rem 0 var(--genre-outline-color-01, #FFF2D3),
+    0.05rem 0.05rem 0 var(--genre-outline-color-01, #FFF2D3), /* inner border */ -0.07rem -0.07rem 0 var(--genre-text-color-01, #356618),
     0.07rem -0.07rem 0 var(--genre-text-color-01, #356618),
     -0.07rem 0.07rem 0 var(--genre-text-color-01, #356618),
     0.07rem 0.07rem 0 var(--genre-text-color-01, #356618); /* outer border */
@@ -39,10 +39,10 @@
 .genre-color-style-02 {
     background-color: var(--color-03, #F88B9E);
     color: var(--genre-text-color-02, #237C24);
-    text-shadow: -0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-    0.05rem -0.05rem 0 var(--color-07, #FFF2D3),
-    -0.05rem 0.05rem 0 var(--color-07, #FFF2D3),
-    0.05rem 0.05rem 0 var(--color-07, #FFF2D3), /* inner border */ -0.07rem -0.07rem 0 var(--genre-text-color-02, #237C24),
+    text-shadow: -0.05rem -0.05rem 0 var(--genre-outline-color-02, #FFF2D3),
+    0.05rem -0.05rem 0 var(--genre-outline-color-02, #FFF2D3),
+    -0.05rem 0.05rem 0 var(--genre-outline-color-02, #FFF2D3),
+    0.05rem 0.05rem 0 var(--genre-outline-color-02, #FFF2D3), /* inner border */ -0.07rem -0.07rem 0 var(--genre-text-color-02, #237C24),
     0.07rem -0.07rem 0 var(--genre-text-color-02, #237C24),
     -0.07rem 0.07rem 0 var(--genre-text-color-02, #237C24),
     0.07rem 0.07rem 0 var(--genre-text-color-02, #237C24); /* outer border */

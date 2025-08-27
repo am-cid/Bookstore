@@ -58,13 +58,13 @@
                 </a>
             </div>
             <ul id="header-navbar">
-                <li><a th:href="@{/books/search}">
+                <li><a th:href="@{/search(type='BOOK')}">
                     <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('BOOKS', 54, 16)}"></div>
                 </a></li>
-                <li><a th:href="@{/themes/search}">
+                <li><a th:href="@{/search(type='THEME')}">
                     <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('THEMES', 66, 16)}"></div>
                 </a></li>
-                <li><a th:href="@{/profile/search}">
+                <li><a th:href="@{/search(type='PROFILE')}">
                     <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('COMMUNITY', 103, 16)}"></div>
                 </a></li>
             </ul>
