@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="search-result-content-div" th:fragment="search-results">
+    <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading('SEARCH PROFILE', 255)}"></div>
+    <div class="search-result-content">
+        <th:block th:if="${!results.hasContent()}">No results found...</th:block>
+        <div class="search-result-item" th:each="theme, i : ${results}">
+            <div class="search-result-item-details-div">
+                <div class="search-result-item-title">
+                    <p>
+                        <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
+                           th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
+                        by
+                        <a th:href="@{/api/v1/profile/{username}(username=${theme.username})}"
+                           th:text="${#strings.isEmpty(theme.userDisplayName) ? theme.username : theme.userDisplayName}"></a>
+                    </p>
+                </div>
+                <div class="list-item-details">
+                    <strong>Description: </strong>
+                    <p class="search-result-desc" th:text="${theme.description}"></p>
+                    <th:block th:if="${user != null}">
+                        <form action="#" method="post" th:action="@{/profile/theme}">
+                            <input name="themeId" th:value="${theme.id}" type="hidden" />
+                            <button th:if="${usedTheme == null}" type="submit">Apply</button>
+                            <th:block th:if="${usedTheme != null}">
+                                <i th:if="${usedTheme.id == theme.id}">In Use</i>
+                                <button th:if="${usedTheme.id != theme.id}" type="submit">Apply</button>
+                            </th:block>
+                        </form>
+                        <form action="#" method="post"
+                              th:action="@{/profile/saved-themes}"
+                              th:if="${!#lists.contains(savedThemeIds, theme.id)}">
+                            <input name="themeId" th:value="${theme.id}" type="hidden" />
+                            <button type="submit">Save</button>
+                        </form>
+                        <form action="#" method="post"
+                              th:action="@{/profile/saved-themes}"
+                              th:if="${#lists.contains(savedThemeIds, theme.id)}">
+                            <input name="_method" type="hidden" value="delete" />
+                            <input name="themeId" th:value="${theme.id}" type="hidden" />
+                            <button type="submit">Unsave</button>
+                        </form>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/genre-expand.js}"></script>
+</div>
+
+</body>
+</html>

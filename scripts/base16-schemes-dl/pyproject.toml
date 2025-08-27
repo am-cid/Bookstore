@@ -1,0 +1,9 @@
+[project]
+name = "base16-schemes-dl"
+version = "0.1.0"
+description = "small script to download and clean up base16 scheme repos to only leave the scheme and LICENSE (if any)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pyyaml>=6.0.2",
+]
