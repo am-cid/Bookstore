@@ -15,7 +15,7 @@ public interface BookService {
 
     List<BookSearchResultDTO> findTopNRatedBooks(int n);
 
-    List<BookSearchResultDTO> findRelevantBooks();
+    List<BookSearchResultDTO> findRelevantBooks(int limit);
 
     Optional<BookSearchResultDTO> findBookById(Long id);
 

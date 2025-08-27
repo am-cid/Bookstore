@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -54,7 +56,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookSearchResultDTO> findRelevantBooks() {
+    public List<BookSearchResultDTO> findRelevantBooks(int limit) {
         List<BookRelevanceProjection> books = bookRepo.findBooksForScoring();
         // normalize
         double maxRating = books
@@ -67,11 +69,11 @@ public class BookServiceImpl implements BookService {
                 .mapToLong(p -> p.getReviewCount() != null ? p.getReviewCount() : 0L)
                 .max()
                 .orElse(1L);
-        long maxDateProxy = books
+        LocalDateTime maxDateProxy = books
                 .stream()
-                .mapToLong(BookRelevanceProjection::getId)
-                .max()
-                .orElse(1L);
+                .map(BookRelevanceProjection::getDate)
+                .max(LocalDateTime::compareTo)
+                .orElse(LocalDateTime.MIN);
         return books
                 .stream()
                 .sorted((p1, p2) -> {
@@ -80,7 +82,8 @@ public class BookServiceImpl implements BookService {
                     return Double.compare(score2, score1);
                 })
                 .map(projection -> BookMapper.relevancyProjectionToDTO(projection, bookRepo))
-                .toList();
+                .toList()
+                .subList(0, limit);
     }
 
     @Override
@@ -133,12 +136,17 @@ public class BookServiceImpl implements BookService {
             BookRelevanceProjection projection,
             double maxRating,
             long maxReviewCount,
-            long maxDateProxy
+            LocalDateTime maxDate
     ) {
-        double normalizedRating = (projection.getAverageRating() != null) ? projection.getAverageRating() / maxRating : 0.0;
-        double normalizedReviewCount = (projection.getReviewCount() != null) ? (double) projection.getReviewCount() / maxReviewCount : 0.0;
+        double normalizedRating = (projection.getAverageRating() != null)
+                ? projection.getAverageRating() / maxRating
+                : 0.0;
+        double normalizedReviewCount = (projection.getReviewCount() != null)
+                ? (double) projection.getReviewCount() / maxReviewCount
+                : 0.0;
+        long daysSincePublished = ChronoUnit.DAYS.between(projection.getDate(), maxDate);
+        double normalizedDate = Math.max(0.0, 1.0 - (daysSincePublished / 365.0));
 
-        double normalizedDate = (double) projection.getId() / maxDateProxy;
         return (normalizedRating * RATING_WEIGHT) +
                 (normalizedReviewCount * REVIEW_COUNT_WEIGHT) +
                 (normalizedDate * DATE_WEIGHT);

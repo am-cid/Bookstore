@@ -28,14 +28,14 @@ public class HomeViewController {
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
 
         // center content data
-        List<BookSearchResultDTO> latestBooks = bookService.findLatestNBooks(10); // Find more than needed to fill all sections
+        List<BookSearchResultDTO> latestBooks = bookService.findLatestNBooks(10);
         model.addAttribute("bannerBooks", latestBooks.subList(0, Math.min(6, latestBooks.size())));
 
         // TODO: format below as "2 days ago. <username> just posted <book-title>. <description: 50 char cutoff>"
         // TODO: model.addAttribute("hotNewsBooks", latestBooks.subList(0, Math.min(2, latestBooks.size())));
 
         model.addAttribute("latestUploads", latestBooks.subList(0, Math.min(4, latestBooks.size())));
-        model.addAttribute("availableBooks", bookService.findRelevantBooks());
+        model.addAttribute("availableBooks", bookService.findRelevantBooks(12));
 
         return "index";
     }

@@ -1,5 +1,7 @@
 package com.simple.Bookstore.Book;
 
+import java.time.LocalDateTime;
+
 public interface BookRelevanceProjection {
     Long getId();
 
@@ -8,6 +10,8 @@ public interface BookRelevanceProjection {
     String getAuthor();
 
     String getDescription();
+
+    LocalDateTime getDate();
 
     String getFrontImage();
 

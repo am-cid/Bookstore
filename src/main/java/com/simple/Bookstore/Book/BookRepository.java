@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = """
-            SELECT b.id, b.title, b.author, b.description, b.front_image, b.back_image, b.spine_image
+            SELECT b.id, b.title, b.author, b.description, b.date, b.front_image, b.back_image, b.spine_image
             FROM book b
             ORDER BY b.id DESC
             LIMIT :n
@@ -24,7 +24,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 
     @Query(value = """
-            SELECT b.id, b.title, b.author, b.description, b.front_image, b.back_image, b.spine_image,
+            SELECT b.id, b.title, b.author, b.description, b.date, b.front_image, b.back_image, b.spine_image,
                 AVG(r.rating) as averageRating, COUNT(r.id) as reviewCount
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id
@@ -34,7 +34,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<BookRelevanceProjection> findBooksForScoring();
 
     @Query(value = """
-            SELECT b.id, b.title, b.author, b.description, b.front_image, b.back_image, b.spine_image,
+            SELECT b.id, b.title, b.author, b.description, b.date, b.front_image, b.back_image, b.spine_image,
                    AVG(r.rating) AS averageRating
             FROM book b
             JOIN review r ON b.id = r.book_id
@@ -46,14 +46,20 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<BookSearchResultProjection> findTopNRatedBooks(@Param("n") int n);
 
     @Query(value = """
-            SELECT b.id, b.title, b.author, b.description, b.front_image, b.back_image, b.spine_image,
+            SELECT b.id, b.title, b.author, b.description, b.date,
+            b.front_image, b.back_image, b.spine_image,
                    AVG(r.rating) AS averageRating
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id
             WHERE (:query IS NULL OR :query = '' OR :query <% b.title OR :query <% b.author)
             GROUP BY b.id
             HAVING (:rating IS NULL OR AVG(r.rating) >= :rating)
-            ORDER BY GREATEST(word_similarity(:query, b.title), word_similarity(:query, b.author)) DESC
+            ORDER BY
+                CASE
+                    WHEN :query IS NULL OR :query = '' THEN EXTRACT(EPOCH FROM b.date)
+                    ELSE GREATEST(word_similarity(:query, b.title), word_similarity(:query, b.author), 0)
+                END, b.id
+            DESC
             """, countQuery = """
             SELECT COUNT(DISTINCT b.id)
             FROM book b
@@ -68,7 +74,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                                  Pageable pageable);
 
     @Query(value = """
-            SELECT b.id, b.title, b.author, b.description, b.front_image, b.back_image, b.spine_image,
+            SELECT b.id, b.title, b.author, b.description, b.date, b.front_image, b.back_image, b.spine_image,
                    AVG(r.rating) AS averageRating
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id

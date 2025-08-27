@@ -2,6 +2,7 @@ package com.simple.Bookstore.Book;
 
 import com.simple.Bookstore.Genre.Genre;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public record BookSearchResultDTO(
@@ -9,6 +10,7 @@ public record BookSearchResultDTO(
         String title,
         String author,
         String description,
+        LocalDateTime date,
         Set<Genre> genres,
         Double averageRating,
         String frontImage,
