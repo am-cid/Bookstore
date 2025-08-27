@@ -29,7 +29,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
     Page<Theme> findByPublishedOrOwnedUnpublishedThemes(@Param("user") User user, Pageable pageable);
 
     @Query(value = """
-            SELECT t.id, t.name, t.description,
+            SELECT t.id, t.name, t.description, t.date,
                    t.profile_id AS profileId,
                    u.username AS username,
                    p.display_name AS userDisplayName,
@@ -44,7 +44,12 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
                     OR (:profileId IS NOT NULL AND t.profile_id = :profileId)
                 )
             )
-            ORDER BY GREATEST(word_similarity(:query, t.name)) DESC
+            ORDER BY
+                CASE
+                    WHEN :query IS NULL OR :query = '' THEN EXTRACT(EPOCH FROM t.date)
+                    ELSE GREATEST(word_similarity(:query, t.name), 0)
+                END, t.id
+            DESC
             """, countQuery = """
             SELECT COUNT(DISTINCT t.id)
             FROM theme t

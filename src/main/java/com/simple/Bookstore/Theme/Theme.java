@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +19,8 @@ public class Theme {
     @Column(nullable = false)
     private String name;
     private String description;
+    @Column(nullable = false)
+    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "profile_id")
@@ -56,6 +59,10 @@ public class Theme {
     @Column(length = 6, nullable = false)
     private String base07;
 
+    @PrePersist
+    protected void onCreate() {
+        this.date = LocalDateTime.now();
+    }
 
     public String getColorByIndex(int i) throws IllegalArgumentException {
         return switch (i) {

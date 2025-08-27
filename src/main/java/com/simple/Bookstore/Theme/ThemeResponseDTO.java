@@ -1,9 +1,12 @@
 package com.simple.Bookstore.Theme;
 
+import java.time.LocalDateTime;
+
 public record ThemeResponseDTO(
         Long id,
         String name,
         String description,
+        LocalDateTime date,
         Long profileId,
         String username,
         String userDisplayName,

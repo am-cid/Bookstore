@@ -1,11 +1,15 @@
 package com.simple.Bookstore.Theme;
 
+import java.time.LocalDateTime;
+
 public interface ThemeProjection {
     Long getId();
 
     String getName();
 
     String getDescription();
+
+    LocalDateTime getDate();
 
     Long getUserId();
 
