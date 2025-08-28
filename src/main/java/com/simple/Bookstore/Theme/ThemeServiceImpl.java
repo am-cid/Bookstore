@@ -10,6 +10,7 @@ import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserRepository;
 import com.simple.Bookstore.utils.ColorUtils;
 import com.simple.Bookstore.utils.ThemeMapper;
+import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -199,9 +200,14 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeRequestDTO loadThemeFromYaml(File yamlFile, boolean published, String customDescription) throws IOException {
+    public ThemeRequestDTO loadThemeFromYaml(
+            File yamlFile,
+            boolean published,
+            @Nullable String customName,
+            @Nullable String customDescription
+    ) throws IOException {
         ThemeFromBase16Yaml yamlScheme = yamlMapper.readValue(yamlFile, ThemeFromBase16Yaml.class);
-        return ThemeMapper.base16YamlToRequestDTO(yamlScheme, published, customDescription);
+        return ThemeMapper.base16YamlToRequestDTO(yamlScheme, published, customName, customDescription);
     }
 
     @Override

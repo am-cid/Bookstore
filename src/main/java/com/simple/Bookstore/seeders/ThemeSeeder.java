@@ -63,6 +63,7 @@ public class ThemeSeeder implements CommandLineRunner {
                     ThemeRequestDTO request = themeService.loadThemeFromYaml(
                             ymlFile.getFile(),
                             true,
+                            null,
                             null
                     );
                     themeService.createTheme(admin, request);
@@ -76,6 +77,7 @@ public class ThemeSeeder implements CommandLineRunner {
                 ThemeRequestDTO request = themeService.loadThemeFromYaml(
                         themeRepo.getFile(),
                         true,
+                        "Default Mangagamer Theme",
                         "colors based off https://www.mangagamer.com (well, the entire site is based off mangagamer so...)"
                 );
                 themeService.createTheme(admin, request);

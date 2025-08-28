@@ -33,6 +33,14 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             LEFT JOIN users u ON u.id = p.user_id
             WHERE (:query IS NULL OR :query = '' OR :query <% u.username OR :query <% p.display_name)
                 AND (p.is_public = true OR (p.user_id IS NOT NULL AND p.user_id = :userId))
+            ORDER BY
+                GREATEST(
+                    word_similarity(:query, u.username),
+                    word_similarity(:query, p.display_name),
+                    0
+                ),
+                p.id
+            DESC
             """, countQuery = """
             SELECT COUNT(DISTINCT p.id)
             FROM profile p

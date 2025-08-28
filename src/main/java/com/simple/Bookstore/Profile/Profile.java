@@ -30,7 +30,6 @@ public class Profile {
             name = "profile_saved_books",
             joinColumns = @JoinColumn(name = "profile_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
-
     )
     private Set<Book> savedBooks = new HashSet<>();
 

@@ -3,6 +3,7 @@ package com.simple.Bookstore.utils;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Theme.*;
 import com.simple.Bookstore.User.User;
+import jakarta.annotation.Nullable;
 
 public class ThemeMapper {
     public static ThemeResponseDTO themeToResponseDTO(Theme theme) {
@@ -107,16 +108,20 @@ public class ThemeMapper {
     /**
      * @param yamlScheme
      * @param published
-     * @param customDescription String/null - leave empty to use yamlScheme.author as the description
+     * @param customName        String/null - leave empty to use yamlScheme.scheme as the theme name
+     * @param customDescription String/null - leave empty to use yamlScheme.author as the theme description
      * @return
      */
     public static ThemeRequestDTO base16YamlToRequestDTO(
             ThemeFromBase16Yaml yamlScheme,
             boolean published,
-            String customDescription
+            @Nullable String customName,
+            @Nullable String customDescription
     ) {
         return new ThemeRequestDTO(
-                yamlScheme.scheme(),
+                customName == null || customName.isEmpty()
+                        ? yamlScheme.scheme()
+                        : customName,
                 customDescription == null || customDescription.isEmpty()
                         ? String.format("Maintained by %s", yamlScheme.author())
                         : customDescription,

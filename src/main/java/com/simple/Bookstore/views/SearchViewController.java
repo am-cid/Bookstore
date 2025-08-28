@@ -46,11 +46,13 @@ public class SearchViewController {
         model.addAttribute("ratingParam", rating);
         switch (searchType) {
             case BOOK ->
-                    model.addAttribute("results",
+                    model.addAttribute(
+                            "results",
                             bookService.searchBooks(query, genres, rating, pageable)
                     );
             case THEME -> {
-                model.addAttribute("results",
+                model.addAttribute(
+                        "results",
                         themeService.searchThemes(
                                 query,
                                 (user != null)
@@ -59,10 +61,12 @@ public class SearchViewController {
                                 pageable
                         )
                 );
-                model.addAttribute("usedTheme",
+                model.addAttribute(
+                        "usedTheme",
                         themeService.findUsedTheme(user)
                 );
-                model.addAttribute("savedThemeIds",
+                model.addAttribute(
+                        "savedThemeIds",
                         themeService
                                 .findSavedThemes(user)
                                 .stream()
@@ -71,7 +75,8 @@ public class SearchViewController {
                 );
             }
             case PROFILE ->
-                    model.addAttribute("results",
+                    model.addAttribute(
+                            "results",
                             profileService.searchProfiles(query, user, pageable)
                     );
         }

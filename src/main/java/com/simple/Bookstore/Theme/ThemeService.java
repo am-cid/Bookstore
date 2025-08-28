@@ -2,6 +2,7 @@ package com.simple.Bookstore.Theme;
 
 import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
 import com.simple.Bookstore.User.User;
+import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -37,11 +38,17 @@ public interface ThemeService {
      *
      * @param yamlFile
      * @param published
-     * @param customDescription String/null - leave empty to use yamlScheme.author as the description
+     * @param customName        String/null - leave empty to use yamlScheme.scheme as the theme name
+     * @param customDescription String/null - leave empty to use yamlScheme.author as the theme description
      * @return
      * @throws IOException
      */
-    ThemeRequestDTO loadThemeFromYaml(File yamlFile, boolean published, String customDescription) throws IOException;
+    ThemeRequestDTO loadThemeFromYaml(
+            File yamlFile,
+            boolean published,
+            @Nullable String customName,
+            @Nullable String customDescription
+    ) throws IOException;
 
     Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable) throws ThemeNotFoundException;
 
