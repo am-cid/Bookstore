@@ -33,12 +33,17 @@
     flex-direction: column;
     margin: 10px;
     row-gap: 2em;
+
+    text {
+        font-size: 33px;
+    }
+
 }
 
 .search-result-content-div svg {
     font-size: 32px;
     padding: 0 0 0 10px;
-    margin-bottom: -40px;
+    margin-bottom: -38px;
 }
 
 .search-result-content {

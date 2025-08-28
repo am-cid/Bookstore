@@ -8,7 +8,7 @@
 <body>
 
 <div class="search-result-content-div" th:fragment="search-results">
-    <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading('SEARCH BOOKS', 255)}"></div>
+    <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Search:Book', 1, 33)}"></div>
     <div class="search-result-content flex-column">
         <th:block th:if="${!results.hasContent()}">No results found...</th:block>
         <div class="search-result-item w-100" th:each="book, i : ${results}">

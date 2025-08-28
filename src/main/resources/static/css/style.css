@@ -337,9 +337,11 @@ body {
     flex-direction: column;
 }
 
-#login-form-heading svg {
-    font-size: 26px;
-    padding: 0 0 0 43px;
+#login-form-heading, #theme-heading {
+    font-size: 19px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .sidebar-right-heading circle {
@@ -376,11 +378,6 @@ body {
 
 .sidebar-right-heading .svg-text-heading .text-fill {
     fill: var(--color-06, #FFE2E7);
-}
-
-#theme-heading svg {
-    font-size: 26px;
-    padding: 0 0 0 45px;
 }
 
 #login-form {

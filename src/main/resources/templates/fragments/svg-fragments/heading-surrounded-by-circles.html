@@ -3,16 +3,16 @@
 <body>
 
 <div style="z-index: 9999; display: inline-block; line-height: 1;"
-     th:fragment="svgHeading(text)">
+     th:fragment="svgHeading(text, viewWidth, viewHeight, circle2X)">
     <svg class="svg-text-heading" preserveAspectRatio="xMinYMid meet"
          style="overflow:visible; height:1em;"
-         viewBox="0 0 1 35"
+         th:attr="viewBox='0 0 ' + ${viewWidth} + ' ' + ${viewHeight}"
          xmlns="http://www.w3.org/2000/svg">
         <!-- circle with gradient colors-->
-        <circle class="circle-outline" cx="0"  cy="15" r="10" />
-        <circle class="circle-outline" cx="121" cy="15" r="10" />
-        <circle cx="0"  cy="15" r="8" />
-        <circle cx="121" cy="15" r="8" />
+        <circle class="circle-outline" cx="0"  cy="11" r="8" />
+        <circle class="circle-outline" cy="11" r="8" th:attr="cx=${circle2X}" />
+        <circle cx="0"  cy="11" r="6" />
+        <circle cy="11" r="6" th:attr="cx=${circle2X}" />
         <!-- outer outline -->
         <text class="text-outline-outer"
               th:text="${text}"
