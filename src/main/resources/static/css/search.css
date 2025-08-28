@@ -42,10 +42,8 @@
 }
 
 .search-result-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
     width: 656px;
     background-color: var(--color-06, #FFE2E7);
     border: 2px solid var(--color-02, #F61590);
@@ -58,7 +56,6 @@
 .search-result-item {
     display: flex;
     flex-direction: row;
-    width: 100%;
     border: 2px solid var(--color-00, #A40E60);
 }
 
@@ -75,7 +72,6 @@
 .search-result-item-details-div {
     display: flex;
     flex-direction: column;
-    width: 100%;
 }
 
 .search-result-item-title {
@@ -105,4 +101,22 @@
     list-style: none;
     margin: 0;
     padding: 0;
+}
+
+/* DESCRIPTIVE */
+.w-100 {
+    width: 100%;
+}
+
+.w-47-86 {
+    width: 47.86%;
+}
+
+.center-content {
+    place-content: center;
+    text-align: center;
+}
+
+.fs-2em {
+    font-size: 2em;
 }

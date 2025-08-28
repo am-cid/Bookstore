@@ -16,8 +16,10 @@ public record RegisterRequestDTO(
                 message = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character")
         String password,
 
+        @Size(min = 1, max = 50, message = "Display name must be between 1 and 50 characters")
         String displayName,
 
+        @NotBlank(message = "Profile must either be public or private")
         boolean isPublic
 ) {
 }

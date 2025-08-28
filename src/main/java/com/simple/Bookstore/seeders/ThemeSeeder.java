@@ -78,7 +78,7 @@ public class ThemeSeeder implements CommandLineRunner {
                         themeRepo.getFile(),
                         true,
                         "Default Mangagamer Theme",
-                        "colors based off https://www.mangagamer.com (well, the entire site is based off mangagamer so...)"
+                        "colors from https://www.mangagamer.com (or you can just unset your theme on the right sidebar to use this)"
                 );
                 themeService.createTheme(admin, request);
             }

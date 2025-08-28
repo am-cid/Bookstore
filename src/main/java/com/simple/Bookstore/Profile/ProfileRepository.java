@@ -38,9 +38,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
                     word_similarity(:query, u.username),
                     word_similarity(:query, p.display_name),
                     0
-                ),
-                p.id
-            DESC
+                ) DESC,
+                u.username
             """, countQuery = """
             SELECT COUNT(DISTINCT p.id)
             FROM profile p
