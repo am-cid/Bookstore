@@ -97,6 +97,7 @@
 
 .search-result-desc {
     margin: 0;
+    word-wrap: anywhere;
 }
 
 .search-result-genres {

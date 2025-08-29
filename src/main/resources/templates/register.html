@@ -11,7 +11,7 @@
     <th:block th:if="${_overrideTheme != null}"
               th:utext="${_overrideTheme}">
     </th:block>
-    <link href="/css/search.css" rel="stylesheet">
+    <link href="/css/register.css" rel="stylesheet">
     <link href="/css/shared/genres.css" rel="stylesheet">
     <link href="/css/shared/main-content.css" rel="stylesheet">
 </head>
@@ -21,7 +21,7 @@
     <div th:replace="~{fragments/header :: header}"></div>
     <div id="main-layout">
         <div th:replace="~{fragments/sidebar-left :: sidebar-left}"></div>
-        <div th:replace="~{fragments/search.html :: main-content}"></div>
+        <div th:replace="~{fragments/register.html :: main-content}"></div>
         <div th:replace="~{fragments/sidebar-right :: sidebar-right}"></div>
     </div>
     <div th:replace="~{fragments/footer :: footer}"></div>

@@ -439,6 +439,8 @@ body {
 
 #your-account-welcome {
     margin: 0;
+    word-wrap: anywhere;
+    text-align: center;
 }
 
 .theme-div {

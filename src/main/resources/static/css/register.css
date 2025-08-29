@@ -1,0 +1,73 @@
+#register-form-outer-div {
+    margin: 10px;
+    gap: 2em;
+}
+
+#register-form-outer-div text {
+    font-size: 33px;
+}
+
+#register-form-outer-div svg {
+    font-size: 33px;
+    padding-left: 10px;
+    margin-bottom: -38px;
+}
+
+#register-form-div {
+    display: flex;
+    justify-content: center;
+    background-color: var(--color-06, #FFE2E7);
+    width: 656px;
+    border: 2px solid var(--color-02, #F61590);
+    border-top: 7px solid var(--color-02, #F61590);
+    border-bottom: 7px solid var(--color-02, #F61590);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#register-form {
+    display: grid;
+    grid-template-columns: 24fr 76fr;
+    grid-auto-rows: auto;
+    width: 100%;
+    grid-gap: 10px;
+}
+
+#register-form label {
+    justify-self: end;
+}
+
+#register-form input {
+    justify-self: stretch;
+}
+
+#register-form #show-display-name,
+#register-form #isPublic {
+    justify-self: start;
+}
+
+#displayName {
+    display: none;
+    grid-column-start: 2;
+}
+
+#show-display-name:checked + #displayName {
+    display: block;
+}
+
+#register-submit-button {
+    grid-column-start: 1;
+    grid-column-end: span 2;
+    justify-self: center;
+}
+
+.required {
+    color: red;
+}
+
+.error-message {
+    color: red;
+    grid-column-start: 1;
+    grid-column-end: span 2;
+    text-align: center;
+}

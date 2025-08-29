@@ -51,20 +51,21 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/*").authenticated()
                         // for website viewing
                         .requestMatchers(HttpMethod.GET,
-                                "/api/v1/books/**",
-                                "/api/v1/comments/**",
+                                "/api/v1/books/**", "/api/v1/comments/**",
                                 "/api/v1/reviews/**",
-                                "/search"
-                        ).permitAll()
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,
-                                "/", "/static/**", "/css/**", "/js/**", "/img/**",
-                                "/fonts/**"
+                                "/", "/search", "/register", "/profile/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST,
+                                "/api/v1/auth/**",
                                 "/profile/**"
                         ).permitAll()
+                        // resources
+                        .requestMatchers(HttpMethod.GET,
+                                "/static/**", "/css/**", "/js/**", "/img/**",
+                                "/fonts/**"
+                        ).permitAll()
                         // require authentication for everything else
+                        // easier for debugging anyway.
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
