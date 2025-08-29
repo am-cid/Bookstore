@@ -40,10 +40,6 @@ public class SearchViewController {
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
 
         // search result data
-        model.addAttribute("searchType", searchType);
-        model.addAttribute("queryParam", query);
-        model.addAttribute("genresParam", genres);
-        model.addAttribute("ratingParam", rating);
         switch (searchType) {
             case BOOK ->
                     model.addAttribute(

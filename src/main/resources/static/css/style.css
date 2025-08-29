@@ -397,6 +397,13 @@ body {
     margin-bottom: 10px;
 }
 
+.error-message {
+    color: red;
+    grid-column-start: 1;
+    grid-column-end: span 2;
+    text-align: center;
+}
+
 .sidebar-right-content {
     display: flex;
     flex-direction: column;
