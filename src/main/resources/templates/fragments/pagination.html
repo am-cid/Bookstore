@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="page" type="org.springframework.data.domain.Page<com.simple.Bookstore.Theme.ThemeResponseDTO>"*/-->
+<!--/*@thymesVar id="baseUrl" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pathParams" type="java.lang.String"*/-->
+
+<nav class="pagination-nav"
+     th:fragment="pagination(page, baseUrl, pathParams)"
+     th:if="${page != null && page.hasContent()}">
+    <p class="pagination-title">Page: </p>
+    <ul class="pagination-list">
+        <li class="page-item">
+            <th:block th:if="${page.first}">
+                <strong class="active"><</strong>
+            </th:block>
+            <th:block th:if="${!page.first}">
+                <a class="page-relative-link"
+                   tabindex="-1"
+                   th:href="@{${baseUrl}(page=${page.number - 1})}"
+                   th:if="${#strings.isEmpty(pathParams)}">
+                    <
+                </a>
+                <a class="page-relative-link"
+                   tabindex="-1"
+                   th:href="${baseUrl} + '?page=' + ${page.number - 1} + '&' + ${pathParams}"
+                   th:if="${!#strings.isEmpty(pathParams)}">
+                    <
+                </a>
+            </th:block>
+        </li>
+
+        <th:block th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}">
+            <!-- to prevent negative indices when there are 0 pages -->
+            <li class="page-item" th:if="${i >= 0}">
+                <th:block th:if="${i == page.number}">
+                    <strong class="active" th:text="${i + 1}"></strong>
+                </th:block>
+                <th:block th:if="${i != page.number}">
+                    <a class="page-link"
+                       th:href="@{${baseUrl}(page=${i})}"
+                       th:if="${#strings.isEmpty(pathParams)}">
+                        <span th:text="${i + 1}"></span>
+                    </a>
+                    <a class="page-link"
+                       th:href="${baseUrl} + '?page=' + ${i} + '&' + ${pathParams}"
+                       th:if="${!#strings.isEmpty(pathParams)}">
+                        <span th:text="${i + 1}"></span>
+                    </a>
+                </th:block>
+            </li>
+        </th:block>
+
+        <li class="page-item">
+            <th:block th:if="${page.last}">
+                <strong class="active">></strong>
+            </th:block>
+            <th:block th:if="${!page.last}">
+                <a class="page-relative-link"
+                   th:href="@{${baseUrl}(page=${page.number + 1})}"
+                   th:if="${#strings.isEmpty(pathParams)}">
+                    >
+                </a>
+                <a class="page-relative-link"
+                   th:href="${baseUrl} + '?page=' + ${page.number + 1} + '&' + ${pathParams}"
+                   th:if="${!#strings.isEmpty(pathParams)}">
+                    >
+                </a>
+            </th:block>
+        </li>
+    </ul>
+</nav>
+
+</body>
+</html>

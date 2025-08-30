@@ -18,6 +18,10 @@
     padding: 0 0 0 5px;
 }
 
+.page-relative-link {
+    text-decoration: none;
+}
+
 .page-item {
     display: flex;
     flex-direction: row;
@@ -37,7 +41,6 @@
     text {
         font-size: 33px;
     }
-
 }
 
 .search-result-content-div svg {
