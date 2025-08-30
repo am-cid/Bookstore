@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface ThemeRepository extends JpaRepository<Theme, Long> {
     List<Theme> findByProfileUser(User user);
 
+    Page<Theme> findByProfileUser(User user, Pageable pageable);
+
     Page<Theme> findByPublishedIsTrue(Pageable pageable);
 
     Optional<Theme> findByIdAndPublishedIsTrue(Long id);

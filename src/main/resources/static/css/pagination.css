@@ -1,0 +1,33 @@
+.pagination-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+}
+
+.pagination-title {
+    margin: 0;
+}
+
+.pagination-list {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    list-style: none;
+    margin: 0 20px 0 0;
+    padding: 0 0 0 5px;
+}
+
+.page-relative-link {
+    text-decoration: none;
+}
+
+.page-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.page-item .active {
+    font-size: 1.25em;
+}

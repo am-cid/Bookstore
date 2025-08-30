@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="ownedThemes" type="org.springframework.data.domain.Page<com.simple.Bookstore.Theme.ThemeResponseDTO>"*/-->
+
+<div class="flex-column" id="main-content" th:fragment="main-content">
+    <div id="main-content-div">
+        <div th:replace="~{fragments/pagination :: pagination(${ownedThemes}, '/profile/me', null)}"></div>
+        <div th:replace="~{fragments/profile/owned-themes :: themes}"></div>
+        <div th:replace="~{fragments/pagination :: pagination(${ownedThemes}, '/profile/me', null)}"></div>
+    </div>
+</div>
+
+</body>
+</html>

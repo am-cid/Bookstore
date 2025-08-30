@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProfileService {
-    ProfileResponseDTO findOwn(User user);
+    ProfileResponseDTO findOwn(User user) throws UnauthorizedException;
 
     ProfileResponseDTO findByUsername(String username, User user);
 

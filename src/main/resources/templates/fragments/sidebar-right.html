@@ -44,7 +44,7 @@
         <strong id="your-account-title">Your Account</strong>
         <form action="#" id="your-account-details" method="post" th:action="@{/api/v1/auth/logout}">
             <p id="your-account-welcome">Welcome <strong th:text="${user.getProfile().getDisplayName()}"></strong></p>
-            <a th:href="@{/profile/{username}(username=${user.getUsername()})}">My Account</a>
+            <a th:href="@{/profile/me}">My Account</a>
             <button type="submit">Logout</button>
         </form>
     </div>

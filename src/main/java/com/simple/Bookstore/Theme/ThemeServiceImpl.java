@@ -64,6 +64,13 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
+    public Page<ThemeResponseDTO> findThemesByUser(User user, Pageable pageable) {
+        return themeRepository
+                .findByProfileUser(user, pageable)
+                .map(ThemeMapper::themeToResponseDTO);
+    }
+
+    @Override
     public ThemeResponseDTO findThemeById(Long id) {
         return themeRepository
                 .findById(id)

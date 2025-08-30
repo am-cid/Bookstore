@@ -6,14 +6,19 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
+<!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="ownedThemes" type="org.springframework.data.domain.Page<com.simple.Bookstore.Theme.ThemeResponseDTO>"*/-->
+<!--/*@thymesVar id="usedTheme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+<!--/*@thymesVar id="savedThemeIds" type="java.util.List<java.lang.Long>"*/-->
+<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
 
-<div class="search-result-content-div" th:fragment="search-results">
-    <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Search:Theme', 1, 33)}"></div>
-    <div class="search-result-content flex-column">
+<div class="profile-themes-div" th:fragment="themes">
+    <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Themes', 1, 33)}"></div>
+    <div class="profile-themes flex-column">
         <i th:if="${user == null}">Login to change theme</i>
-        <th:block th:if="${!results.hasContent()}">No results found...</th:block>
-        <div class="search-result-item w-100" th:each="theme, i : ${results}">
-            <div class="search-result-item-image">
+        <th:block th:if="${!ownedThemes.hasContent()}">No results found...</th:block>
+        <div class="profile-theme w-100" th:each="theme, i : ${ownedThemes}">
+            <div class="profile-theme-colors">
                 <ul class="theme-colors-list">
                     <li class="theme-color" th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
                     <li class="theme-color" th:style="'background-color: #' + ${theme.base01} " th:title="'#' + ${theme.base01}"></li>
@@ -25,21 +30,18 @@
                     <li class="theme-color" th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
                 </ul>
             </div>
-            <div class="search-result-item-details-div w-100">
-                <div class="search-result-item-title">
+            <div class="profile-theme-details-div w-100">
+                <div class="profile-theme-title">
                     <p>
                         <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
                            th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
-                        by
-                        <a th:href="@{/api/v1/profile/{username}(username=${theme.username})}"
-                           th:text="${#strings.isEmpty(theme.userDisplayName) ? theme.username : theme.userDisplayName}"></a>
                     </p>
                 </div>
                 <th:block th:if="${!#strings.isEmpty(theme.description) || user != null}">
-                    <div class="list-item-details">
+                    <div class="profile-theme-details">
                         <th:block th:if="${!#strings.isEmpty(theme.description)}">
                             <strong>Description: </strong>
-                            <p class="search-result-desc" th:text="${theme.description}"></p>
+                            <p class="profile-theme-desc" th:text="${theme.description}"></p>
                         </th:block>
                         <th:block th:if="${user != null}">
                             <form action="#" class="apply-form" method="post" th:action="@{/profile/theme}">

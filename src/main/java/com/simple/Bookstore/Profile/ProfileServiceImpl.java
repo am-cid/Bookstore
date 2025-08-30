@@ -22,7 +22,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final UserRepository userRepository;
 
     @Override
-    public ProfileResponseDTO findOwn(User user) {
+    public ProfileResponseDTO findOwn(User user) throws UnauthorizedException {
         if (user == null) {
             throw new UnauthorizedException("You are not logged in");
         }
