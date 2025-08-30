@@ -11,7 +11,7 @@
     <div class="book-list-content-div">
         <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading(${headingTitle}, 290)}"></div>
         <div class="book-list-content">
-            <div class="book-list-item" th:each="book : ${bookDtoList}">
+            <div class="book-list-item gap-10px" th:each="book : ${bookDtoList}">
                 <div class="book-list-item-image">
                     <img th:alt="'book-list-item-image-' + ${book.id}"
                          th:src="${book.frontImage != null ?

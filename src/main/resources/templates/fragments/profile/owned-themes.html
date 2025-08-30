@@ -12,63 +12,65 @@
 <!--/*@thymesVar id="savedThemeIds" type="java.util.List<java.lang.Long>"*/-->
 <!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
 
-<div class="profile-themes-div" th:fragment="themes">
-    <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Themes', 1, 33)}"></div>
-    <div class="profile-themes flex-column">
-        <i th:if="${user == null}">Login to change theme</i>
-        <th:block th:if="${!ownedThemes.hasContent()}">No results found...</th:block>
-        <div class="profile-theme w-100" th:each="theme, i : ${ownedThemes}">
-            <div class="profile-theme-colors">
-                <ul class="theme-colors-list">
-                    <li class="theme-color" th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
-                    <li class="theme-color" th:style="'background-color: #' + ${theme.base01} " th:title="'#' + ${theme.base01}"></li>
-                    <li class="theme-color" th:style="'background-color: #' + ${theme.base02} " th:title="'#' + ${theme.base02}"></li>
-                    <li class="theme-color" th:style="'background-color: #' + ${theme.base03} " th:title="'#' + ${theme.base03}"></li>
-                    <li class="theme-color" th:style="'background-color: #' + ${theme.base04} " th:title="'#' + ${theme.base04}"></li>
-                    <li class="theme-color" th:style="'background-color: #' + ${theme.base05} " th:title="'#' + ${theme.base05}"></li>
-                    <li class="theme-color" th:style="'background-color: #' + ${theme.base06} " th:title="'#' + ${theme.base06}"></li>
-                    <li class="theme-color" th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
-                </ul>
+<div class="profile-themes flex-column" th:fragment="themes">
+    <div class="flex-row profile-content-header">
+        <p class="profile-content-header-title">
+            Themes
+        </p>
+        <div th:replace="~{fragments/pagination :: pagination(${ownedThemes}, '/profile/me', null)}"></div>
+    </div>
+    <th:block th:if="${!ownedThemes.hasContent()}">No results found...</th:block>
+    <div class="profile-theme w-100" th:each="theme, i : ${ownedThemes}">
+        <div class="profile-theme-colors">
+            <ul class="theme-colors-list">
+                <li class="theme-color" th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
+                <li class="theme-color" th:style="'background-color: #' + ${theme.base01} " th:title="'#' + ${theme.base01}"></li>
+                <li class="theme-color" th:style="'background-color: #' + ${theme.base02} " th:title="'#' + ${theme.base02}"></li>
+                <li class="theme-color" th:style="'background-color: #' + ${theme.base03} " th:title="'#' + ${theme.base03}"></li>
+                <li class="theme-color" th:style="'background-color: #' + ${theme.base04} " th:title="'#' + ${theme.base04}"></li>
+                <li class="theme-color" th:style="'background-color: #' + ${theme.base05} " th:title="'#' + ${theme.base05}"></li>
+                <li class="theme-color" th:style="'background-color: #' + ${theme.base06} " th:title="'#' + ${theme.base06}"></li>
+                <li class="theme-color" th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
+            </ul>
+        </div>
+        <div class="profile-theme-details-div w-100">
+            <div class="profile-theme-title">
+                <p>
+                    <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
+                       th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
+                </p>
             </div>
-            <div class="profile-theme-details-div w-100">
-                <div class="profile-theme-title">
-                    <p>
-                        <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
-                           th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
-                    </p>
+            <th:block th:if="${!#strings.isEmpty(theme.description) || user != null}">
+                <div class="profile-theme-details">
+                    <th:block th:if="${!#strings.isEmpty(theme.description)}">
+                        <strong>Description: </strong>
+                        <p class="profile-theme-desc" th:text="${theme.description}"></p>
+                    </th:block>
+                    <th:block th:if="${user != null}">
+                        <form action="#" class="apply-form" method="post" th:action="@{/profile/theme}">
+                            <input name="themeId" th:value="${theme.id}" type="hidden" />
+                            <button th:if="${usedTheme == null}" type="submit">Apply</button>
+                            <th:block th:if="${usedTheme != null}">
+                                <i th:if="${usedTheme.id == theme.id}">In Use</i>
+                                <button th:if="${usedTheme.id != theme.id}" type="submit">Apply</button>
+                            </th:block>
+                        </form>
+                        <form action="#" method="post"
+                              th:action="@{/profile/saved-themes}"
+                              th:if="${!#lists.contains(savedThemeIds, theme.id)}">
+                            <input name="themeId" th:value="${theme.id}" type="hidden" />
+                            <button type="submit">Save</button>
+                        </form>
+                        <form action="#" method="post"
+                              th:action="@{/profile/saved-themes}"
+                              th:if="${#lists.contains(savedThemeIds, theme.id)}">
+                            <input name="_method" type="hidden" value="delete" />
+                            <input name="themeId" th:value="${theme.id}" type="hidden" />
+                            <button type="submit">Unsave</button>
+                        </form>
+                    </th:block>
                 </div>
-                <th:block th:if="${!#strings.isEmpty(theme.description) || user != null}">
-                    <div class="profile-theme-details">
-                        <th:block th:if="${!#strings.isEmpty(theme.description)}">
-                            <strong>Description: </strong>
-                            <p class="profile-theme-desc" th:text="${theme.description}"></p>
-                        </th:block>
-                        <th:block th:if="${user != null}">
-                            <form action="#" class="apply-form" method="post" th:action="@{/profile/theme}">
-                                <input name="themeId" th:value="${theme.id}" type="hidden" />
-                                <button th:if="${usedTheme == null}" type="submit">Apply</button>
-                                <th:block th:if="${usedTheme != null}">
-                                    <i th:if="${usedTheme.id == theme.id}">In Use</i>
-                                    <button th:if="${usedTheme.id != theme.id}" type="submit">Apply</button>
-                                </th:block>
-                            </form>
-                            <form action="#" method="post"
-                                  th:action="@{/profile/saved-themes}"
-                                  th:if="${!#lists.contains(savedThemeIds, theme.id)}">
-                                <input name="themeId" th:value="${theme.id}" type="hidden" />
-                                <button type="submit">Save</button>
-                            </form>
-                            <form action="#" method="post"
-                                  th:action="@{/profile/saved-themes}"
-                                  th:if="${#lists.contains(savedThemeIds, theme.id)}">
-                                <input name="_method" type="hidden" value="delete" />
-                                <input name="themeId" th:value="${theme.id}" type="hidden" />
-                                <button type="submit">Unsave</button>
-                            </form>
-                        </th:block>
-                    </div>
-                </th:block>
-            </div>
+            </th:block>
         </div>
     </div>
 </div>

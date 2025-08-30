@@ -8,9 +8,8 @@
 <body>
 <!--/*@thymesVar id="results" type="org.springframework.data.domain.Page"*/-->
 
-<div class="flex-column" id="main-content" th:fragment="main-content">
-    <div id="main-content-div"
-         th:with="queryString=
+<div class="flex-column" id="main-content" th:fragment="main-content"
+     th:with="queryString=
             'type=' + ${(param.type != null) ? param.type.getFirst() : ''} +
             '&query=' + ${(param.query != null) ? param.query.getFirst() : ''} +
             '&rating=' + ${(param.rating != null) ? param.rating.getFirst() : ''} +
@@ -20,24 +19,23 @@
                 : param.genres.getFirst()
              : ''
             }">
-        <th:block th:each="genre, i : ${param.genres}">
-            <th:block th:with="queryString=${queryString} + '&genres=' + genre"></th:block>
-        </th:block>
+    <th:block th:each="genre, i : ${param.genres}">
+        <th:block th:with="queryString=${queryString} + '&genres=' + genre"></th:block>
+    </th:block>
 
-        <div th:replace="~{fragments/pagination :: pagination(${results}, '/search', ${queryString})}"></div>
-        <th:block th:switch="${param.type.toString()}">
-            <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).BOOK.name()}">
-                <div th:replace="~{fragments/search/book :: search-results}"></div>
-            </th:block>
-            <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).THEME.name()}">
-                <div th:replace="~{fragments/search/theme :: search-results}"></div>
-            </th:block>
-            <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).PROFILE.name()}">
-                <div th:replace="~{fragments/search/profile :: search-results}"></div>
-            </th:block>
+    <div th:replace="~{fragments/pagination :: pagination(${results}, '/search', ${queryString})}"></div>
+    <th:block th:switch="${param.type.toString()}">
+        <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).BOOK.name()}">
+            <div th:replace="~{fragments/search/book :: search-results}"></div>
         </th:block>
-        <div th:replace="~{fragments/pagination :: pagination(${results}, '/search', ${queryString})}"></div>
-    </div>
+        <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).THEME.name()}">
+            <div th:replace="~{fragments/search/theme :: search-results}"></div>
+        </th:block>
+        <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).PROFILE.name()}">
+            <div th:replace="~{fragments/search/profile :: search-results}"></div>
+        </th:block>
+    </th:block>
+    <div th:replace="~{fragments/pagination :: pagination(${results}, '/search', ${queryString})}"></div>
 </div>
 
 </body>

@@ -7,59 +7,10 @@
 </head>
 <body>
 
-<div class="flex-column" id="main-content" th:fragment="main-content">
+<div class="flex-column w-700px gap-10px" th:fragment="main-content">
     <!-- SLIDING BANNER -->
-    <div id="sliding-banner" th:if="${bannerBooks != null and !#lists.isEmpty(bannerBooks)}">
-        <div id="sliding-banner-images">
-            <ul class="flex-row" >
-                <li th:each="book : ${bannerBooks}">
-                    <a th:href="@{/api/v1/books/{id}(id=${book.id})}">
-                        <img th:alt="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"
-                             th:src="${#strings.isEmpty(book.frontImage) ?
-                                    (#strings.isEmpty(book.backImage) ?
-                                        (#strings.isEmpty(book.spineImage) ?
-                                            (#lists.isEmpty(book.contentImages) ?
-                                                'https://placehold.co/700x200?text=' +
-                                                (#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title)
-                                                + '%0A' +
-                                                (#strings.isEmpty(book.author) ? '' : book.author)
-                                                : #lists.first(book.contentImages)
-                                            )
-                                            : book.spineImage
-                                        )
-                                        : book.backImage
-                                    )
-                                    : book.frontImage
-                                }">
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div id="sliding-banner-thumbs">
-            <ul class="flex-row" >
-                <li th:each="book : ${bannerBooks}">
-                    <img th:alt="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"
-                         th:src="${#strings.isEmpty(book.frontImage) ?
-                                (#strings.isEmpty(book.backImage) ?
-                                    (#strings.isEmpty(book.spineImage) ?
-                                        (#lists.isEmpty(book.contentImages) ?
-                                            'https://placehold.co/80x20?text=' +
-                                            (#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title)
-                                            : #lists.first(book.contentImages)
-                                        )
-                                        : book.spineImage
-                                    )
-                                    : book.backImage
-                                )
-                                : book.frontImage
-                            }">
-                </li>
-            </ul>
-        </div>
-    </div>
-    <script th:src="@{/js/sliding-banner.js}"></script>
-
-    <div id="main-content-div">
+    <div th:replace="~{fragments/sliding-banner :: sliding-banner}"></div>
+    <div id="main-content">
         <!-- LATEST UPLOADS -->
         <div th:replace="~{fragments/two-column-book-list :: twoColBookList(${latestUploads}, 'LATEST UPLOADS')}"></div>
         <!-- AVAILABLE BOOKS -->

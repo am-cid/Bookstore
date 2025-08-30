@@ -1,3 +1,47 @@
+#profile-div {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    row-gap: 2em;
+}
+
+#profile-div svg {
+    font-size: 32px;
+    padding: 0 0 0 10px;
+    margin-bottom: -40px;
+}
+
+#profile-div .svg-text-heading .text-outline-outer {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-02, #F61590);
+    stroke-linejoin: round;
+    stroke-width: 12;
+}
+
+#profile-div .svg-text-heading .text-outline-inner {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-07, #FFF2D3);
+    stroke-linejoin: round;
+    stroke-width: 8;
+}
+
+#profile-div .svg-text-heading .text-fill {
+    fill: var(--color-02, #F61590);
+}
+
+#profile {
+    gap: 20px;
+    width: 656px;
+    background-color: var(--color-06, #FFE2E7);
+    border: 2px solid var(--color-02, #F61590);
+    border-top: 10px solid var(--color-02, #F61590);
+    border-bottom: 2px solid var(--color-02, #F61590);
+    border-radius: 10px;
+    padding: 10px;
+}
+
 .profile-themes-div {
     display: flex;
     flex-direction: column;
@@ -9,22 +53,43 @@
     }
 }
 
-.profile-themes-div svg {
-    font-size: 32px;
-    padding: 0 0 0 10px;
-    margin-bottom: -38px;
-}
-
 .profile-themes {
     flex-wrap: wrap;
     gap: 20px;
-    width: 656px;
-    background-color: var(--color-06, #FFE2E7);
-    border: 2px solid var(--color-02, #F61590);
-    border-top: 7px solid var(--color-02, #F61590);
-    border-bottom: 7px solid var(--color-02, #F61590);
-    border-radius: 10px;
+    /*width: 656px;*/
+    /*background-color: var(--color-06, #FFE2E7);*/
+    /*border: 2px solid var(--color-02, #F61590);*/
+    /*border-top: 7px solid var(--color-02, #F61590);*/
+    /*border-bottom: 7px solid var(--color-02, #F61590);*/
+    /*border-radius: 10px;*/
+    /*padding: 10px;*/
+}
+
+.profile-content-header {
+    justify-content: space-between;
+}
+
+.profile-content-header-title {
+    font-size: 26px;
+    font-weight: bolder;
+    border-radius: 15px;
     padding: 10px;
+    margin: 0;
+    background-color: var(--color-02, #F61590);
+    color: var(--color-06, #FFE2E7);
+}
+
+.profile-content-header-sub-title {
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bolder;
+    border-radius: 15px;
+    padding: 5px 50px;
+    margin: 0;
+    background-color: var(--color-02, #F61590);
+    color: var(--color-06, #FFE2E7);
+    box-shadow: inset 2px 2px 5px var(--color-06, #FFE2E7);
 }
 
 .profile-theme {

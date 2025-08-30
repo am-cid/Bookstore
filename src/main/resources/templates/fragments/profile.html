@@ -8,10 +8,12 @@
 <body>
 <!--/*@thymesVar id="ownedThemes" type="org.springframework.data.domain.Page<com.simple.Bookstore.Theme.ThemeResponseDTO>"*/-->
 
-<div class="flex-column" id="main-content" th:fragment="main-content">
-    <div id="main-content-div">
-        <div th:replace="~{fragments/pagination :: pagination(${ownedThemes}, '/profile/me', null)}"></div>
-        <div th:replace="~{fragments/profile/owned-themes :: themes}"></div>
+<div id="main-content" th:fragment="main-content">
+    <div id="profile-div">
+        <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('My Account', 1, 33)}"></div>
+        <div class="flex-column" id="profile">
+            <div th:replace="~{fragments/profile/owned-themes :: themes}"></div>
+        </div>
         <div th:replace="~{fragments/pagination :: pagination(${ownedThemes}, '/profile/me', null)}"></div>
     </div>
 </div>
