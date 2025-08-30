@@ -1,9 +1,6 @@
 package com.simple.Bookstore.Book;
 
-import com.simple.Bookstore.Genre.Genre;
-
 import java.time.LocalDateTime;
-import java.util.Set;
 
 public interface BookSearchResultProjection {
     String getTitle();
@@ -24,8 +21,10 @@ public interface BookSearchResultProjection {
 
     Long getId();
 
-    Set<Genre> getGenres();
+    ///  Comma separated string
+    String getGenres();
 
-    Set<String> getContentImages();
+    ///  Comma separated string
+    String getContentImages();
 
 }

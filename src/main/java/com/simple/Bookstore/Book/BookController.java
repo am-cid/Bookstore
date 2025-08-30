@@ -51,7 +51,7 @@ public class BookController {
     @GetMapping("/search")
     public ResponseEntity<Page<BookSearchResultDTO>> searchBooks(
             @RequestParam(required = false) String query,
-            @RequestParam(required = false) Set<Genre> genres,
+            @RequestParam(required = false) Optional<Set<Genre>> genres,
             @RequestParam(required = false) Double rating,
             @PageableDefault(size = 10, page = 0) Pageable pageable
     ) {

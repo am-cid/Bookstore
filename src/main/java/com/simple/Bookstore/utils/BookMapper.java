@@ -2,9 +2,12 @@ package com.simple.Bookstore.utils;
 
 import com.simple.Bookstore.Book.*;
 import com.simple.Bookstore.Exceptions.BookNotFoundException;
+import com.simple.Bookstore.Genre.Genre;
 import com.simple.Bookstore.Review.Review;
 
+import java.util.Arrays;
 import java.util.OptionalDouble;
+import java.util.stream.Collectors;
 
 public class BookMapper {
     public static Book createDtoToBook(BookRequestDTO dto) {
@@ -24,24 +27,24 @@ public class BookMapper {
      * Helper method to perform the mapping from projection to DTO
      */
     public static BookSearchResultDTO searchResultProjectionToDTO(
-            BookSearchResultProjection projection,
-            BookRepository bookRepo
+            BookSearchResultProjection projection
     ) {
-        Book book = bookRepo
-                .findById(projection.getId())
-                .orElseThrow(() -> new BookNotFoundException(projection.getId()));
         return new BookSearchResultDTO(
                 projection.getId(),
                 projection.getTitle(),
                 projection.getAuthor(),
                 projection.getDescription(),
                 projection.getDate(),
-                book.getGenres(),
+                projection.getGenres() == null
+                        ? null
+                        : Arrays.stream(projection.getGenres().split(",")).map(Genre::valueOf).collect(Collectors.toSet()),
                 projection.getAverageRating(),
                 projection.getFrontImage(),
                 projection.getBackImage(),
                 projection.getSpineImage(),
-                projection.getContentImages()
+                projection.getContentImages() == null
+                        ? null
+                        : Arrays.stream(projection.getContentImages().split(",")).collect(Collectors.toSet())
         );
     }
 

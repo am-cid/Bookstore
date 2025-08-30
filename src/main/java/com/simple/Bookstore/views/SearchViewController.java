@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -31,7 +32,11 @@ public class SearchViewController {
     public String search(
             @RequestParam("type") SearchType searchType,
             @RequestParam(required = false) String query,
-            @RequestParam(required = false) Set<Genre> genres,
+            // need specifically for collection types since a null collection's
+            // type cannot be inferred by JPA in repository native queries,
+            // even if there is a null check in the WHERE clause:
+            // ':genres IS NULL OR'
+            @RequestParam(required = false) Optional<Set<Genre>> genres,
             @RequestParam(required = false) Double rating,
             @AuthenticationPrincipal User user,
             @PageableDefault Pageable pageable,
@@ -41,11 +46,12 @@ public class SearchViewController {
 
         // search result data
         switch (searchType) {
-            case BOOK ->
-                    model.addAttribute(
-                            "results",
-                            bookService.searchBooks(query, genres, rating, pageable)
-                    );
+            case BOOK -> {
+                model.addAttribute(
+                        "results",
+                        bookService.searchBooks(query, genres, rating, pageable)
+                );
+            }
             case THEME -> {
                 model.addAttribute(
                         "results",

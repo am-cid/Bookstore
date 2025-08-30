@@ -5,16 +5,17 @@ import com.simple.Bookstore.Genre.Genre;
 import com.simple.Bookstore.utils.BookMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class BookServiceImpl implements BookService {
         return bookRepo
                 .findTopNRatedBooks(n)
                 .stream()
-                .map(projection -> BookMapper.searchResultProjectionToDTO(projection, bookRepo))
+                .map(BookMapper::searchResultProjectionToDTO)
                 .toList();
     }
 
@@ -46,7 +47,7 @@ public class BookServiceImpl implements BookService {
         return bookRepo
                 .findLatestNBooks(n)
                 .stream()
-                .map(projection -> BookMapper.searchResultProjectionToDTO(projection, bookRepo))
+                .map(BookMapper::searchResultProjectionToDTO)
                 .toList();
     }
 
@@ -118,16 +119,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<BookSearchResultDTO> searchBooks(String query, Set<Genre> genres, Double rating, Pageable pageable) {
-        Page<BookSearchResultProjection> bookPage = bookRepo.searchBooks(query, rating, pageable);
-        List<BookSearchResultDTO> filteredDTOs = bookPage
-                .stream()
-                .map(projection -> BookMapper.searchResultProjectionToDTO(projection, bookRepo))
-                .filter(dto -> genres == null || dto.genres().stream()
-                        .anyMatch(genres.isEmpty() ? (Genre genre) -> true : genres::contains)
-                )
-                .toList();
-        return new PageImpl<>(filteredDTOs, pageable, bookPage.getTotalElements());
+    public Page<BookSearchResultDTO> searchBooks(
+            String query,
+            Optional<Set<Genre>> genres,
+            Double rating,
+            Pageable pageable
+    ) {
+        Set<Genre> validGenres = genres.orElse(new HashSet<>());
+        Page<BookSearchResultProjection> bookPage = bookRepo.searchBooks(
+                query,
+                rating,
+                validGenres.stream().map(Genre::name).collect(Collectors.toSet()),
+                validGenres.size(),
+                pageable
+        );
+        return bookPage
+                .map(BookMapper::searchResultProjectionToDTO);
     }
 
     // HELPERS
@@ -148,8 +155,8 @@ public class BookServiceImpl implements BookService {
         double normalizedDate = Math.max(0.0, 1.0 - (daysSincePublished / 365.0));
 
         return (normalizedRating * RATING_WEIGHT) +
-                (normalizedReviewCount * REVIEW_COUNT_WEIGHT) +
-                (normalizedDate * DATE_WEIGHT);
+               (normalizedReviewCount * REVIEW_COUNT_WEIGHT) +
+               (normalizedDate * DATE_WEIGHT);
     }
 
     private void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO newBook) {
