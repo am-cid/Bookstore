@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> findByUsername(String username);
 
-    void createUser(RegisterRequestDTO request, Role role) throws UsernameAlreadyTakenException;
+    User createUser(RegisterRequestDTO request, Role role) throws UsernameAlreadyTakenException;
 
     /**
      * Updates User entity as well as the SecurityContextHolder which caches

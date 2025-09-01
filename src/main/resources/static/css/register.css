@@ -30,6 +30,6 @@
     grid-column-start: 2;
 }
 
-#show-display-name:checked + #displayName {
+.show-hidden-trigger:checked + #displayName {
     display: block;
 }

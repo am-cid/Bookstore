@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -71,10 +73,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/books/**", "/api/v1/comments/**",
                                 "/api/v1/reviews/**",
-                                "/", "/search", "/register", "/profile/**"
+                                "/", "/search", "/register/**", "/profile/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST,
-                                "/api/v1/auth/**", "/register",
+                                "/api/v1/auth/**", "/register/**",
                                 "/profile/**"
                         ).permitAll()
                         // resources
@@ -104,5 +106,10 @@ public class SecurityConfig {
                 )
         ;
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

@@ -5,8 +5,8 @@ import com.simple.Bookstore.Exceptions.UsernameAlreadyTakenException;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.Role.Role;
-import com.simple.Bookstore.Theme.ThemeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProfileRepository profileRepository;
-    private final ThemeRepository themeRepository;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public Optional<User> findByUsername(String username) {
@@ -36,11 +36,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(RegisterRequestDTO request, Role role) throws UsernameAlreadyTakenException {
+    public User createUser(RegisterRequestDTO request, Role role) throws UsernameAlreadyTakenException {
         if (userRepository.findByUsername(request.username()).isPresent()) {
             throw new UsernameAlreadyTakenException(request.username());
         }
-
 
         User user = new User();
         user.setUsername(request.username());
@@ -50,11 +49,15 @@ public class UserServiceImpl implements UserService {
 
         Profile profile = new Profile();
         profile.setUser(savedUser);
-        profile.setDisplayName(request.displayName() != null ? request.displayName() : request.username());
+        profile.setDisplayName(
+                request.displayName() == null || request.displayName().isBlank()
+                        ? request.username()
+                        : request.displayName());
         profile.setPublic(request.isPublic());
         Profile savedProfile = profileRepository.save(profile);
 
         savedUser.setProfile(savedProfile);
+        return userRepository.save(savedUser);
     }
 
     @Override
@@ -69,7 +72,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
         Authentication newAuth = new UsernamePasswordAuthenticationToken(
                 savedUser,
-                savedUser.getPassword(),
+                request.newPassword(),
                 savedUser.getAuthorities()
         );
         SecurityContextHolder.getContext().setAuthentication(newAuth);

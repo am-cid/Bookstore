@@ -21,7 +21,7 @@
         <span class="error-message" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></span>
 
         <label for="show-change-password" title="Check to change password">Change Password?</label>
-        <input class="profile-details-checkbox" id="show-change-password"
+        <input class="profile-details-checkbox show-hidden-trigger" id="show-change-password"
                name="change-password" type="checkbox">
         <div class="gap-10px profile-details" id="change-password">
             <label for="newPassword" title="required">New Password<span class="required">*</span>:</label>

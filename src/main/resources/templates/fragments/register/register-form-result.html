@@ -8,10 +8,10 @@
 <body>
 <!--/*@thymesVar id="registerRequestDTO" type="com.simple.Bookstore.Auth.RegisterRequestDTO"*/-->
 
-<div class="flex-column" id="main-content" th:fragment="main-content">
-    <div class="flex-column" id="register-form-outer-div">
-        <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('My Account', 1, 33)}"></div>
-        <div th:replace="~{fragments/register/register-form :: register-form}"></div>
+<div id="register-form-div" th:fragment="register-form">
+    <div class="flex-column justify-center text-center">
+        <p>Your registration has been completed!</p>
+        <p>You can start by logging into your <a th:href="@{/profile/me}">my account page</a> or start browsing immediately!</p>
     </div>
 </div>
 

@@ -134,13 +134,12 @@ public class ProfileViewController {
 
     @GetMapping("/me/edit/confirm")
     public String confirmEditProfile(
-            @Valid @ModelAttribute("profileEditRequestDTO") ProfileEditRequestDTO request,
+            @ModelAttribute("profileEditRequestDTO") ProfileEditRequestDTO request,
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        if (request == null) {
+        if (request == null || request.isUninitializedForEditing())
             return "redirect:/profile/me/edit";
-        }
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
         return "profile-edit-confirm";
@@ -148,12 +147,11 @@ public class ProfileViewController {
 
     @PostMapping("/me/edit/confirm")
     public String confirmEditProfile(
-            @Valid @ModelAttribute("profileEditRequestDTO") ProfileEditRequestDTO request,
+            @ModelAttribute("profileEditRequestDTO") ProfileEditRequestDTO request,
             RedirectAttributes redirectAttributes
     ) {
-        if (request == null) {
+        if (request == null || request.isUninitializedForEditing())
             return "redirect:/profile/me/edit";
-        }
 
         redirectAttributes.addFlashAttribute("profileEditRequestDTO", request);
         return "redirect:/profile/me/edit/result";
@@ -161,12 +159,11 @@ public class ProfileViewController {
 
     @PostMapping(path = "/me/edit/confirm", params = {"_action=back"})
     public String confirmEditProfileGoBack(
-            @Valid @ModelAttribute("profileEditRequestDTO") ProfileEditRequestDTO request,
+            @ModelAttribute("profileEditRequestDTO") ProfileEditRequestDTO request,
             RedirectAttributes redirectAttributes
     ) {
-        if (request == null) {
+        if (request == null || request.isUninitializedForEditing())
             return "redirect:/profile/me/edit";
-        }
 
         redirectAttributes.addFlashAttribute("profileEditRequestDTO", request);
         return "redirect:/profile/me/edit";
@@ -174,13 +171,12 @@ public class ProfileViewController {
 
     @GetMapping("/me/edit/result")
     public String editResult(
-            @Valid @ModelAttribute("profileEditRequestDTO") ProfileEditRequestDTO request,
+            @ModelAttribute("profileEditRequestDTO") ProfileEditRequestDTO request,
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        if (request == null) {
+        if (request == null || request.isUninitializedForEditing())
             return "redirect:/profile/me/edit";
-        }
 
         User savedUser = userService.updateUser(user, new UserUpdateRequestDTO(
                 request.username(),

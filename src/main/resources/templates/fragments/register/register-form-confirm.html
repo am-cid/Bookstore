@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="registerRequestDTO" type="com.simple.Bookstore.Auth.RegisterRequestDTO"*/-->
+
+<div id="register-form-div" th:fragment="register-form">
+    <div class="gap-10px profile-details">
+        <p class="profile-details-label">Username: </p>
+        <p class="profile-details-value" th:text="${registerRequestDTO.username()}"></p>
+
+        <p class="profile-details-label">Display Name: </p>
+        <p class="profile-details-value" th:text="${registerRequestDTO.displayName()}"></p>
+
+        <p class="profile-details-label">Password: </p>
+        <p class="profile-details-value" th:text="${#strings.repeat('*', registerRequestDTO.password().length())}"></p>
+
+        <div class="flex-row gap-10px profile-details-submit-button">
+            <form method="post"
+                  th:action="@{/register/confirm}"
+                  th:object="${registerRequestDTO}">
+                <th:block th:replace="~{fragments/register/register-form-confirm :: registerRequestHiddenFields}"></th:block>
+                <button type="submit">Confirm & Create Account</button>
+            </form>
+            <form method="post"
+                  th:action="@{/register/confirm}"
+                  th:object="${registerRequestDTO}">
+                <input name="_action" type="hidden" value="back">
+                <th:block th:replace="~{fragments/register/register-form-confirm :: registerRequestHiddenFields}"></th:block>
+                <button type="submit">Back</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<th:block th:fragment="registerRequestHiddenFields" th:object="${registerRequestDTO}">
+    <input th:field="*{username}" type="hidden">
+    <input th:field="*{password}" type="hidden">
+    <input th:field="*{confirmPassword}" type="hidden">
+    <input th:field="*{displayName}" type="hidden">
+    <input th:field="*{isPublic}" type="hidden">
+</th:block>
+
+</body>
+</html>

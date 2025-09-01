@@ -34,7 +34,7 @@
         <p class="profile-details-label">Display Name: </p>
         <p class="profile-details-value" th:text="${profile.displayName()}"></p>
 
-        <div class="flex-row profile-details-buttons-start-col-2" id="profile-details-account-buttons">
+        <div class="flex-row gap-10px" id="profile-details-account-buttons">
             <form th:action="@{/profile/me/edit}">
                 <button type="submit">Modify</button>
             </form>

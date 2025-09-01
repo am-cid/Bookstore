@@ -16,7 +16,7 @@
     paint-order: stroke;
     stroke: var(--color-02, #F61590);
     stroke-linejoin: round;
-    stroke-width: 12;
+    stroke-width: 8;
 }
 
 #profile-div .svg-text-heading .text-outline-inner {
@@ -24,7 +24,7 @@
     paint-order: stroke;
     stroke: var(--color-07, #FFF2D3);
     stroke-linejoin: round;
-    stroke-width: 8;
+    stroke-width: 4;
 }
 
 #profile-div .svg-text-heading .text-fill {

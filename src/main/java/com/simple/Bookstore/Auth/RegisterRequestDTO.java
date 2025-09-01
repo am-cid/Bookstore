@@ -30,4 +30,14 @@ public record RegisterRequestDTO(
     public static RegisterRequestDTO empty() {
         return new RegisterRequestDTO(null, null, null, null, false);
     }
+
+    /**
+     * @return whether the request is a blank request
+     */
+    public boolean isEmpty() {
+        return (username == null || username.isEmpty())
+                && (password == null || password.isEmpty())
+                && (confirmPassword == null || confirmPassword.isEmpty())
+                && (displayName == null || displayName.isEmpty());
+    }
 }
