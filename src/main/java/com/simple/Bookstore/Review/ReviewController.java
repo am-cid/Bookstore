@@ -1,8 +1,10 @@
 package com.simple.Bookstore.Review;
 
+import com.simple.Bookstore.User.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,10 +26,11 @@ public class ReviewController {
     @PostMapping("/books/{bookId}/reviews")
     public ResponseEntity<ReviewResponseDTO> createReview(
             @PathVariable Long bookId,
-            @RequestBody ReviewRequestDTO request
+            @RequestBody ReviewRequestDTO request,
+            @AuthenticationPrincipal User user
     ) {
         return new ResponseEntity<>(
-                reviewService.createReview(bookId, request),
+                reviewService.createReview(user, bookId, request),
                 HttpStatus.CREATED
         );
     }
@@ -44,9 +47,10 @@ public class ReviewController {
     @PatchMapping("/reviews/{id}")
     public ResponseEntity<ReviewResponseDTO> updateReview(
             @PathVariable Long id,
-            @RequestBody ReviewRequestDTO request
+            @RequestBody ReviewRequestDTO request,
+            @AuthenticationPrincipal User user
     ) {
-        ReviewResponseDTO updatedReview = reviewService.updateReview(id, request);
+        ReviewResponseDTO updatedReview = reviewService.updateReview(user, id, request);
         return new ResponseEntity<>(
                 updatedReview,
                 HttpStatus.OK
@@ -54,8 +58,11 @@ public class ReviewController {
     }
 
     @DeleteMapping("/reviews/{id}")
-    public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
-        reviewService.deleteReview(id);
+    public ResponseEntity<Void> deleteReview(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user
+    ) {
+        reviewService.deleteReview(user, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

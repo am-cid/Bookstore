@@ -1,17 +1,19 @@
 package com.simple.Bookstore.Comment;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.simple.Bookstore.User.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class CommentController {
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @GetMapping("/reviews/{reviewId}/comments")
     private ResponseEntity<List<CommentResponseDTO>> getComments(@PathVariable Long reviewId) {
@@ -24,16 +26,17 @@ public class CommentController {
     @PostMapping("/reviews/{reviewId}/comments")
     public ResponseEntity<CommentResponseDTO> createComment(
             @PathVariable Long reviewId,
-            @RequestBody CommentRequestDTO request
+            @RequestBody CommentRequestDTO request,
+            @AuthenticationPrincipal User user
     ) {
         return new ResponseEntity<>(
-                commentService.createComment(reviewId, request),
+                commentService.createComment(user, reviewId, request),
                 HttpStatus.CREATED
         );
     }
 
     @GetMapping("/comments/{id}")
-    public ResponseEntity<CommentResponseDTO> getReview(@PathVariable Long id) {
+    public ResponseEntity<CommentResponseDTO> getComment(@PathVariable Long id) {
         return new ResponseEntity<>(
                 commentService.findCommentById(id),
                 HttpStatus.OK
@@ -41,11 +44,12 @@ public class CommentController {
     }
 
     @PatchMapping("/comments/{id}")
-    public ResponseEntity<CommentResponseDTO> updateReview(
+    public ResponseEntity<CommentResponseDTO> updateComment(
             @PathVariable Long id,
-            @RequestBody CommentRequestDTO request
+            @RequestBody CommentRequestDTO request,
+            @AuthenticationPrincipal User user
     ) {
-        CommentResponseDTO updatedComment = commentService.updateComment(id, request);
+        CommentResponseDTO updatedComment = commentService.updateComment(user, id, request);
         return new ResponseEntity<>(
                 updatedComment,
                 HttpStatus.OK
@@ -53,8 +57,11 @@ public class CommentController {
     }
 
     @DeleteMapping("/comments/{id}")
-    public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
-        commentService.deleteComment(id);
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user
+    ) {
+        commentService.deleteComment(user, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

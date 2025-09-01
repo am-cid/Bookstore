@@ -1,6 +1,8 @@
 package com.simple.Bookstore.Profile;
 
 import com.simple.Bookstore.Book.Book;
+import com.simple.Bookstore.Comment.Comment;
+import com.simple.Bookstore.Review.Review;
 import com.simple.Bookstore.Theme.Theme;
 import com.simple.Bookstore.User.User;
 import jakarta.persistence.*;
@@ -24,6 +26,12 @@ public class Profile {
 
     private String displayName;
     private boolean isPublic;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Review> reviews = new HashSet<>();
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 
     @ManyToMany
     @JoinTable(

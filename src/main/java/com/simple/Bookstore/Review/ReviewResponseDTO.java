@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public record ReviewResponseDTO(
         Long id,
+        String username,
         String userDisplayName,
         Long bookId,
         String bookTitle,

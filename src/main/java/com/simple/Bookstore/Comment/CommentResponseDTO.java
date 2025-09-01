@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public record CommentResponseDTO(
         Long id,
-        Long userId,
-        String displayName,
+        String username,
+        String userDisplayName,
         LocalDateTime date,
         boolean edited,
         String content

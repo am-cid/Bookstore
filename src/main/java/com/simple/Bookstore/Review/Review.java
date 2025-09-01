@@ -2,7 +2,7 @@ package com.simple.Bookstore.Review;
 
 import com.simple.Bookstore.Book.Book;
 import com.simple.Bookstore.Comment.Comment;
-import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.Profile.Profile;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,8 +31,8 @@ public class Review {
     private boolean edited;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "profile_id", nullable = false)
+    private Profile profile;
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)

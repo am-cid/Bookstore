@@ -1,5 +1,7 @@
 package com.simple.Bookstore.Comment;
 
+import com.simple.Bookstore.User.User;
+
 import java.util.List;
 
 public interface CommentService {
@@ -7,9 +9,9 @@ public interface CommentService {
 
     CommentResponseDTO findCommentById(Long id);
 
-    CommentResponseDTO createComment(Long reviewId, CommentRequestDTO request);
+    CommentResponseDTO createComment(User user, Long reviewId, CommentRequestDTO request);
 
-    CommentResponseDTO updateComment(Long id, CommentRequestDTO request);
+    CommentResponseDTO updateComment(User user, Long id, CommentRequestDTO request);
 
-    void deleteComment(Long id);
+    void deleteComment(User user, Long id);
 }

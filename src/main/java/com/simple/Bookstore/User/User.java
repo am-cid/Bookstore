@@ -35,7 +35,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private LocalDateTime joinedAt;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Profile profile;
 
     @Override

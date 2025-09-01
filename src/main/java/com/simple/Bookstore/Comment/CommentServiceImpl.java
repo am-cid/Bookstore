@@ -1,10 +1,12 @@
 package com.simple.Bookstore.Comment;
 
-import com.simple.Bookstore.Auth.SecurityService;
 import com.simple.Bookstore.Exceptions.CommentNotFoundException;
 import com.simple.Bookstore.Exceptions.ReviewNotFoundException;
 import com.simple.Bookstore.Exceptions.UnauthorizedException;
+import com.simple.Bookstore.Review.Review;
 import com.simple.Bookstore.Review.ReviewRepository;
+import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.utils.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +17,13 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final ReviewRepository reviewRepository;
-    private final SecurityService securityService;
 
     @Override
     public List<CommentResponseDTO> findAllCommentsByReviewId(Long reviewId) {
         return commentRepository
                 .findAllCommentsByReviewId(reviewId)
                 .stream()
-                .map(this::commentToResponseDTO)
+                .map(CommentMapper::commentToResponseDTO)
                 .toList();
     }
 
@@ -30,60 +31,43 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponseDTO findCommentById(Long id) {
         return commentRepository
                 .findById(id)
-                .map(this::commentToResponseDTO)
+                .map(CommentMapper::commentToResponseDTO)
                 .orElseThrow(() -> new CommentNotFoundException(id));
     }
 
     @Override
-    public CommentResponseDTO createComment(Long reviewId, CommentRequestDTO request) {
-        Comment comment = requestDtoToComment(reviewId, request);
+    public CommentResponseDTO createComment(User user, Long reviewId, CommentRequestDTO request) {
+        Review review = reviewRepository
+                .findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(reviewId));
+        Comment comment = CommentMapper.requestDtoToComment(user.getProfile(), review, request);
         Comment savedComment = commentRepository.save(comment);
-        return commentToResponseDTO(savedComment);
+        return CommentMapper.commentToResponseDTO(savedComment);
     }
 
     @Override
-    public CommentResponseDTO updateComment(Long id, CommentRequestDTO request) {
+    public CommentResponseDTO updateComment(User user, Long id, CommentRequestDTO request) {
         Comment comment = commentRepository
                 .findById(id)
                 .orElseThrow(() -> new CommentNotFoundException(id));
-        if (!comment.getUser().getId().equals(securityService.getLoggedInUser().getId()))
+        if (!comment.getProfile().getUser().getId().equals(user.getId()))
             throw new UnauthorizedException("You are not authorized to edit this comment");
 
         comment.setContent(request.content());
         comment.setEdited(true);
         Comment savedComment = commentRepository.save(comment);
-        return commentToResponseDTO(savedComment);
+        return CommentMapper.commentToResponseDTO(savedComment);
     }
 
     @Override
-    public void deleteComment(Long id) {
+    public void deleteComment(User user, Long id) {
         Comment comment = commentRepository
                 .findById(id)
                 .orElseThrow(() -> new CommentNotFoundException(id));
-        if (!comment.getUser().getId().equals(securityService.getLoggedInUser().getId()))
+        if (!comment.getProfile().getUser().getId().equals(user.getId()))
             throw new UnauthorizedException("You are not authorized to edit this comment");
 
         commentRepository.deleteById(id);
     }
 
-    private CommentResponseDTO commentToResponseDTO(Comment comment) {
-        return new CommentResponseDTO(
-                comment.getId(),
-                comment.getUser().getId(),
-                comment.getUser().getProfile().getDisplayName(),
-                comment.getDate(),
-                comment.isEdited(),
-                comment.getContent()
-        );
-    }
-
-    private Comment requestDtoToComment(Long reviewId, CommentRequestDTO request) {
-        Comment comment = new Comment();
-        comment.setUser(securityService.getLoggedInUser());
-        comment.setReview(reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(reviewId)));
-        comment.setContent(request.content());
-        return comment;
-
-    }
 }

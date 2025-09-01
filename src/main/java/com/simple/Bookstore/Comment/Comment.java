@@ -1,7 +1,7 @@
 package com.simple.Bookstore.Comment;
 
+import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Review.Review;
-import com.simple.Bookstore.User.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +17,8 @@ public class Comment {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "profile_id", nullable = false)
+    private Profile profile;
 
     @Column(length = 2000, nullable = false)
     private String content;
