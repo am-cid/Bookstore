@@ -20,4 +20,6 @@ public interface ProfileService {
     void unsaveTheme(Long id, User user) throws UnauthorizedException, ThemeNotFoundException;
 
     Page<ProfileResponseDTO> searchProfiles(String query, User user, Pageable pageable);
+
+    Profile updateProfile(Profile profile, ProfileEditRequestDTO request);
 }

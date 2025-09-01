@@ -1,6 +1,7 @@
 package com.simple.Bookstore.utils;
 
 import com.simple.Bookstore.Profile.Profile;
+import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
 import com.simple.Bookstore.Profile.ProfileProjection;
 import com.simple.Bookstore.Profile.ProfileResponseDTO;
 
@@ -18,6 +19,17 @@ public class ProfileMapper {
                 projection.getId(),
                 projection.getUsername(),
                 projection.getDisplayName()
+        );
+    }
+
+    public static ProfileEditRequestDTO profileToFreshEditRequestDTO(Profile profile) {
+        return new ProfileEditRequestDTO(
+                profile.getUser().getUsername(),
+                "",
+                "",
+                profile.getDisplayName(),
+                profile.isPublic(),
+                ""
         );
     }
 }

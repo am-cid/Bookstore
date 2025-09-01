@@ -126,4 +126,11 @@ public class ProfileServiceImpl implements ProfileService {
                 .searchProfiles(query, user == null ? null : user.getId(), pageable)
                 .map(ProfileMapper::projectionToResponseDTO);
     }
+
+    @Override
+    public Profile updateProfile(Profile profile, ProfileEditRequestDTO request) {
+        profile.setDisplayName(request.displayName());
+        profile.setPublic(request.isPublic());
+        return profileRepository.save(profile);
+    }
 }

@@ -49,7 +49,6 @@ public class RegisterViewController {
             return "register";
         } else if (!request.password().equals(request.confirmPassword())) {
             result.rejectValue("confirmPassword", "error.registerRequestDTO", "Passwords do not match.");
-            HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
             return "register";
         }
         userService.createUser(request, Role.USER);

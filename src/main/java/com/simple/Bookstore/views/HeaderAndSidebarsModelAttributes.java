@@ -16,7 +16,20 @@ import java.util.List;
 
 public class HeaderAndSidebarsModelAttributes {
     /**
-     * initializes the needed data for header, and the two sidebars
+     * initializes the needed data for header, and the two sidebars.
+     * <p>
+     * Initialized data:
+     * <ul>
+     *     <li><code>user: User</code> - logged in user</li>
+     *     <li><code>_overrideTheme: String</code> - inlined style for current theme used if any</li>
+     *     <li><code>_overrideThemeUsed: ThemeResponseDTO</code> - current theme used if any</li>
+     *     <li><code>logoLetters: List< Map< String, Object > ></code> - current theme used if any</li>
+     *     <li><code>genres: List< Genre ></code> - list of genres</li>
+     *     <li><code>authors: List< String ></code> - list of authors of books</li>
+     *     <li><code>_latestReview: ReviewResponseDTO</code> - latest review if any</li>
+     *     <li><code>_latestReviewDate: String</code> - latest review's date formatted if any</li>
+     * <p>
+     * </ul>
      *
      * @param model model to add attributes to
      */
