@@ -20,21 +20,24 @@
     justify-self: start;
 }
 
-.profile-details-submit-button {
-    grid-column-start: 1;
-    grid-column-end: span 2;
-    justify-self: center;
-}
-
 .required {
     color: red;
 }
 
 /* DESCRIPTIVE */
-.justify-center {
+.justify-content-center {
     justify-content: center;
+}
+
+.justify-self-center {
+    justify-self: center;
 }
 
 .text-center {
     text-align: center;
+}
+
+.grid-col-start-1-span-2 {
+    grid-column-start: 1;
+    grid-column-end: span 2;
 }

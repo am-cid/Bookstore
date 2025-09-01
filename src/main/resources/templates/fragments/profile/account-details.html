@@ -14,19 +14,6 @@
 <!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
 
 <div class="flex-column gap-10px" th:fragment="details">
-    <div class="flex-row profile-content-header">
-        <p class="profile-content-header-title">
-            Account Details
-        </p>
-        <div class="flex-column">
-            <a class="profile-content-header-sub-title" th:href="@{/profile/me(view=SAVED_BOOKS)}">
-                SAVED BOOKS
-            </a>
-            <a class="profile-content-header-sub-title" th:href="@{/profile/me(view=SAVED_THEMES)}">
-                SAVED THEMES
-            </a>
-        </div>
-    </div>
     <div class="gap-10px profile-details" id="profile-details">
         <p class="profile-details-label">Username: </p>
         <p class="profile-details-value" th:text="${profile.username()}"></p>

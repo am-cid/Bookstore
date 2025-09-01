@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore</title>
+    <script src="http://localhost:35729/livereload.js"></script>
+    <link href="/css/variables.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/shared/genres.css" rel="stylesheet">
+    <link href="/css/shared/main-content.css" rel="stylesheet">
+    <!-- START PAGE SPECIFIC CSS -->
+    <link href="/css/profile-details.css" rel="stylesheet">
+    <link href="/css/profile/shared.css" rel="stylesheet">
+    <link href="/css/profile/delete.css" rel="stylesheet">
+    <link href="/css/pagination.css" rel="stylesheet">
+    <!-- END PAGE SPECIFIC CSS -->
+    <th:block th:if="${_overrideTheme != null}"
+              th:utext="${_overrideTheme}">
+    </th:block>
+</head>
+<body>
+
+<div id="body-div">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div id="main-layout">
+        <div th:replace="~{fragments/sidebar-left :: sidebar-left}"></div>
+        <div th:replace="~{fragments/profile-delete :: main-content}"></div>
+        <div th:replace="~{fragments/sidebar-right :: sidebar-right}"></div>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+
+</body>
+</html>

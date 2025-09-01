@@ -22,6 +22,8 @@ public interface UserService {
      */
     User updateUser(User user, UserUpdateRequestDTO request) throws UsernameAlreadyTakenException;
 
+    void deleteUser(User user);
+
     /**
      * use when the password in the request is optional and cannot be validated by @Valid.
      * <p>

@@ -9,9 +9,12 @@ import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Theme.ThemeResponseDTO;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.User.UserDeleteRequestDTO;
 import com.simple.Bookstore.User.UserService;
 import com.simple.Bookstore.User.UserUpdateRequestDTO;
 import com.simple.Bookstore.utils.ProfileMapper;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,6 +43,7 @@ public class ProfileViewController {
     private final ThemeService themeService;
     private final ReviewService reviewService;
     private final PasswordEncoder passwordEncoder;
+    private final HttpServletRequest request;
 
     @GetMapping("/me")
     public String profile(
@@ -186,4 +190,52 @@ public class ProfileViewController {
         HeaderAndSidebarsModelAttributes.defaults(savedUser, model, bookService, reviewService, themeService);
         return "profile-edit-result";
     }
+
+    @GetMapping("/me/delete")
+    public String deleteProfile(
+            @AuthenticationPrincipal User user,
+            Model model
+    ) {
+        HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
+        model.addAttribute("userDeleteRequestDTO", new UserDeleteRequestDTO(null));
+        return "profile-delete";
+    }
+
+    @PostMapping("/me/delete")
+    public String deleteProfile(
+            @ModelAttribute("userDeleteRequestDTO") UserDeleteRequestDTO deleteRequest,
+            BindingResult result,
+            @AuthenticationPrincipal User user,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+        if (deleteRequest == null || deleteRequest.password().isBlank())
+            return "redirect:/profile/me/delete";
+
+        HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
+        if (result.hasErrors()) {
+            return "profile-delete";
+        } else if (!passwordEncoder.matches(deleteRequest.password(), user.getPassword())) {
+            result.rejectValue("password", "error.userDeleteRequestDTO", "Incorrect password.");
+            return "profile-delete";
+        }
+        redirectAttributes.addFlashAttribute("userDeleteRequestDTO", deleteRequest);
+        return "redirect:/profile/me/delete/result";
+    }
+
+    @GetMapping("/me/delete/result")
+    public String deleteProfileResult(
+            @ModelAttribute("userDeleteRequestDTO") UserDeleteRequestDTO deleteRequest,
+            @AuthenticationPrincipal User user,
+            Model model
+    ) throws ServletException {
+        if (deleteRequest == null || deleteRequest.password().isBlank())
+            return "redirect:/profile/me/delete";
+
+        userService.deleteUser(user);
+        request.logout();
+
+        HeaderAndSidebarsModelAttributes.defaults(null, model, bookService, reviewService, themeService);
+        return "profile-delete-result";
+    }
+
 }

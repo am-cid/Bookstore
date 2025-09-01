@@ -20,7 +20,7 @@
         <p class="profile-details-label">New Password: </p>
         <p class="profile-details-value" th:text="${#strings.repeat('*', profileEditRequestDTO.newPassword().length())}"></p>
 
-        <div class="flex-row gap-10px profile-details-submit-button">
+        <div class="flex-row gap-10px grid-col-start-1-span-2 justify-self-center">
             <form method="post"
                   th:action="@{/profile/me/edit/confirm}"
                   th:object="${profileEditRequestDTO}">

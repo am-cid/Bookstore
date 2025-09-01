@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="ownedThemes" type="org.springframework.data.domain.Page<com.simple.Bookstore.Theme.ThemeResponseDTO>"*/-->
+<!--/*@thymesVar id="profileAction" type="java.lang.String"*/-->
+
+
+<div id="main-content" th:fragment="main-content">
+    <div id="profile-div">
+        <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('My Account', 1, 33)}"></div>
+        <div class="flex-column" id="profile">
+            <div th:replace="~{fragments/profile/delete-account :: details}"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

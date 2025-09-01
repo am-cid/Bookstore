@@ -5,6 +5,7 @@ import com.simple.Bookstore.Exceptions.UsernameAlreadyTakenException;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.Role.Role;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -79,6 +80,11 @@ public class UserServiceImpl implements UserService {
         return savedUser;
     }
 
+    @Override
+    @Transactional
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
 
     @Override
     public Optional<String> isValidPasswordLength(String password) {
