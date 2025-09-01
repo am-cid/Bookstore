@@ -1,0 +1,17 @@
+#old-password-hint {
+    grid-column-start: 2;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+#change-password {
+    display: none;
+    grid-column-end: span 2;
+    grid-row-end: span 2;
+}
+
+#show-change-password:checked + #change-password {
+    display: grid;
+}

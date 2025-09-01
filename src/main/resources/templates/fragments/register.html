@@ -12,46 +12,43 @@
     <div class="flex-column" id="register-form-outer-div">
         <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('My Account', 1, 33)}"></div>
         <div id="register-form-div">
-            <form id="register-form" method="post" th:action="@{/register}" th:object="${registerRequestDTO}">
+            <form class="profile-details" method="post" th:action="@{/register}" th:object="${registerRequestDTO}">
                 <label for="username" title="required">Username<span class="required">*</span>:</label>
-                <input id="username" maxlength="20" minlength="3"
-                       name="username" pattern="^[a-zA-Z0-9_.-]*$"
+                <input maxlength="20" minlength="3" pattern="^[a-zA-Z0-9_.-]*$"
                        required th:field="*{username}"
                        title="Between 3 to 20 alphanumeric characters (including _ . -)"
                        type="text">
                 <span class="error-message" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></span>
 
                 <label for="password" title="required">Password<span class="required">*</span>:</label>
-                <input id="password" name="password"
-                       pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,30}$"
+                <input pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,30}$"
                        required th:field="*{password}"
                        title="Password must be between 8 and 30 characters, and must contain at least one digit, one lowercase letter, one uppercase letter, and one special character"
                        type="password">
                 <span class="error-message" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></span>
 
                 <label for="confirmPassword" title="required">(again)<span class="required">*</span>:</label>
-                <input id="confirmPassword" name="confirmPassword"
-                       pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,30}$"
+                <input pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,30}$"
                        required th:field="*{confirmPassword}"
                        title="Confirm Password" type="password">
                 <span class="error-message" th:errors="*{confirmPassword}" th:if="${#fields.hasErrors('confirmPassword')}"></span>
 
                 <label for="isPublic"
                        title="Make your profile public and searchable by others">Public Profile:</label>
-                <input id="isPublic" name="isPublic"
+                <input class="profile-details-checkbox"
                        th:field="*{isPublic}"
                        type="checkbox">
 
                 <label for="show-display-name" title="">Custom Display Name:</label>
-                <input id="show-display-name" name="show-display-name" type="checkbox">
+                <input class="profile-details-checkbox" id="show-display-name"
+                       name="show-display-name" type="checkbox">
 
-                <input id="displayName" maxlength="50" minlength="1"
-                       name="displayName"
+                <input maxlength="50" minlength="1"
                        th:field="*{displayName}"
                        type="text">
-                <span class="error-message" th:errors="*{displayName()}" th:if="${#fields.hasErrors('displayName')}"></span>
+                <span class="error-message" th:errors="*{displayName}" th:if="${#fields.hasErrors('displayName')}"></span>
 
-                <button id="register-submit-button" type="submit">Confirm & Create Account</button>
+                <button class="profile-details-submit-button" type="submit">Confirm & Create Account</button>
             </form>
             <script th:src="@{/js/sync-input-fields.js}"></script>
         </div>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="profile" type="com.simple.Bookstore.Profile.ProfileResponseDTO"*/-->
+<!--/*@thymesVar id="ownedThemes" type="org.springframework.data.domain.Page<com.simple.Bookstore.Theme.ThemeResponseDTO>"*/-->
+<!--/*@thymesVar id="usedTheme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+<!--/*@thymesVar id="savedThemeIds" type="java.util.List<java.lang.Long>"*/-->
+<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+
+<div class="flex-column gap-10px" th:fragment="details">
+    <div class="flex-row profile-content-header">
+        <p class="profile-content-header-title">
+            Account Details
+        </p>
+        <div class="flex-column">
+            <a class="profile-content-header-sub-title" th:href="@{/profile/me(view=SAVED_BOOKS)}">
+                SAVED BOOKS
+            </a>
+            <a class="profile-content-header-sub-title" th:href="@{/profile/me(view=SAVED_THEMES)}">
+                SAVED THEMES
+            </a>
+        </div>
+    </div>
+    <div class="gap-10px profile-details" id="profile-details">
+        <p class="profile-details-label">Username: </p>
+        <p class="profile-details-value" th:text="${profile.username()}"></p>
+
+        <p class="profile-details-label">Display Name: </p>
+        <p class="profile-details-value" th:text="${profile.displayName()}"></p>
+
+        <div class="flex-row profile-details-buttons-start-col-2" id="profile-details-account-buttons">
+            <form th:action="@{/profile/me/edit}">
+                <button type="submit">Modify</button>
+            </form>
+            <form th:action="@{/profile/me/delete}">
+                <button type="submit">Delete Account</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

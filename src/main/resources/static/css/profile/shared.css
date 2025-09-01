@@ -1,0 +1,47 @@
+#profile-div {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    row-gap: 2em;
+}
+
+#profile-div svg {
+    font-size: 32px;
+    padding: 0 0 0 10px;
+    margin-bottom: -40px;
+}
+
+#profile-div .svg-text-heading .text-outline-outer {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-02, #F61590);
+    stroke-linejoin: round;
+    stroke-width: 12;
+}
+
+#profile-div .svg-text-heading .text-outline-inner {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-07, #FFF2D3);
+    stroke-linejoin: round;
+    stroke-width: 8;
+}
+
+#profile-div .svg-text-heading .text-fill {
+    fill: var(--color-02, #F61590);
+}
+
+#profile {
+    gap: 20px;
+    width: 656px;
+    background-color: var(--color-06, #FFE2E7);
+    border: 2px solid var(--color-02, #F61590);
+    border-top: 10px solid var(--color-02, #F61590);
+    border-bottom: 2px solid var(--color-02, #F61590);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.profile-details p {
+    margin: 0;
+}

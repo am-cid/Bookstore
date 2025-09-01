@@ -1,0 +1,31 @@
+.profile-details {
+    display: grid;
+    grid-template-columns: 24fr 76fr;
+    grid-auto-rows: auto;
+    width: 100%;
+    grid-gap: 10px;
+}
+
+.profile-details label,
+.profile-details-label {
+    justify-self: end;
+}
+
+.profile-details input not .profile-details-checkbox
+.profile-details-value {
+    justify-self: stretch;
+}
+
+.profile-details-checkbox {
+    justify-self: start;
+}
+
+.profile-details-submit-button {
+    grid-column-start: 1;
+    grid-column-end: span 2;
+    justify-self: center;
+}
+
+.required {
+    color: red;
+}

@@ -25,27 +25,6 @@
     padding: 10px;
 }
 
-#register-form {
-    display: grid;
-    grid-template-columns: 24fr 76fr;
-    grid-auto-rows: auto;
-    width: 100%;
-    grid-gap: 10px;
-}
-
-#register-form label {
-    justify-self: end;
-}
-
-#register-form input {
-    justify-self: stretch;
-}
-
-#register-form #show-display-name,
-#register-form #isPublic {
-    justify-self: start;
-}
-
 #displayName {
     display: none;
     grid-column-start: 2;
@@ -53,14 +32,4 @@
 
 #show-display-name:checked + #displayName {
     display: block;
-}
-
-#register-submit-button {
-    grid-column-start: 1;
-    grid-column-end: span 2;
-    justify-self: center;
-}
-
-.required {
-    color: red;
 }

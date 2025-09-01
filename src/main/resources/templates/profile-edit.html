@@ -11,8 +11,10 @@
     <link href="/css/shared/genres.css" rel="stylesheet">
     <link href="/css/shared/main-content.css" rel="stylesheet">
     <!-- START PAGE SPECIFIC CSS -->
-    <link href="/css/register.css" rel="stylesheet">
     <link href="/css/profile-details.css" rel="stylesheet">
+    <link href="/css/profile/shared.css" rel="stylesheet">
+    <link href="/css/profile/edit.css" rel="stylesheet">
+    <link href="/css/pagination.css" rel="stylesheet">
     <!-- END PAGE SPECIFIC CSS -->
     <th:block th:if="${_overrideTheme != null}"
               th:utext="${_overrideTheme}">
@@ -24,7 +26,7 @@
     <div th:replace="~{fragments/header :: header}"></div>
     <div id="main-layout">
         <div th:replace="~{fragments/sidebar-left :: sidebar-left}"></div>
-        <div th:replace="~{fragments/register :: main-content}"></div>
+        <div th:replace="~{fragments/profile-edit :: main-content}"></div>
         <div th:replace="~{fragments/sidebar-right :: sidebar-right}"></div>
     </div>
     <div th:replace="~{fragments/footer :: footer}"></div>

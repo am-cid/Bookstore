@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="profileEditRequestDTO" type="com.simple.Bookstore.Profile.ProfileEditRequestDTO"*/-->
+
+<div class="flex-column gap-10px" th:fragment="details">
+    <div class="gap-10px profile-details">
+        <p class="profile-details-label">Username: </p>
+        <p class="profile-details-value" th:text="${profileEditRequestDTO.username()}"></p>
+
+        <p class="profile-details-label">Display Name: </p>
+        <p class="profile-details-value" th:text="${profileEditRequestDTO.displayName()}"></p>
+
+        <p class="profile-details-label">New Password: </p>
+        <p class="profile-details-value" th:text="${#strings.repeat('*', profileEditRequestDTO.newPassword().length())}"></p>
+
+        <div class="flex-row profile-details-submit-button">
+            <form method="post"
+                  th:action="@{/profile/me/edit/confirm}"
+                  th:object="${profileEditRequestDTO}">
+                <input name="_action" type="hidden" value="back">
+                <th:block th:replace="~{fragments/profile/confirm-edit-account-details :: profileEditRequestHiddenFields}"></th:block>
+                <button type="submit">Back</button>
+            </form>
+            <form method="post"
+                  th:action="@{/profile/me/edit/confirm}"
+                  th:object="${profileEditRequestDTO}">
+                <th:block th:replace="~{fragments/profile/confirm-edit-account-details :: profileEditRequestHiddenFields}"></th:block>
+                <button type="submit">Confirm your changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<th:block th:fragment="profileEditRequestHiddenFields">
+    <input th:field="*{username}" type="hidden">
+    <input th:field="*{newPassword}" type="hidden">
+    <input th:field="*{confirmNewPassword}" type="hidden">
+    <input th:field="*{isPublic}" type="hidden">
+    <input th:field="*{displayName}" type="hidden">
+    <input th:field="*{oldPassword}" type="hidden">
+</th:block>
+
+</body>
+</html>
