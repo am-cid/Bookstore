@@ -28,7 +28,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     Page<Profile> findPublicOrOwnPrivateProfile(@Param("user") User user, Pageable pageable);
 
     @Query(value = """
-            SELECT p.id, u.username, p.display_name
+            SELECT p.id, u.username, p.display_name, p.is_public
             FROM profile p
             LEFT JOIN users u ON u.id = p.user_id
             WHERE (:query IS NULL OR :query = '' OR :query <% u.username OR :query <% p.display_name)

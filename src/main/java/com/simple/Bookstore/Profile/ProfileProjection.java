@@ -6,4 +6,6 @@ public interface ProfileProjection {
     String getUsername();
 
     String getDisplayName();
+
+    Boolean getIsPublic();
 }

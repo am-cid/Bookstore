@@ -10,7 +10,8 @@ public class ProfileMapper {
         return new ProfileResponseDTO(
                 profile.getId(),
                 profile.getUser().getUsername(),
-                profile.getDisplayName()
+                profile.getDisplayName(),
+                profile.isPublic()
         );
     }
 
@@ -18,7 +19,8 @@ public class ProfileMapper {
         return new ProfileResponseDTO(
                 projection.getId(),
                 projection.getUsername(),
-                projection.getDisplayName()
+                projection.getDisplayName(),
+                projection.getIsPublic()
         );
     }
 
@@ -28,6 +30,17 @@ public class ProfileMapper {
                 "",
                 "",
                 profile.getDisplayName(),
+                profile.isPublic(),
+                ""
+        );
+    }
+
+    public static ProfileEditRequestDTO profileResponseDtoToFreshEditRequestDTO(ProfileResponseDTO profile) {
+        return new ProfileEditRequestDTO(
+                profile.username(),
+                "",
+                "",
+                profile.displayName(),
                 profile.isPublic(),
                 ""
         );
