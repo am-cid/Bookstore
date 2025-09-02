@@ -21,7 +21,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private static final int PASSWORD_MIN_LENGTH = 8;
     private static final int PASSWORD_MAX_LENGTH = 30;
-    private static final String PASSWORD_REGEX_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,30}$";
+    private static final String PASSWORD_REGEX_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{0,30}$";
     private static final String PASSWORD_LENGTH_ERROR_MESSAGE =
             "Password must be between " + PASSWORD_MIN_LENGTH + " and " + PASSWORD_MAX_LENGTH + " characters";
     private static final String PASSWORD_PATTERN_ERROR_MESSAGE = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character";
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(
+    public User updateAuthenticatedUser(
             User user,
             UserUpdateRequestDTO request
     ) throws UsernameAlreadyTakenException {
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<String> isValidPasswordLength(String password) {
         if (password.length() < PASSWORD_MIN_LENGTH || password.length() > PASSWORD_MAX_LENGTH) {
-            return Optional.of(PASSWORD_PATTERN_ERROR_MESSAGE);
+            return Optional.of(PASSWORD_LENGTH_ERROR_MESSAGE);
         }
         return Optional.empty();
     }

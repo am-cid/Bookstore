@@ -7,20 +7,18 @@
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
-<!--/*@thymesVar id="ownedThemes" type="org.springframework.data.domain.Page<com.simple.Bookstore.Theme.ThemeResponseDTO>"*/-->
-<!--/*@thymesVar id="usedTheme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
-<!--/*@thymesVar id="savedThemeIds" type="java.util.List<java.lang.Long>"*/-->
-<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+<!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
+<!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileViewModel"*/-->
 
 <div class="profile-themes flex-column" th:fragment="themes">
     <div class="flex-row profile-content-header">
         <p class="profile-content-header-title">
             Themes
         </p>
-        <div th:replace="~{fragments/pagination :: pagination(${ownedThemes}, '/profile/me', null)}"></div>
+        <div th:replace="~{fragments/pagination :: pagination(${viewModel.ownedThemes()}, '/profile/me', null)}"></div>
     </div>
-    <th:block th:if="${!ownedThemes.hasContent()}">No results found...</th:block>
-    <div class="profile-theme w-100" th:each="theme, i : ${ownedThemes}">
+    <th:block th:if="${!viewModel.ownedThemes().hasContent()}">No results found...</th:block>
+    <div class="profile-theme w-100" th:each="theme, i : ${viewModel.ownedThemes()}">
         <div class="profile-theme-colors">
             <ul class="theme-colors-list">
                 <li class="theme-color" th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
@@ -49,21 +47,21 @@
                     <th:block th:if="${user != null}">
                         <form action="#" class="apply-form" method="post" th:action="@{/profile/theme}">
                             <input name="themeId" th:value="${theme.id}" type="hidden" />
-                            <button th:if="${usedTheme == null}" type="submit">Apply</button>
-                            <th:block th:if="${usedTheme != null}">
-                                <i th:if="${usedTheme.id == theme.id}">In Use</i>
-                                <button th:if="${usedTheme.id != theme.id}" type="submit">Apply</button>
+                            <button th:if="${viewModel.usedTheme() == null}" type="submit">Apply</button>
+                            <th:block th:if="${viewModel.usedTheme() != null}">
+                                <i th:if="${viewModel.usedTheme().id == theme.id}">In Use</i>
+                                <button th:if="${viewModel.usedTheme().id != theme.id}" type="submit">Apply</button>
                             </th:block>
                         </form>
                         <form action="#" method="post"
                               th:action="@{/profile/saved-themes}"
-                              th:if="${!#lists.contains(savedThemeIds, theme.id)}">
+                              th:if="${!#lists.contains(viewModel.savedThemeIds(), theme.id)}">
                             <input name="themeId" th:value="${theme.id}" type="hidden" />
                             <button type="submit">Save</button>
                         </form>
                         <form action="#" method="post"
                               th:action="@{/profile/saved-themes}"
-                              th:if="${#lists.contains(savedThemeIds, theme.id)}">
+                              th:if="${#lists.contains(viewModel.savedThemeIds(), theme.id)}">
                             <input name="_method" type="hidden" value="delete" />
                             <input name="themeId" th:value="${theme.id}" type="hidden" />
                             <button type="submit">Unsave</button>
@@ -73,7 +71,7 @@
             </th:block>
         </div>
     </div>
-    <div th:replace="~{fragments/pagination :: pagination(${ownedThemes}, '/profile/me', null)}"></div>
+    <div th:replace="~{fragments/pagination :: pagination(${viewModel.ownedThemes()}, '/profile/me', null)}"></div>
 </div>
 
 </body>

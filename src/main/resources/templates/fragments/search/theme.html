@@ -31,7 +31,7 @@
                         <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
                            th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
                         by
-                        <a th:href="@{/api/v1/profile/{username}(username=${theme.username})}"
+                        <a th:href="@{/profile/{username}(username=${theme.username})}"
                            th:text="${#strings.isEmpty(theme.userDisplayName) ? theme.username : theme.userDisplayName}"></a>
                     </p>
                 </div>

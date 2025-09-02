@@ -20,7 +20,7 @@ public interface UserService {
      * @return updated user
      * @throws UsernameAlreadyTakenException when user update request changes username to an already taken username
      */
-    User updateUser(User user, UserUpdateRequestDTO request) throws UsernameAlreadyTakenException;
+    User updateAuthenticatedUser(User user, UserUpdateRequestDTO request) throws UsernameAlreadyTakenException;
 
     void deleteUser(User user);
 

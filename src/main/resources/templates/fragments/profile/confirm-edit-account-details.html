@@ -7,6 +7,7 @@
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
 <!--/*@thymesVar id="profileEditRequestDTO" type="com.simple.Bookstore.Profile.ProfileEditRequestDTO"*/-->
 
 <div class="flex-column gap-10px" th:fragment="details">
@@ -17,19 +18,29 @@
         <p class="profile-details-label">Display Name: </p>
         <p class="profile-details-value" th:text="${profileEditRequestDTO.displayName()}"></p>
 
-        <p class="profile-details-label">New Password: </p>
-        <p class="profile-details-value" th:text="${#strings.repeat('*', profileEditRequestDTO.newPassword().length())}"></p>
+        <th:block th:if="${#strings.isEmpty(profileEditRequestDTO.newPassword())}">
+            <p class="profile-details-label">Password:</p>
+            <p class="profile-details-value">No change</p>
+        </th:block>
+        <th:block th:if="${!#strings.isEmpty(profileEditRequestDTO.newPassword())}">
+            <p class="profile-details-label">New Password:</p>
+            <p class="profile-details-value" th:text="${#strings.repeat('*', profileEditRequestDTO.newPassword().length())}"></p>
+        </th:block>
+
+        <p class="profile-details-label">Profile Visibility:</p>
+        <p class="profile-details-value" th:if="${profileEditRequestDTO.isPublic()}">Public</p>
+        <p class="profile-details-value" th:if="${!profileEditRequestDTO.isPublic()}">Private</p>
 
         <div class="flex-row gap-10px grid-col-start-1-span-2 justify-self-center">
             <form method="post"
-                  th:action="@{/profile/me/edit/confirm}"
+                  th:action="@{/profile/{username}/edit/confirm(username=${pathUsername})}"
                   th:object="${profileEditRequestDTO}">
                 <input name="_action" type="hidden" value="back">
                 <th:block th:replace="~{fragments/profile/confirm-edit-account-details :: profileEditRequestHiddenFields}"></th:block>
                 <button type="submit">Back</button>
             </form>
             <form method="post"
-                  th:action="@{/profile/me/edit/confirm}"
+                  th:action="@{/profile/{username}/edit/confirm(username=${pathUsername})}"
                   th:object="${profileEditRequestDTO}">
                 <th:block th:replace="~{fragments/profile/confirm-edit-account-details :: profileEditRequestHiddenFields}"></th:block>
                 <button type="submit">Confirm your changes</button>
@@ -38,7 +49,7 @@
     </div>
 </div>
 
-<th:block th:fragment="profileEditRequestHiddenFields">
+<th:block th:fragment="profileEditRequestHiddenFields" th:object="${profileEditRequestDTO}">
     <input th:field="*{username}" type="hidden">
     <input th:field="*{newPassword}" type="hidden">
     <input th:field="*{confirmNewPassword}" type="hidden">

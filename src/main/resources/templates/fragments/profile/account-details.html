@@ -7,25 +7,23 @@
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
-<!--/*@thymesVar id="profile" type="com.simple.Bookstore.Profile.ProfileResponseDTO"*/-->
-<!--/*@thymesVar id="ownedThemes" type="org.springframework.data.domain.Page<com.simple.Bookstore.Theme.ThemeResponseDTO>"*/-->
-<!--/*@thymesVar id="usedTheme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
-<!--/*@thymesVar id="savedThemeIds" type="java.util.List<java.lang.Long>"*/-->
-<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+<!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
+<!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileViewModel"*/-->
 
 <div class="flex-column gap-10px" th:fragment="details">
     <div class="gap-10px profile-details" id="profile-details">
         <p class="profile-details-label">Username: </p>
-        <p class="profile-details-value" th:text="${profile.username()}"></p>
+        <p class="profile-details-value" th:text="${viewModel.profile().username()}"></p>
 
         <p class="profile-details-label">Display Name: </p>
-        <p class="profile-details-value" th:text="${profile.displayName()}"></p>
+        <p class="profile-details-value" th:text="${viewModel.profile().displayName()}"></p>
 
-        <div class="flex-row gap-10px" id="profile-details-account-buttons">
-            <form th:action="@{/profile/me/edit}">
+        <div class="flex-row gap-10px" id="profile-details-account-buttons"
+             th:if="${user != null && user.username.equals(viewModel.profile().username)}">
+            <form th:action="@{/profile/{username}/edit(username=${pathUsername})}">
                 <button type="submit">Modify</button>
             </form>
-            <form th:action="@{/profile/me/delete}">
+            <form th:action="@{/profile/{username}/delete(username=${pathUsername})}">
                 <button type="submit">Delete Account</button>
             </form>
         </div>

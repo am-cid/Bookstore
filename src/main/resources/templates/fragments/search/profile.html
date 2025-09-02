@@ -15,7 +15,7 @@
             <div class="search-result-item-details-div w-100">
                 <div class="search-result-item-title">
                     <p>
-                        <a th:href="@{/api/v1/profile/{id}(id=${profile.id})}"
+                        <a th:href="@{/profile/{username}(username=${profile.username})}"
                            th:text="${profile.username}"></a>
                     </p>
                 </div>

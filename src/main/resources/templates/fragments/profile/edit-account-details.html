@@ -7,11 +7,13 @@
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
+<!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileEditModel"*/-->
 <!--/*@thymesVar id="profileEditRequestDTO" type="com.simple.Bookstore.Profile.ProfileEditRequestDTO"*/-->
 
 <div class="flex-column gap-10px" th:fragment="details">
     <form class="gap-10px profile-details" method="post"
-          th:action="@{/profile/me/edit}"
+          th:action="@{/profile/{username}/edit(username=${pathUsername})}"
           th:object="${profileEditRequestDTO}">
         <label for="username" title="required">Username<span class="required">*</span>:</label>
         <input maxlength="20" minlength="3" pattern="^[a-zA-Z0-9_.-]*$"
