@@ -27,9 +27,9 @@
             <p class="profile-details-value" th:text="${#strings.repeat('*', profileEditRequestDTO.newPassword().length())}"></p>
         </th:block>
 
-        <p class="profile-details-label">Profile Visibility:</p>
-        <p class="profile-details-value" th:if="${profileEditRequestDTO.isPublic()}">Public</p>
-        <p class="profile-details-value" th:if="${!profileEditRequestDTO.isPublic()}">Private</p>
+        <p class="profile-details-label">Visibility:</p>
+        <p class="profile-details-value"
+           th:text="${profileEditRequestDTO.isPublic() ? 'Public' : 'Private'}">Public</p>
 
         <div class="flex-row gap-10px grid-col-start-1-span-2 justify-self-center">
             <form method="post"

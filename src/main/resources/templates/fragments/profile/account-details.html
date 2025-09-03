@@ -10,16 +10,24 @@
 <!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
 <!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileViewModel"*/-->
 
-<div class="flex-column gap-10px" th:fragment="details">
+<div class="flex-column gap-10px" th:fragment="details"
+    th:with="ownProfile=${user != null && user.username.equals(viewModel.profile().username)},
+            profile=${viewModel.profile()}">
     <div class="gap-10px profile-details" id="profile-details">
         <p class="profile-details-label">Username: </p>
-        <p class="profile-details-value" th:text="${viewModel.profile().username()}"></p>
+        <p class="profile-details-value" th:text="${profile.username}"></p>
 
         <p class="profile-details-label">Display Name: </p>
-        <p class="profile-details-value" th:text="${viewModel.profile().displayName()}"></p>
+        <p class="profile-details-value" th:text="${profile.displayName}"></p>
+
+        <th:block th:if="${ownProfile}">
+            <p class="profile-details-label">Visibility: </p>
+            <p class="profile-details-value"
+               th:text="${profile.isPublic ? 'Public' : 'Private'}"></p>
+        </th:block>
 
         <div class="flex-row gap-10px" id="profile-details-account-buttons"
-             th:if="${user != null && user.username.equals(viewModel.profile().username)}">
+             th:if="${ownProfile}">
             <form th:action="@{/profile/{username}/edit(username=${pathUsername})}">
                 <button type="submit">Modify</button>
             </form>
