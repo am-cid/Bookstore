@@ -48,11 +48,8 @@ public class ProfileViewController {
             @PageableDefault Pageable pageable,
             Model model
     ) {
-        Result<ProfileViewModel, String> viewResult = profileViewService.buildProfileView(
-                user,
-                pathUsername,
-                pageable
-        );
+        Result<ProfileViewModel, String> viewResult = profileViewService
+                .buildProfileView(user, pathUsername, pageable);
         if (viewResult.isErr())
             return viewResult.unwrapErr();
 
@@ -69,11 +66,8 @@ public class ProfileViewController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        Result<ProfileEditModel, String> viewResult = profileViewService.buildProfileEditView(
-                user,
-                pathUsername,
-                editRequest
-        );
+        Result<ProfileEditModel, String> viewResult = profileViewService
+                .buildProfileEditView(user, pathUsername, editRequest);
         if (viewResult.isErr())
             return viewResult.unwrapErr();
 
@@ -94,36 +88,31 @@ public class ProfileViewController {
             Model model,
             RedirectAttributes redirectAttributes
     ) throws UnauthorizedException {
-        Result<ProfileEditModel, String> viewResult = profileViewService.validateProfileEditView(
-                user,
-                pathUsername,
-                editRequest
-        );
+        Result<ProfileEditModel, String> viewResult = profileViewService
+                .validateEditAccess(user, pathUsername, editRequest);
         if (viewResult.isErr())
             return viewResult.unwrapErr();
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
         ProfileEditModel viewModel = viewResult.unwrap();
         model.addAttribute("viewModel", viewModel);
-        model.addAttribute("profileEditRequestDTO", viewModel.editRequest());
         model.addAttribute("pathUsername", pathUsername);
-        model.addAttribute("profileEditRequestDTO", editRequest);
+        model.addAttribute("profileEditRequestDTO", viewModel.editRequest());
 
         ///  RESULT ERRORS
-        if (result.hasErrors())
-            return "profile-edit";
+        boolean hasErrors = result.hasErrors();
         if (!editRequest.newPassword().equals(editRequest.confirmNewPassword())) {
             result.rejectValue("confirmNewPassword", "error.profileEditRequestDTO", "Passwords do not match.");
-            return "profile-edit";
+            hasErrors = true;
         }
         if (!passwordEncoder.matches(editRequest.oldPassword(), user.getPassword())) {
             result.rejectValue("oldPassword", "error.oldPassword", "Incorrect old password.");
-            return "profile-edit";
+            hasErrors = true;
         }
         if (!user.getUsername().equals(editRequest.username())
                 && userService.findByUsername(editRequest.username()).isPresent()) {
             result.rejectValue("oldPassword", "error.oldPassword", "Incorrect old password.");
-            return "profile-edit";
+            hasErrors = true;
         }
         if (!editRequest.newPassword().isEmpty()) {
             Optional<String> lengthErrorMessage = userService.isValidPasswordLength(editRequest.newPassword());
@@ -131,9 +120,11 @@ public class ProfileViewController {
             lengthErrorMessage.ifPresent(s -> result.rejectValue("confirmNewPassword", "error.passwordLength", s));
             patternErrorMessage.ifPresent(s -> result.rejectValue("confirmNewPassword", "error.passwordPattern", s));
             if (lengthErrorMessage.isPresent() || patternErrorMessage.isPresent()) {
-                return "profile-edit";
+                hasErrors = true;
             }
         }
+        if (hasErrors)
+            return "profile-edit";
 
         redirectAttributes.addFlashAttribute("profileEditRequestDTO", viewResult.unwrap().editRequest());
         return "redirect:/profile/{pathUsername}/edit/confirm";
@@ -146,13 +137,14 @@ public class ProfileViewController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        Result<ProfileEditRequestDTO, String> viewResult = profileViewService.validateProfileEditConfirmView(user, pathUsername, editRequest);
-        HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
-        model.addAttribute("pathUsername", pathUsername);
+        Result<ProfileEditModel, String> viewResult = profileViewService
+                .validateEditAccessAndRequest(user, pathUsername, editRequest);
         if (viewResult.isErr())
             return viewResult.unwrapErr();
 
-        model.addAttribute("profileEditRequestDTO", viewResult.unwrap());
+        HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
+        model.addAttribute("pathUsername", pathUsername);
+        model.addAttribute("profileEditRequestDTO", viewResult.unwrap().editRequest());
         return "profile-edit-confirm";
     }
 
@@ -163,11 +155,12 @@ public class ProfileViewController {
             @AuthenticationPrincipal User user,
             RedirectAttributes redirectAttributes
     ) {
-        Result<ProfileEditRequestDTO, String> editRequestResult = profileViewService.validateProfileEditConfirmView(user, pathUsername, editRequest);
-        if (editRequestResult.isErr())
-            return editRequestResult.unwrapErr();
+        Result<ProfileEditModel, String> viewResult = profileViewService
+                .validateEditAccessAndRequest(user, pathUsername, editRequest);
+        if (viewResult.isErr())
+            return viewResult.unwrapErr();
 
-        redirectAttributes.addFlashAttribute("profileEditRequestDTO", editRequestResult.unwrap());
+        redirectAttributes.addFlashAttribute("profileEditRequestDTO", viewResult.unwrap().editRequest());
         return "redirect:/profile/{pathUsername}/edit/result";
     }
 
@@ -178,11 +171,12 @@ public class ProfileViewController {
             @AuthenticationPrincipal User user,
             RedirectAttributes redirectAttributes
     ) {
-        Result<ProfileEditRequestDTO, String> editRequestResult = profileViewService.validateProfileEditConfirmView(user, pathUsername, editRequest);
-        if (editRequestResult.isErr())
-            return editRequestResult.unwrapErr();
+        Result<ProfileEditModel, String> viewResult = profileViewService
+                .validateEditAccessAndRequest(user, pathUsername, editRequest);
+        if (viewResult.isErr())
+            return viewResult.unwrapErr();
 
-        redirectAttributes.addFlashAttribute("profileEditRequestDTO", editRequestResult.unwrap());
+        redirectAttributes.addFlashAttribute("profileEditRequestDTO", viewResult.unwrap().editRequest());
         return "redirect:/profile/{pathUsername}/edit";
     }
 
@@ -193,7 +187,8 @@ public class ProfileViewController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        Result<ProfileEditModel, String> editRequestResult = profileViewService.buildProfileEditResultView(user, pathUsername, editRequest);
+        Result<ProfileEditModel, String> editRequestResult = profileViewService
+                .validateEditAccessAndRequest(user, pathUsername, editRequest);
         if (editRequestResult.isErr())
             return editRequestResult.unwrapErr();
 
@@ -211,31 +206,38 @@ public class ProfileViewController {
         return "profile-edit-result";
     }
 
-    @GetMapping("/me/delete")
+    @GetMapping("/{pathUsername}/delete")
     public String deleteProfile(
+            @PathVariable String pathUsername,
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        if (user == null) {
-            // TODO: error page, need authenticated
-            return "redirect:/";
-        }
+        Result<ProfileDeleteModel, String> viewResult = profileViewService
+                .validateDeleteAccess(user, pathUsername, UserDeleteRequestDTO.empty());
+        if (viewResult.isErr())
+            return viewResult.unwrapErr();
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
-        model.addAttribute("userDeleteRequestDTO", new UserDeleteRequestDTO(null));
+        ProfileDeleteModel viewModel = viewResult.unwrap();
+        model.addAttribute("pathUsername", pathUsername);
+        model.addAttribute("viewModel", viewModel);
+        model.addAttribute("userDeleteRequestDTO", viewModel.deleteRequest());
         return "profile-delete";
     }
 
-    @PostMapping("/me/delete")
+    @PostMapping("/{pathUsername}/delete")
     public String deleteProfile(
+            @PathVariable String pathUsername,
             @ModelAttribute("userDeleteRequestDTO") UserDeleteRequestDTO deleteRequest,
             BindingResult result,
             @AuthenticationPrincipal User user,
             Model model,
             RedirectAttributes redirectAttributes
     ) {
-        if (deleteRequest == null || deleteRequest.password().isBlank())
-            return "redirect:/profile/me/delete";
+        Result<ProfileDeleteModel, String> viewResult = profileViewService
+                .validateDeleteAccessAndRequest(user, pathUsername, deleteRequest);
+        if (viewResult.isErr())
+            return viewResult.unwrapErr();
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
         if (result.hasErrors()) {
@@ -244,18 +246,22 @@ public class ProfileViewController {
             result.rejectValue("password", "error.userDeleteRequestDTO", "Incorrect password.");
             return "profile-delete";
         }
-        redirectAttributes.addFlashAttribute("userDeleteRequestDTO", deleteRequest);
+
+        redirectAttributes.addFlashAttribute("userDeleteRequestDTO", viewResult.unwrap().deleteRequest());
         return "redirect:/profile/me/delete/result";
     }
 
-    @GetMapping("/me/delete/result")
+    @GetMapping("/{pathUsername}/delete/result")
     public String deleteProfileResult(
+            @PathVariable String pathUsername,
             @ModelAttribute("userDeleteRequestDTO") UserDeleteRequestDTO deleteRequest,
             @AuthenticationPrincipal User user,
             Model model
     ) throws ServletException {
-        if (deleteRequest == null || deleteRequest.password().isBlank())
-            return "redirect:/profile/me/delete";
+        Result<ProfileDeleteModel, String> viewResult = profileViewService
+                .validateDeleteAccessAndRequest(user, pathUsername, deleteRequest);
+        if (viewResult.isErr())
+            return viewResult.unwrapErr();
 
         userService.deleteUser(user);
         request.logout();
