@@ -25,24 +25,18 @@ public class ProfileMapper {
     }
 
     public static ProfileEditRequestDTO profileToFreshEditRequestDTO(Profile profile) {
-        return new ProfileEditRequestDTO(
+        return ProfileEditRequestDTO.initializeForm(
                 profile.getUser().getUsername(),
-                "",
-                "",
                 profile.getDisplayName(),
-                profile.isPublic(),
-                ""
+                profile.isPublic()
         );
     }
 
     public static ProfileEditRequestDTO profileResponseDtoToFreshEditRequestDTO(ProfileResponseDTO profile) {
-        return new ProfileEditRequestDTO(
+        return ProfileEditRequestDTO.initializeForm(
                 profile.username(),
-                "",
-                "",
                 profile.displayName(),
-                profile.isPublic(),
-                ""
+                profile.isPublic()
         );
     }
 }

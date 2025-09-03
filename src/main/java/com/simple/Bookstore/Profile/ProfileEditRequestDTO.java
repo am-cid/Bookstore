@@ -1,5 +1,6 @@
 package com.simple.Bookstore.Profile;
 
+import com.simple.Bookstore.utils.FormRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -20,8 +21,17 @@ public record ProfileEditRequestDTO(
 
         @NotBlank(message = "Please input the current password to change these data")
         String oldPassword
-) {
-    public boolean isUninitializedForEditing() {
+) implements FormRequest {
+    public static ProfileEditRequestDTO empty() {
+        return new ProfileEditRequestDTO("", "", "", "", false, "");
+    }
+
+    public static ProfileEditRequestDTO initializeForm(String username, String displayName, Boolean isPublic) {
+        return new ProfileEditRequestDTO(username, "", "", displayName, isPublic, "");
+    }
+
+    @Override
+    public boolean isUninitialized() {
         return username == null && displayName == null;
     }
 }
