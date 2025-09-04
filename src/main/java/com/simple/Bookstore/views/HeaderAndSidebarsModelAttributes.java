@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class HeaderAndSidebarsModelAttributes {
     /**
@@ -65,12 +66,12 @@ public class HeaderAndSidebarsModelAttributes {
         // left sidebar data
         model.addAttribute("genres", Arrays.stream(Genre.values()).toList());
         model.addAttribute("authors", bookService.findDistinctAuthors());
-        List<ReviewResponseDTO> latestReview = reviewService.findLatestNReviews(1); // A new service method
+        Optional<ReviewResponseDTO> latestReview = reviewService.findLatestReview(); // A new service method
         if (latestReview.isEmpty()) {
             model.addAttribute("_latestReview", null);
             model.addAttribute("_latestReviewDate", null);
         } else {
-            ReviewResponseDTO latestReviewDTO = latestReview.getFirst();
+            ReviewResponseDTO latestReviewDTO = latestReview.get();
             String formattedDate = PostedDateFormatter
                     .formatTimeAgo(latestReviewDTO.date(), latestReviewDTO.edited());
             model.addAttribute("_latestReview", latestReviewDTO);

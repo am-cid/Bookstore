@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,14 @@ public class ReviewServiceImpl implements ReviewService {
                 .stream()
                 .map(ReviewMapper::reviewToResponseDTO)
                 .toList();
+    }
+
+    @Override
+    public Optional<ReviewResponseDTO> findLatestReview() {
+        List<ReviewResponseDTO> latestNReviews = findLatestNReviews(1);
+        if (latestNReviews.isEmpty())
+            return Optional.empty();
+        return Optional.of(latestNReviews.getFirst());
     }
 
     @Override

@@ -5,11 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewService {
     List<ReviewResponseDTO> findAllReviewsByBookId(Long bookId);
 
     List<ReviewResponseDTO> findLatestNReviews(int n);
+
+    Optional<ReviewResponseDTO> findLatestReview();
 
     ReviewResponseDTO findReviewById(Long id);
 
