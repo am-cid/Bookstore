@@ -14,47 +14,38 @@
 <!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
 <!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
 
-<div class="profile-themes flex-column" th:fragment="reviews">
-    <div class="flex-row profile-content-header">
+<div class="profile-result-div flex-column" th:fragment="comments">
+    <div class="flex-row space-between">
         <div th:replace="~{fragments/profile/profile-view-dropdown :: view-dropdown}"></div>
-        <div th:replace="~{fragments/pagination :: pagination(${viewReviewsModel.profileReviews()}, '/profile/' + ${pathUsername}, null)}"></div>
+        <div th:replace="~{fragments/pagination :: pagination(${viewCommentsModel.profileComments}, '/profile/' + ${pathUsername}, null)}"></div>
     </div>
-    <th:block th:if="${!viewReviewsModel.profileReviews().hasContent()}">No results found...</th:block>
-    <div class="profile-result flex-row w-100P" th:each="review, i : ${viewReviewsModel.profileReviews()}">
-        <div class="profile-result-preview">
-            <img th:alt="'book-' + ${review.bookId} + '-image'"
-                 th:src="${review.bookFrontImage != null ?
-                                     review.bookFrontImage : 'https://placehold.co/100x140?text=' +
-                                         (#strings.isEmpty(review.bookTitle) ?
-                                             'Book ' + review.bookId : review.bookTitle + '\n' + review.bookAuthor
-                                 )}" />
-        </div>
+    <th:block th:if="${!viewCommentsModel.profileComments.hasContent()}">No results found...</th:block>
+    <div class="profile-result flex-row w-100P" th:each="comment, i : ${viewCommentsModel.profileComments}">
         <div class="profile-result-content flex-column">
             <div class="profile-result-content-title flex-row space-between gap-10px">
                 <p class="margin-0">
-                    <a th:href="@{/api/v1/books/{id}(id=${review.bookId})}" th:text="${review.bookTitle}"></a>
+                    <a th:href="@{/api/v1/books/{bookId}/reviews/{reviewId}(bookId=${comment.bookId}, reviewId=${comment.reviewId})}"
+                       th:text="'RE: ' + ${comment.reviewTitle}"></a>
                     by
-                    <a th:href="@{/search(query=${review.bookAuthor}, type='BOOK')}" th:text="${review.bookAuthor}"></a>
+                    <a th:href="@{/profile/{username}(username=${comment.reviewerUsername})}"
+                       th:text="${comment.reviewerDisplayName}"></a>
                 </p>
-                <p class="margin-0" th:title="${review.date}">
+                <p class="margin-0" th:title="${comment.date}">
                     Posted
                     <span th:text="${T(com.simple.Bookstore.utils.PostedDateFormatter)
-                                     .formatTimeAgo(review.date, review.edited)}"></span>
+                                     .formatTimeAgo(comment.date, comment.edited)}"></span>
                 </p>
             </div>
-            <div class="profile-result-content-details">
-                <svg th:replace="~{fragments/svg-fragments/rating-star ::
-                ratingStar(${review.rating}, 105, 16, 5)}"></svg>
-                <b th:text="${review.title}"></b>
-                <p class="margin-0 col-span-2" th:text="${review.content}"></p>
-                <p class="margin-0 col-span-2 text-align-end">
-                    - <a th:href="@{/profile/{username}(username=${review.username})}"
-                         th:text="${review.userDisplayName}"></a>
+            <div class="flex-column space-between pad-0-15px">
+                <p class="margin-0" th:text="${comment.content}"></p>
+                <p class="margin-0 text-align-end">
+                    - <a th:href="@{/profile/{username}(username=${comment.username})}"
+                         th:text="${comment.userDisplayName}"></a>
                 </p>
             </div>
         </div>
     </div>
-    <div th:replace="~{fragments/pagination :: pagination(${viewReviewsModel.profileReviews()}, '/profile/' + ${pathUsername}, null)}"></div>
+    <div th:replace="~{fragments/pagination :: pagination(${viewCommentsModel.profileComments}, '/profile/' + ${pathUsername}, null)}"></div>
 </div>
 
 </body>
