@@ -8,6 +8,8 @@ import com.simple.Bookstore.Exceptions.UnauthorizedException;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.utils.ReviewMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,5 +82,11 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.deleteById(id);
     }
 
-    // HELPERS
+    @Override
+    public Page<ReviewResponseDTO> findAllReviewsByUser(User user, Pageable pageable) {
+        if (user == null)
+            return Page.empty(pageable);
+        return reviewRepository
+                .findAllReviewsByProfileId(user.getProfile().getId(), pageable);
+    }
 }

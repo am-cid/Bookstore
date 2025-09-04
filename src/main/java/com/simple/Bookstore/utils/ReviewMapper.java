@@ -10,14 +10,17 @@ public class ReviewMapper {
     public static ReviewResponseDTO reviewToResponseDTO(Review review) {
         return new ReviewResponseDTO(
                 review.getId(),
-                review.getProfile().getUser().getUsername(),
-                review.getProfile().getDisplayName(),
-                review.getBook().getId(),
-                review.getBook().getTitle(),
+                review.getTitle(),
+                review.getContent(),
+                review.getRating(),
                 review.getDate(),
                 review.isEdited(),
-                review.getRating(),
-                review.getContent()
+                review.getBook().getId(),
+                review.getBook().getTitle(),
+                review.getBook().getAuthor(),
+                review.getBook().getFrontImage(),
+                review.getProfile().getUser().getUsername(),
+                review.getProfile().getDisplayName()
         );
     }
 
@@ -26,6 +29,7 @@ public class ReviewMapper {
         review.setProfile(user.getProfile());
         review.setBook(book);
         review.setRating(request.rating());
+        review.setTitle(request.title());
         review.setContent(request.content());
         return review;
     }

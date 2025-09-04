@@ -18,11 +18,14 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 100)
+    private String title;
+
     @Column(length = 2000)
     private String content;
 
     @Column(nullable = false)
-    private Double rating;
+    private Integer rating;
 
     @Column(nullable = false)
     private LocalDateTime date;

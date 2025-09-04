@@ -1,6 +1,8 @@
 package com.simple.Bookstore.Review;
 
 import com.simple.Bookstore.User.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,4 +18,6 @@ public interface ReviewService {
     ReviewResponseDTO updateReview(User user, Long id, ReviewRequestDTO request);
 
     void deleteReview(User user, Long id);
+
+    Page<ReviewResponseDTO> findAllReviewsByUser(User user, Pageable pageable);
 }
