@@ -14,8 +14,8 @@
 <!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
 <!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
 
-<div class="profile-themes flex-column" th:fragment="reviews">
-    <div class="flex-row profile-content-header">
+<div class="profile-result-div flex-column" th:fragment="reviews">
+    <div class="flex-row space-between">
         <div th:replace="~{fragments/profile/profile-view-dropdown :: view-dropdown}"></div>
         <div th:replace="~{fragments/pagination :: pagination(${viewReviewsModel.profileReviews()}, '/profile/' + ${pathUsername}, null)}"></div>
     </div>
@@ -42,7 +42,7 @@
                                      .formatTimeAgo(review.date, review.edited)}"></span>
                 </p>
             </div>
-            <div class="profile-result-content-details">
+            <div class="profile-result-content-details pad-0-15px">
                 <svg th:replace="~{fragments/svg-fragments/rating-star ::
                 ratingStar(${review.rating}, 105, 16, 5)}"></svg>
                 <b th:text="${review.title}"></b>

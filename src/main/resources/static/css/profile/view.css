@@ -20,13 +20,9 @@
     }
 }
 
-.profile-themes {
+.profile-result-div {
     flex-wrap: wrap;
     gap: 20px;
-}
-
-.profile-content-header {
-    justify-content: space-between;
 }
 
 .profile-content-header-title {
@@ -54,12 +50,6 @@
     box-shadow: inset 2px 2px 5px var(--color-06, #FFE2E7);
 }
 
-.profile-theme {
-    display: flex;
-    flex-direction: row;
-    border: 2px solid var(--color-00, #A40E60);
-}
-
 .profile-theme-colors {
     display: flex;
     justify-content: center;
@@ -68,32 +58,6 @@
     ul {
         height: calc(100% - 20px);
     }
-}
-
-.profile-theme-details-div {
-    display: flex;
-    flex-direction: column;
-}
-
-.profile-theme-title {
-    background-color: var(--color-04, #FFD376);
-    padding: 0 5px;
-
-    p {
-        margin: 0;
-    }
-}
-
-.profile-theme-details {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    grid-template-rows: repeat(3, auto);
-    margin-left: 15px;
-}
-
-.profile-theme-desc {
-    margin: 0;
-    word-wrap: anywhere;
 }
 
 .profile-result {
@@ -119,7 +83,6 @@
     display: grid;
     grid-template-columns: 1fr 4fr;
     grid-template-rows: repeat(3, auto);
-    margin: 0 15px;
 }
 
 .profile-result-content-details .rating-score {
@@ -137,4 +100,8 @@
 
 .text-align-end {
     text-align: end;
+}
+
+.pad-0-15px {
+    padding: 0 15px;
 }

@@ -14,13 +14,13 @@
 <!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
 <!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
 
-<div class="profile-themes flex-column" th:fragment="themes">
-    <div class="flex-row profile-content-header">
+<div class="profile-result-div flex-column" th:fragment="themes">
+    <div class="flex-row space-between">
         <div th:replace="~{fragments/profile/profile-view-dropdown :: view-dropdown}"></div>
         <div th:replace="~{fragments/pagination :: pagination(${viewThemesModel.profileThemes()}, '/profile/' + ${pathUsername}, null)}"></div>
     </div>
     <th:block th:if="${!viewThemesModel.profileThemes().hasContent()}">No results found...</th:block>
-    <div class="profile-theme w-100P" th:each="theme, i : ${viewThemesModel.profileThemes()}">
+    <div class="profile-result flex-row w-100P" th:each="theme, i : ${viewThemesModel.profileThemes()}">
         <div class="profile-theme-colors">
             <ul class="theme-colors-list">
                 <li class="theme-color" th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
@@ -33,18 +33,18 @@
                 <li class="theme-color" th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
             </ul>
         </div>
-        <div class="profile-theme-details-div w-100P">
-            <div class="profile-theme-title">
-                <p>
+        <div class="flex-column w-100P">
+            <div class="profile-result-content-title">
+                <p class="margin-0">
                     <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
                        th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
                 </p>
             </div>
             <th:block th:if="${!#strings.isEmpty(theme.description) || user != null}">
-                <div class="profile-theme-details">
+                <div class="profile-result-content-details pad-0-15px">
                     <th:block th:if="${!#strings.isEmpty(theme.description)}">
                         <strong>Description: </strong>
-                        <p class="profile-theme-desc" th:text="${theme.description}"></p>
+                        <p class="margin-0" th:text="${theme.description}"></p>
                     </th:block>
                     <th:block th:if="${user != null}">
                         <form action="#" class="apply-form" method="post" th:action="@{/profile/theme}">

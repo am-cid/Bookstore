@@ -17,7 +17,7 @@
 <div class="flex-column gap-10px" th:fragment="details"
     th:with="ownProfile=${user != null && user.username.equals(viewModel.profile.username)},
     profile=${viewModel.profile}">
-    <div class="flex-row profile-content-header">
+    <div class="flex-row space-between">
         <p class="profile-content-header-title">
             Account Details
         </p>
