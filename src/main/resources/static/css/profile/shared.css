@@ -5,7 +5,7 @@
     row-gap: 2em;
 }
 
-#profile-div svg {
+#profile-div .svg-text-heading {
     font-size: 32px;
     padding: 0 0 0 10px;
     margin-bottom: -40px;

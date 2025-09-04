@@ -12,7 +12,7 @@
     <div class="search-result-content flex-column">
         <i th:if="${user == null}">Login to change theme</i>
         <th:block th:if="${!results.hasContent()}">No results found...</th:block>
-        <div class="search-result-item w-100" th:each="theme, i : ${results}">
+        <div class="search-result-item w-100P" th:each="theme, i : ${results}">
             <div class="search-result-item-image">
                 <ul class="theme-colors-list">
                     <li class="theme-color" th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
@@ -25,7 +25,7 @@
                     <li class="theme-color" th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
                 </ul>
             </div>
-            <div class="search-result-item-details-div w-100">
+            <div class="search-result-item-details-div w-100P">
                 <div class="search-result-item-title">
                     <p>
                         <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"

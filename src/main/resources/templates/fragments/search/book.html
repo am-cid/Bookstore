@@ -11,7 +11,7 @@
     <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Search:Book', 1, 33)}"></div>
     <div class="search-result-content flex-column">
         <th:block th:if="${!results.hasContent()}">No results found...</th:block>
-        <div class="search-result-item w-100" th:each="book, i : ${results}">
+        <div class="search-result-item w-100P" th:each="book, i : ${results}">
             <div class="search-result-item-image">
                 <img th:alt="'search-result-item-image-' + ${book.id}"
                      th:src="${book.frontImage != null ?
@@ -20,7 +20,7 @@
                                              'Book ' + book.id : book.title + '\n' + book.author
                                  )}" />
             </div>
-            <div class="search-result-item-details-div w-100">
+            <div class="search-result-item-details-div w-100P">
                 <div class="search-result-item-title">
                     <a th:href="@{/api/v1/books/{id}(id=${book.id})}"
                        th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></a>

@@ -59,7 +59,7 @@
     row-gap: 2em;
 }
 
-.book-list-content-div svg {
+.book-list-content-div .svg-text-heading {
     font-size: 32px;
     padding: 0 0 0 10px;
     margin-bottom: -40px;

@@ -12,7 +12,7 @@
     <div class="search-result-content flex-row center-content">
         <th:block th:if="${!results.hasContent()}">No results found...</th:block>
         <div class="search-result-item w-47-86" th:each="profile, i : ${results}">
-            <div class="search-result-item-details-div w-100">
+            <div class="search-result-item-details-div w-100P">
                 <div class="search-result-item-title">
                     <p>
                         <a th:href="@{/profile/{username}(username=${profile.username})}"

@@ -9,7 +9,7 @@
     }
 }
 
-.search-result-content-div svg {
+.search-result-content-div .svg-text-heading {
     font-size: 32px;
     padding: 0 0 0 10px;
     margin-bottom: -38px;
@@ -79,7 +79,7 @@
 }
 
 /* DESCRIPTIVE */
-.w-100 {
+.w-100P {
     width: 100%;
 }
 
