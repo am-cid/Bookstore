@@ -6,6 +6,7 @@ import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserDeleteRequestDTO;
 import com.simple.Bookstore.utils.Result;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 
 public interface ProfileViewService {
     /**
@@ -15,7 +16,33 @@ public interface ProfileViewService {
      * @return view model if ok. return a "redirect:/some/path" or a "template-name" if any failed any checks
      * @throws UserNotFoundException when user with target username is not found
      */
-    Result<ProfileViewModel, String> buildProfileView(
+    Result<Pair<ProfileViewModel, ProfileViewThemesModel>, String> buildProfileViewThemes(
+            User currentUser,
+            String pathUsername,
+            Pageable pageable
+    ) throws UserNotFoundException;
+
+    /**
+     * @param currentUser  currently authenticated user. null if anonymous
+     * @param pathUsername username of profile being accessed
+     * @param pageable     ownedTheme paging
+     * @return view model if ok. return a "redirect:/some/path" or a "template-name" if any failed any checks
+     * @throws UserNotFoundException when user with target username is not found
+     */
+    Result<Pair<ProfileViewModel, ProfileViewReviewsModel>, String> buildProfileViewReviews(
+            User currentUser,
+            String pathUsername,
+            Pageable pageable
+    ) throws UserNotFoundException;
+
+    /**
+     * @param currentUser  currently authenticated user. null if anonymous
+     * @param pathUsername username of profile being accessed
+     * @param pageable     ownedTheme paging
+     * @return view model if ok. return a "redirect:/some/path" or a "template-name" if any failed any checks
+     * @throws UserNotFoundException when user with target username is not found
+     */
+    Result<Pair<ProfileViewModel, ProfileViewCommentsModel>, String> buildProfileViewComments(
             User currentUser,
             String pathUsername,
             Pageable pageable

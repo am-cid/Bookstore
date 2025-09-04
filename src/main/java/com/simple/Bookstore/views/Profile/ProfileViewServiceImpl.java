@@ -1,8 +1,12 @@
 package com.simple.Bookstore.views.Profile;
 
+import com.simple.Bookstore.Comment.CommentResponseDTO;
+import com.simple.Bookstore.Comment.CommentService;
 import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
 import com.simple.Bookstore.Profile.ProfileResponseDTO;
+import com.simple.Bookstore.Review.ReviewResponseDTO;
+import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Theme.ThemeResponseDTO;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
@@ -14,7 +18,7 @@ import com.simple.Bookstore.utils.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,10 +29,11 @@ import java.util.Optional;
 public class ProfileViewServiceImpl implements ProfileViewService {
     private final UserService userService;
     private final ThemeService themeService;
-    private final PasswordEncoder passwordEncoder;
+    private final ReviewService reviewService;
+    private final CommentService commentService;
 
     @Override
-    public Result<ProfileViewModel, String> buildProfileView(
+    public Result<Pair<ProfileViewModel, ProfileViewThemesModel>, String> buildProfileViewThemes(
             User currentUser,
             String pathUsername,
             Pageable pageable
@@ -48,18 +53,69 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             return new Result.Err<>(redirect.get());
 
         Page<ThemeResponseDTO> ownedThemes = themeService.findThemesByUser(foundUser, pageable);
-        ThemeResponseDTO usedTheme = themeService.findUsedTheme(foundUser);
+        ThemeResponseDTO usedTheme = themeService.findUsedTheme(currentUser);
         List<Long> savedThemeIds = themeService
-                .findSavedThemes(foundUser)
+                .findSavedThemes(currentUser)
                 .stream()
                 .map(ThemeResponseDTO::id)
                 .toList();
-        return new Result.Ok<>(new ProfileViewModel(
-                foundUser,
-                foundProfile,
-                ownedThemes,
-                usedTheme,
-                savedThemeIds
+        return new Result.Ok<>(Pair.of(
+                new ProfileViewModel(foundUser, foundProfile),
+                new ProfileViewThemesModel(ownedThemes, usedTheme, savedThemeIds)
+        ));
+    }
+
+    @Override
+    public Result<Pair<ProfileViewModel, ProfileViewReviewsModel>, String> buildProfileViewReviews(
+            User currentUser,
+            String pathUsername,
+            Pageable pageable
+    ) throws UserNotFoundException {
+        if (currentUser == null && pathUsername.equals("me"))
+            return new Result.Err<>("redirect:/");
+
+        User foundUser = pathUsername.equals("me")
+                ? currentUser
+                : userService
+                .findByUsername(pathUsername)
+                .orElseThrow(() -> new UserNotFoundException(pathUsername));
+        ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
+
+        Optional<String> redirect = cannotAccessPrivateProfile(currentUser, pathUsername, foundProfile);
+        if (redirect.isPresent())
+            return new Result.Err<>(redirect.get());
+
+        Page<ReviewResponseDTO> reviews = reviewService.findAllReviewsByUser(foundUser, pageable);
+        return new Result.Ok<>(Pair.of(
+                new ProfileViewModel(foundUser, foundProfile),
+                new ProfileViewReviewsModel(reviews)
+        ));
+    }
+
+    @Override
+    public Result<Pair<ProfileViewModel, ProfileViewCommentsModel>, String> buildProfileViewComments(
+            User currentUser,
+            String pathUsername,
+            Pageable pageable
+    ) throws UserNotFoundException {
+        if (currentUser == null && pathUsername.equals("me"))
+            return new Result.Err<>("redirect:/");
+
+        User foundUser = pathUsername.equals("me")
+                ? currentUser
+                : userService
+                .findByUsername(pathUsername)
+                .orElseThrow(() -> new UserNotFoundException(pathUsername));
+        ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
+
+        Optional<String> redirect = cannotAccessPrivateProfile(currentUser, pathUsername, foundProfile);
+        if (redirect.isPresent())
+            return new Result.Err<>(redirect.get());
+
+        Page<CommentResponseDTO> comments = commentService.findAllCommentsByUser(foundUser, pageable);
+        return new Result.Ok<>(Pair.of(
+                new ProfileViewModel(foundUser, foundProfile),
+                new ProfileViewCommentsModel(comments)
         ));
     }
 

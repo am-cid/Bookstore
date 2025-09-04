@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,18 +45,51 @@ public class ProfileViewController {
     @GetMapping("/{pathUsername}")
     public String profile(
             @PathVariable String pathUsername,
+            @RequestParam(required = false) ProfileViewType view,
             @AuthenticationPrincipal User user,
             @PageableDefault Pageable pageable,
             Model model
     ) {
-        Result<ProfileViewModel, String> viewResult = profileViewService
-                .buildProfileView(user, pathUsername, pageable);
-        if (viewResult.isErr())
-            return viewResult.unwrapErr();
+        ProfileViewType actualView = view == null ? ProfileViewType.THEMES : view;
+        model.addAttribute("viewType", actualView);
+        switch (actualView) {
+            case THEMES:
+                Result<Pair<ProfileViewModel, ProfileViewThemesModel>, String>
+                        pairThemesResult = profileViewService
+                        .buildProfileViewThemes(user, pathUsername, pageable);
+                if (pairThemesResult.isErr())
+                    return pairThemesResult.unwrapErr();
+                Pair<ProfileViewModel, ProfileViewThemesModel>
+                        pairThemes = pairThemesResult.unwrap();
+                model.addAttribute("viewModel", pairThemes.getFirst());
+                model.addAttribute("viewThemesModel", pairThemes.getSecond());
+                break;
+            case REVIEWS:
+                Result<Pair<ProfileViewModel, ProfileViewReviewsModel>, String>
+                        pairReviewResult = profileViewService
+                        .buildProfileViewReviews(user, pathUsername, pageable);
+                if (pairReviewResult.isErr())
+                    return pairReviewResult.unwrapErr();
+                Pair<ProfileViewModel, ProfileViewReviewsModel>
+                        pairReviews = pairReviewResult.unwrap();
+                model.addAttribute("viewModel", pairReviews.getFirst());
+                model.addAttribute("viewReviewsModel", pairReviews.getSecond());
+                break;
+            case COMMENTS:
+                Result<Pair<ProfileViewModel, ProfileViewCommentsModel>, String>
+                        pairCommentsResult = profileViewService
+                        .buildProfileViewComments(user, pathUsername, pageable);
+                if (pairCommentsResult.isErr())
+                    return pairCommentsResult.unwrapErr();
+                Pair<ProfileViewModel, ProfileViewCommentsModel>
+                        pairComments = pairCommentsResult.unwrap();
+                model.addAttribute("viewModel", pairComments.getSecond());
+                model.addAttribute("viewCommentsModel", pairComments.getSecond());
+                break;
+        }
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
         model.addAttribute("pathUsername", pathUsername);
-        model.addAttribute("viewModel", viewResult.unwrap());
         return "profile";
     }
 
