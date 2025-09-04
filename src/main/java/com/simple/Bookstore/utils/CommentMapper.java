@@ -14,6 +14,11 @@ public class CommentMapper {
                 comment.getContent(),
                 comment.getDate(),
                 comment.isEdited(),
+                comment.getReview().getId(),
+                comment.getReview().getTitle(),
+                comment.getReview().getProfile().getUser().getUsername(),
+                comment.getReview().getProfile().getDisplayName(),
+                comment.getReview().getBook().getId(),
                 comment.getProfile().getUser().getUsername(),
                 comment.getProfile().getDisplayName()
         );

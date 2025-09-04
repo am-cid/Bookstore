@@ -16,9 +16,15 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("""
             SELECT new com.simple.Bookstore.Comment.CommentResponseDTO(
                         c.id, c.content, c.date, c.edited,
+                        r.id, r.title, u_r.username, p_r.displayName,
+                        b.id,
                         u.username, p.displayName
             )
             FROM Comment c
+            LEFT JOIN c.review r
+            LEFT JOIN r.profile p_r
+            LEFT JOIN p_r.user u_r
+            LEFT JOIN r.book b
             LEFT JOIN c.profile p
             LEFT JOIN p.user u
             WHERE c.profile.id = :profileId

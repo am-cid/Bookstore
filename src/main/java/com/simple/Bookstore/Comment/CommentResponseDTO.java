@@ -7,6 +7,11 @@ public record CommentResponseDTO(
         String content,
         LocalDateTime date,
         boolean edited,
+        Long reviewId,
+        String reviewTitle,
+        String reviewerUsername,
+        String reviewerDisplayName,
+        Long bookId,
         String username,
         String userDisplayName
 ) {

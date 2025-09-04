@@ -83,7 +83,7 @@ public class ProfileViewController {
                     return pairCommentsResult.unwrapErr();
                 Pair<ProfileViewModel, ProfileViewCommentsModel>
                         pairComments = pairCommentsResult.unwrap();
-                model.addAttribute("viewModel", pairComments.getSecond());
+                model.addAttribute("viewModel", pairComments.getFirst());
                 model.addAttribute("viewCommentsModel", pairComments.getSecond());
                 break;
         }
