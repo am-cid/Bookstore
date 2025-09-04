@@ -8,6 +8,8 @@ import com.simple.Bookstore.Review.ReviewRepository;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.utils.CommentMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,4 +72,11 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(id);
     }
 
+    @Override
+    public Page<CommentResponseDTO> findAllCommentsByUser(User user, Pageable pageable) {
+        if (user == null)
+            return Page.empty(pageable);
+        return commentRepository
+                .findAllCommentsByProfileId(user.getProfile().getId(), pageable);
+    }
 }

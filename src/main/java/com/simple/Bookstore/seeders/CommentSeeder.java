@@ -41,7 +41,7 @@ public class CommentSeeder implements CommandLineRunner {
         List<Profile> profiles = profileRepo.findAll();
 
         if (reviews.isEmpty() || profiles.isEmpty()) {
-            log.warn("Cannot seed comments. Review or User entities not found.");
+            log.warn("Cannot seed profileComments. Review or User entities not found.");
             return;
         }
 
@@ -67,6 +67,6 @@ public class CommentSeeder implements CommandLineRunner {
         comment3.setEdited(false);
 
         commentRepo.saveAll(List.of(comment1, comment2, comment3));
-        log.info("Seeded {} comments.", commentRepo.count());
+        log.info("Seeded {} profileComments.", commentRepo.count());
     }
 }

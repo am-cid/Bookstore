@@ -11,11 +11,11 @@ public class CommentMapper {
     public static CommentResponseDTO commentToResponseDTO(Comment comment) {
         return new CommentResponseDTO(
                 comment.getId(),
-                comment.getProfile().getUser().getUsername(),
-                comment.getProfile().getDisplayName(),
+                comment.getContent(),
                 comment.getDate(),
                 comment.isEdited(),
-                comment.getContent()
+                comment.getProfile().getUser().getUsername(),
+                comment.getProfile().getDisplayName()
         );
     }
 

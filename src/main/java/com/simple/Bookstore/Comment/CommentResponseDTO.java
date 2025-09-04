@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 public record CommentResponseDTO(
         Long id,
-        String username,
-        String userDisplayName,
+        String content,
         LocalDateTime date,
         boolean edited,
-        String content
+        String username,
+        String userDisplayName
 ) {
 }

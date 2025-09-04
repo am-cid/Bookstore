@@ -1,6 +1,8 @@
 package com.simple.Bookstore.Comment;
 
 import com.simple.Bookstore.User.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -14,4 +16,6 @@ public interface CommentService {
     CommentResponseDTO updateComment(User user, Long id, CommentRequestDTO request);
 
     void deleteComment(User user, Long id);
+
+    Page<CommentResponseDTO> findAllCommentsByUser(User user, Pageable pageable);
 }
