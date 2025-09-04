@@ -324,6 +324,10 @@ body {
     display: none;
 }
 
+#sidebar-left .rating-score {
+    font-size: 16px;
+}
+
 #sidebar-right {
     display: flex;
     flex-direction: column;
@@ -522,4 +526,8 @@ body {
 
 .gray-text {
     color: gray;
+}
+
+.margin-0 {
+    margin: 0;
 }

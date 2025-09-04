@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: sidebar-left</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<svg class="rating-score"
+     th:attr="viewBox='0 0 ' + ${viewWidth} + ' ' + ${viewHeight + 2}"
+     th:fragment="ratingStar(rating, viewWidth, viewHeight, letterSpacing)"
+     th:title="${rating} + ' out of 5'">
+    <title th:text="${rating} + ' out of 5'"></title>
+    <text th:attr="letter-spacing=${letterSpacing}" th:text="${#strings.repeat('★', rating)}"
+          x=2></text>
+</svg>
+
+</body>
+</html>
+

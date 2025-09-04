@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
+<!--/*@thymesVar id="viewType" type="com.simple.Bookstore.views.Profile.ProfileViewType"*/-->
+<!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileViewModel"*/-->
+<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.Profile.ProfileViewThemesModel"*/-->
+<!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
+<!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
+
+<div class="profile-themes flex-column" th:fragment="reviews">
+    <div class="flex-row profile-content-header">
+        <div th:replace="~{fragments/profile/profile-view-dropdown :: view-dropdown}"></div>
+        <div th:replace="~{fragments/pagination :: pagination(${viewReviewsModel.profileReviews()}, '/profile/' + ${pathUsername}, null)}"></div>
+    </div>
+    <th:block th:if="${!viewReviewsModel.profileReviews().hasContent()}">No results found...</th:block>
+    <div class="profile-result flex-row w-100P" th:each="review, i : ${viewReviewsModel.profileReviews()}">
+        <div class="profile-result-preview">
+            <img th:alt="'book-' + ${review.bookId} + '-image'"
+                 th:src="${review.bookFrontImage != null ?
+                                     review.bookFrontImage : 'https://placehold.co/100x140?text=' +
+                                         (#strings.isEmpty(review.bookTitle) ?
+                                             'Book ' + review.bookId : review.bookTitle + '\n' + review.bookAuthor
+                                 )}" />
+        </div>
+        <div class="profile-result-content flex-column">
+            <div class="profile-result-content-title flex-row space-between gap-10px">
+                <p class="margin-0">
+                    <a th:href="@{/api/v1/books/{id}(id=${review.bookId})}" th:text="${review.bookTitle}"></a>
+                    by
+                    <a th:href="@{/search(query=${review.bookAuthor}, type='BOOK')}" th:text="${review.bookAuthor}"></a>
+                </p>
+                <p class="margin-0" th:title="${review.date}">
+                    Posted
+                    <span th:text="${T(com.simple.Bookstore.utils.PostedDateFormatter)
+                                     .formatTimeAgo(review.date, review.edited)}"></span>
+                </p>
+            </div>
+            <div class="profile-result-content-details">
+                <svg th:replace="~{fragments/svg-fragments/rating-star ::
+                ratingStar(${review.rating}, 105, 16, 5)}"></svg>
+                <b th:text="${review.title}"></b>
+                <p class="margin-0 col-span-2" th:text="${review.content}"></p>
+                <p class="margin-0 col-span-2 text-align-end">
+                    - <a th:href="@{/profile/{username}(username=${review.username})}"
+                         th:text="${review.userDisplayName}"></a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{fragments/pagination :: pagination(${viewReviewsModel.profileReviews()}, '/profile/' + ${pathUsername}, null)}"></div>
+</div>
+
+</body>
+</html>

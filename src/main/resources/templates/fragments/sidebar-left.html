@@ -6,6 +6,10 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
+<!--/*@thymesVar id="authors" type="java.util.List<java.lang.String>"*/-->
+<!--/*@thymesVar id="genres" type="java.util.List<com.simple.Bookstore.Genre.Genre>"*/-->
+<!--/*@thymesVar id="_latestReview" type="com.simple.Bookstore.Review.ReviewResponseDTO"*/-->
+<!--/*@thymesVar id="_latestReviewDate" type="java.lang.String"*/-->
 
 <div id="sidebar-left" th:fragment="sidebar-left">
     <script th:src="@{/js/sidebar.js}"></script>
@@ -36,10 +40,10 @@
     <div class="sidebar-left-div">
         <p class="sidebar-left-title">Genres</p>
         <div class="sidebar-left-list" id="genres-list">
-            <th:block th:each="genre, genreStat: ${genres}">
+            <th:block th:each="genre, genreStat : ${genres}">
                 <a class="sidebar-left-list-item"
                    th:classappend="${genreStat.index >= 10 ? 'more-item' : ''}"
-                   th:href="@{/search(genres=${genre.name()}, type='BOOK')}"
+                   th:href="@{/search(genres=${genre.name}, type='BOOK')}"
                    th:text="${genre.displayName}"></a>
             </th:block>
             <div th:if="${#lists.size(genres) > 10}">
@@ -60,30 +64,31 @@
         <p class="sidebar-left-title">Latest Review</p>
         <div class="sidebar-left-list">
             <a class="sidebar-left-list-item"
-               th:href="@{/api/v1/books/{id}(id=${_latestReview.bookId()})}"
-               th:text="${_latestReview.bookTitle()}"></a>
+               th:href="@{/api/v1/books/{id}(id=${_latestReview.bookId})}"
+               th:text="${_latestReview.bookTitle}"></a>
             <div class="flex-row space-between sidebar-left-list-item">
-                <p class="rating-score">
-                    <b><span th:text="${_latestReview.rating()}"></span> / 5</b>
-                </p>
-                <p th:text="${_latestReviewDate}"></p>
+                <svg th:replace="~{fragments/svg-fragments/rating-star ::
+                ratingStar(${_latestReview.rating}, 106, 16, 5)}"></svg>
+                <p th:text="${_latestReviewDate}"
+                   th:title="${_latestReview.date}"></p>
             </div>
             <div class="sidebar-left-list-item"
-                 th:if="${!#strings.isEmpty(_latestReview.content())}">
-                <th:block th:if="${_latestReview.content().length() > 100}">
-                    <p th:text="${#strings.abbreviate(_latestReview.content(), 100)}"></p>
+                 th:if="${!#strings.isEmpty(_latestReview.content)}">
+                <th:block th:if="${_latestReview.content.length() > 100}">
+                    <p th:text="${#strings.abbreviate(_latestReview.content, 100)}"></p>
                 </th:block>
-                <th:block th:if="${_latestReview.content().length() <= 100}">
-                    <p th:text="${_latestReview.content()}"></p>
+                <th:block th:if="${_latestReview.content.length() <= 100}">
+                    <p th:text="${_latestReview.content}"></p>
                 </th:block>
             </div>
             <div class="sidebar-left-list-item"
-                 th:if="${#strings.isEmpty(_latestReview.content())}">
+                 th:if="${#strings.isEmpty(_latestReview.content)}">
                 <p class="gray-text">No content was provided for this review</p>
             </div>
             <div>
                 <p class="float-right">
-                    - <span th:text="${_latestReview.userDisplayName()}"></span>
+                    - <a th:href="@{/profile/{username}(username=${_latestReview.username})}"
+                        th:text="${_latestReview.userDisplayName}"></a>
                 </p>
             </div>
         </div>

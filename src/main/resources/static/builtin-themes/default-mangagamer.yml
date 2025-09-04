@@ -15,7 +15,7 @@ base07: FFF2D3
 # 0
 #   center content div border
 # 1
-#   rating font color
+#   Book title in book view font color
 # 2
 #   sidebar left border,
 #   sidebar left heading bg,
@@ -34,6 +34,7 @@ base07: FFF2D3
 #   genre oval bg base color 2
 #   genre oval text base color 2
 #   genre oval outline base color 2
+#   rating star fill color
 # 5
 #   genre oval bg base color 3
 #   genre oval text base color 3
