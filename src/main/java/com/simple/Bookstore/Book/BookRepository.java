@@ -78,7 +78,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                 END, b.id
             DESC
             """, countQuery = """
-            SELECT COUNT(DISTINCT b.id)
+            SELECT COUNT(b.id)
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id
             WHERE b.id IN (
@@ -108,7 +108,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             LEFT JOIN review r ON b.id = r.book_id
             GROUP BY b.id
             """, countQuery = """
-            SELECT COUNT(DISTINCT b.id)
+            SELECT COUNT(b.id)
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id
             GROUP BY b.id

@@ -58,7 +58,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
                 END, t.id
             DESC
             """, countQuery = """
-            SELECT COUNT(DISTINCT t.id)
+            SELECT COUNT(t.id)
             FROM theme t
             LEFT JOIN profile p ON p.id = t.profile_id
             LEFT JOIN users u ON u.id = p.user_id

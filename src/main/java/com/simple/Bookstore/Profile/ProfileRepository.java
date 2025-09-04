@@ -41,7 +41,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
                 ) DESC,
                 u.username
             """, countQuery = """
-            SELECT COUNT(DISTINCT p.id)
+            SELECT COUNT(p.id)
             FROM profile p
             LEFT JOIN users u ON u.id = p.user_id
             WHERE (:query IS NULL OR :query = '' OR :query <% u.username OR :query <% p.display_name)
