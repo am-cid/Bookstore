@@ -57,7 +57,7 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public List<ThemeResponseDTO> findThemesByUser(User user) {
         return themeRepository
-                .findByProfileUser(user)
+                .findByProfileUserOrderByName(user)
                 .stream()
                 .map(ThemeMapper::themeToResponseDTO)
                 .toList();
@@ -66,7 +66,7 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public Page<ThemeResponseDTO> findThemesByUser(User user, Pageable pageable) {
         return themeRepository
-                .findByProfileUser(user, pageable)
+                .findByProfileUserOrderByName(user, pageable)
                 .map(ThemeMapper::themeToResponseDTO);
     }
 
