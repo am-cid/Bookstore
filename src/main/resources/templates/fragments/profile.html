@@ -8,7 +8,11 @@
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
 <!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
+<!--/*@thymesVar id="viewType" type="com.simple.Bookstore.views.Profile.ProfileViewType"*/-->
 <!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileViewModel"*/-->
+<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.Profile.ProfileViewThemesModel"*/-->
+<!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
+<!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
 
 
 <div id="main-content" th:fragment="main-content">
@@ -16,7 +20,15 @@
         <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('My Account', 1, 33)}"></div>
         <div class="flex-column" id="profile">
             <div th:replace="~{fragments/profile/account-details :: details}"></div>
-            <div th:replace="~{fragments/profile/owned-themes :: themes}"></div>
+            <th:block th:if="${viewType.name.equals(T(com.simple.Bookstore.views.Profile.ProfileViewType).THEMES.name)}">
+                <div th:replace="~{fragments/profile/profile-themes :: themes}"></div>
+            </th:block>
+            <th:block th:if="${viewType.name.equals(T(com.simple.Bookstore.views.Profile.ProfileViewType).REVIEWS.name)}">
+                <div th:replace="~{fragments/profile/profile-reviews :: reviews}"></div>
+            </th:block>
+            <th:block th:if="${viewType.name.equals(T(com.simple.Bookstore.views.Profile.ProfileViewType).COMMENTS.name)}">
+                <div th:replace="~{fragments/profile/profile-comments :: comments}"></div>
+            </th:block>
         </div>
     </div>
 </div>

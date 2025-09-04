@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
+<!--/*@thymesVar id="viewType" type="com.simple.Bookstore.views.Profile.ProfileViewType"*/-->
+<!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileViewModel"*/-->
+<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.Profile.ProfileViewThemesModel"*/-->
+<!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
+<!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
+
+<!--
+Based off:
+- https://stackoverflow.com/questions/44832572/pure-css-clickable-dropdown#answer-71029926
+- https://jsfiddle.net/8evtxnsL/
+-->
+
+<div class="dropdown" tabindex="1" th:fragment="view-dropdown">
+    <i class="show-dropdown-menu" tabindex="1"></i>
+    <a class="dropdown-title profile-content-header-title flex-row">
+        <span th:text="${viewType.displayName}"></span>
+        <span class="dropdown-expand">&#9660;</span>
+    </a>
+    <div class="dropdown-menu flex-column">
+        <th:block th:each="viewEnumType : ${T(com.simple.Bookstore.views.Profile.ProfileViewType).values()}">
+            <a class="dropdown-item"
+               th:href="@{/profile/{username}(username=${pathUsername}, view=${viewEnumType})}"
+               th:if="${!viewType.name.equals(viewEnumType.name)}"
+               th:text="${viewEnumType.displayName}"></a>
+            <p class="dropdown-item active" th:if="${viewType.name.equals(viewEnumType.name)}"
+               th:text="${viewEnumType.displayName}"></p>
+        </th:block>
+    </div>
+</div>
+
+</body>
+</html>

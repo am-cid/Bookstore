@@ -8,11 +8,30 @@
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
 <!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
+<!--/*@thymesVar id="viewType" type="com.simple.Bookstore.views.Profile.ProfileViewType"*/-->
 <!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileViewModel"*/-->
+<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.Profile.ProfileViewThemesModel"*/-->
+<!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
+<!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
 
 <div class="flex-column gap-10px" th:fragment="details"
-    th:with="ownProfile=${user != null && user.username.equals(viewModel.profile().username)},
-            profile=${viewModel.profile()}">
+    th:with="ownProfile=${user != null && user.username.equals(viewModel.profile.username)},
+    profile=${viewModel.profile}">
+    <div class="flex-row profile-content-header">
+        <p class="profile-content-header-title">
+            Account Details
+        </p>
+        <div class="flex-column" th:if="${ownProfile}">
+            <a class="profile-content-header-sub-title"
+               th:href="@{/profile/{username}/saved-books(username=${pathUsername})}">
+                SAVED BOOKS
+            </a>
+            <a class="profile-content-header-sub-title"
+               th:href="@{/profile/{username}/saved-themes(username=${pathUsername})}">
+                SAVED THEMES
+            </a>
+        </div>
+    </div>
     <div class="gap-10px profile-details" id="profile-details">
         <p class="profile-details-label">Username: </p>
         <p class="profile-details-value" th:text="${profile.username}"></p>

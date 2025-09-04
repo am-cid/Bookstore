@@ -1,0 +1,101 @@
+/*
+Based off:
+- https://stackoverflow.com/questions/44832572/pure-css-clickable-dropdown#answer-71029926
+- https://jsfiddle.net/8evtxnsL/
+ */
+
+:root {
+    --dropdown-width: 140px;
+}
+
+.dropdown {
+    display: inline-block;
+    position: relative;
+    outline: none;
+}
+
+.dropdown-title {
+    width: var(--dropdown-width, 140px);
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.dropdown-expand {
+    font-size: 12px;
+    align-self: center;
+}
+
+.dropdown .dropdown-menu {
+    position: absolute;
+    visibility: hidden;
+}
+
+/* SHOW DROPDOWN MENU */
+.dropdown:focus .dropdown-menu {
+    visibility: visible;
+}
+
+.dropdown-title:hover,
+.dropdown:focus .dropdown-title {
+    background-color: var(--color-00, #A40E60);
+}
+
+/*
+MASK: cover entire ".dropdown" element when in focus.
+".dropdown" in focus: hide the dropdown menu
+".show-dropdown-menu" in focus: show the dropdown menu
+*/
+.dropdown .show-dropdown-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+    display: none;
+}
+
+/* SHOW DROPDOWN MENU MASK */
+.dropdown:focus .show-dropdown-menu {
+    display: inline-block;
+}
+
+/* HIDE DROPDOWN MENU when mask is in focus */
+.dropdown .show-dropdown-menu:focus .dropdown-menu {
+    visibility: hidden;
+}
+
+/* DROPDOWN ITEM STYLING */
+.dropdown-item {
+    width: var(--dropdown-width, 140px);
+    padding: 5px 20px;
+    margin: 0;
+    font-size: 26px;
+    font-weight: bolder;
+    text-decoration: none;
+    border: none;
+    background-color: var(--color-02, #F61590);
+    color: var(--color-06, #FFE2E7);
+    cursor: pointer;
+}
+
+.dropdown-item:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.dropdown-item:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.dropdown-item.active {
+    background-color: var(--color-00, #F61590);
+}
+
+.dropdown-item:hover {
+    background-color: var(--color-00, #F61590);
+}
+
