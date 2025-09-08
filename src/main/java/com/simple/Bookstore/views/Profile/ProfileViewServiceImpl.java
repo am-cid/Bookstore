@@ -1,7 +1,7 @@
 package com.simple.Bookstore.views.Profile;
 
-import com.simple.Bookstore.Comment.CommentResponseDTO;
 import com.simple.Bookstore.Comment.CommentService;
+import com.simple.Bookstore.Comment.CommentViewResponseDTO;
 import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
 import com.simple.Bookstore.Profile.ProfileResponseDTO;
@@ -112,7 +112,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
         if (redirect.isPresent())
             return new Result.Err<>(redirect.get());
 
-        Page<CommentResponseDTO> comments = commentService.findAllCommentsByUser(foundUser, pageable);
+        Page<CommentViewResponseDTO> comments = commentService.findAllCommentsByUser(foundUser, pageable);
         return new Result.Ok<>(Pair.of(
                 new ProfileViewModel(foundUser, foundProfile),
                 new ProfileViewCommentsModel(comments)

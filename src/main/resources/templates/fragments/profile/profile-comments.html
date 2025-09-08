@@ -24,7 +24,7 @@
         <div class="profile-result-content flex-column">
             <div class="profile-result-content-title flex-row space-between gap-10px">
                 <p class="margin-0">
-                    <a th:href="@{/api/v1/books/{bookId}/reviews/{reviewId}(bookId=${comment.bookId}, reviewId=${comment.reviewId})}"
+                    <a th:href="@{|/books/${comment.bookId}/reviews/${comment.reviewId}?page=${comment.pageNumber}#comment-${comment.id}|}"
                        th:text="'RE: ' + ${comment.reviewTitle}"></a>
                     by
                     <a th:href="@{/profile/{username}(username=${comment.reviewerUsername})}"

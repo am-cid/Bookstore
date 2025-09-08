@@ -1,8 +1,6 @@
 package com.simple.Bookstore.utils;
 
-import com.simple.Bookstore.Comment.Comment;
-import com.simple.Bookstore.Comment.CommentRequestDTO;
-import com.simple.Bookstore.Comment.CommentResponseDTO;
+import com.simple.Bookstore.Comment.*;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Review.Review;
 
@@ -21,6 +19,23 @@ public class CommentMapper {
                 comment.getReview().getBook().getId(),
                 comment.getProfile().getUser().getUsername(),
                 comment.getProfile().getDisplayName()
+        );
+    }
+
+    public static CommentViewResponseDTO viewProjectionToViewResponseDTO(CommentViewProjection projection) {
+        return new CommentViewResponseDTO(
+                projection.getId(),
+                projection.getContent(),
+                projection.getDate(),
+                projection.getEdited(),
+                projection.getReviewId(),
+                projection.getReviewTitle(),
+                projection.getReviewerUsername(),
+                projection.getReviewerDisplayName(),
+                projection.getBookId(),
+                projection.getUsername(),
+                projection.getUserDisplayName(),
+                projection.getPageNumber()
         );
     }
 

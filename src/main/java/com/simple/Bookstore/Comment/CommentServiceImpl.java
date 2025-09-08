@@ -73,10 +73,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Page<CommentResponseDTO> findAllCommentsByUser(User user, Pageable pageable) {
+    public Page<CommentViewResponseDTO> findAllCommentsByUser(User user, Pageable pageable) {
         if (user == null)
             return Page.empty(pageable);
         return commentRepository
-                .findAllCommentsByProfileId(user.getProfile().getId(), pageable);
+                .findAllCommentsByProfileId(user.getProfile().getId(), pageable.getPageSize(), pageable)
+                .map(CommentMapper::viewProjectionToViewResponseDTO);
     }
 }
