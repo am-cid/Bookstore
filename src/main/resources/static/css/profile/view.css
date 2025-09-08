@@ -90,18 +90,6 @@
 }
 
 /* DESCRIPTIVE */
-.w-100P {
-    width: 100%;
-}
-
-.col-span-2 {
-    grid-column-end: span 2;
-}
-
 .text-align-end {
     text-align: end;
-}
-
-.pad-0-15px {
-    padding: 0 15px;
 }

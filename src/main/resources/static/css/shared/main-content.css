@@ -32,6 +32,20 @@
     stroke-width: 2;
 }
 
+/* DESCRIPTIVE */
+
+.col-span-2 {
+    grid-column-end: span 2;
+}
+
 .gap-10px {
     gap: 10px;
+}
+
+.w-100P {
+    width: 100%;
+}
+
+.pad-0-15px {
+    padding: 0 15px;
 }
