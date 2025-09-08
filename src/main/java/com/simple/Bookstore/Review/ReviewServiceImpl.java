@@ -100,4 +100,11 @@ public class ReviewServiceImpl implements ReviewService {
                 .findAllReviewsByProfileId(user.getProfile().getId(), pageable.getPageSize(), pageable)
                 .map(ReviewMapper::viewProjectionToViewResponseDTO);
     }
+
+    @Override
+    public Page<ReviewResponseDTO> findAllReviewsByBookIdAsPage(Long bookId, Pageable pageable) {
+        return reviewRepository
+                .findAllReviewsByBookId(bookId, pageable)
+                .map(ReviewMapper::projectionToResponseDTO);
+    }
 }

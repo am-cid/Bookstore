@@ -23,4 +23,6 @@ public interface ReviewService {
     void deleteReview(User user, Long id);
 
     Page<ReviewViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable);
+
+    Page<ReviewResponseDTO> findAllReviewsByBookIdAsPage(Long bookId, Pageable pageable);
 }

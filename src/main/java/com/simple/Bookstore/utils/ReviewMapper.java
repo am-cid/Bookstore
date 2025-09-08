@@ -22,6 +22,23 @@ public class ReviewMapper {
         );
     }
 
+    public static ReviewResponseDTO projectionToResponseDTO(ReviewProjection projection) {
+        return new ReviewResponseDTO(
+                projection.getId(),
+                projection.getTitle(),
+                projection.getContent(),
+                projection.getRating(),
+                projection.getDate(),
+                projection.getEdited(),
+                projection.getBookId(),
+                projection.getBookTitle(),
+                projection.getBookAuthor(),
+                projection.getBookFrontImage(),
+                projection.getUsername(),
+                projection.getUserDisplayName()
+        );
+    }
+
     public static ReviewViewResponseDTO viewProjectionToViewResponseDTO(ReviewViewProjection projection) {
         return new ReviewViewResponseDTO(
                 projection.getId(),
