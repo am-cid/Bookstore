@@ -8,7 +8,7 @@
 <body>
 <!--/*@thymesVar id="authors" type="java.util.List<java.lang.String>"*/-->
 <!--/*@thymesVar id="genres" type="java.util.List<com.simple.Bookstore.Genre.Genre>"*/-->
-<!--/*@thymesVar id="_latestReview" type="com.simple.Bookstore.Review.ReviewResponseDTO"*/-->
+<!--/*@thymesVar id="_latestReview" type="com.simple.Bookstore.Review.ReviewViewResponseDTO"*/-->
 <!--/*@thymesVar id="_latestReviewDate" type="java.lang.String"*/-->
 
 <div id="sidebar-left" th:fragment="sidebar-left">
@@ -64,7 +64,7 @@
         <p class="sidebar-left-title">Latest Review</p>
         <div class="sidebar-left-list">
             <a class="sidebar-left-list-item"
-               th:href="@{/api/v1/books/{id}(id=${_latestReview.bookId})}"
+               th:href="@{|/books/${_latestReview.bookId}?page=${_latestReview.pageNumber}#review-${_latestReview.id}|}"
                th:text="${_latestReview.bookTitle}"></a>
             <div class="flex-row space-between sidebar-left-list-item">
                 <svg th:replace="~{fragments/svg-fragments/rating-star ::

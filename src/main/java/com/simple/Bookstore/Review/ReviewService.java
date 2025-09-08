@@ -10,9 +10,9 @@ import java.util.Optional;
 public interface ReviewService {
     List<ReviewResponseDTO> findAllReviewsByBookId(Long bookId);
 
-    List<ReviewResponseDTO> findLatestNReviews(int n);
+    List<ReviewViewResponseDTO> findLatestNReviews(int n);
 
-    Optional<ReviewResponseDTO> findLatestReview();
+    Optional<ReviewViewResponseDTO> findLatestReview();
 
     ReviewResponseDTO findReviewById(Long id);
 
@@ -22,5 +22,5 @@ public interface ReviewService {
 
     void deleteReview(User user, Long id);
 
-    Page<ReviewResponseDTO> findAllReviewsByUser(User user, Pageable pageable);
+    Page<ReviewViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable);
 }

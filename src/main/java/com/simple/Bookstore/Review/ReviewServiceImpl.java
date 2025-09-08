@@ -6,6 +6,7 @@ import com.simple.Bookstore.Exceptions.BookNotFoundException;
 import com.simple.Bookstore.Exceptions.ReviewNotFoundException;
 import com.simple.Bookstore.Exceptions.UnauthorizedException;
 import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.config.constants.PagingConstants;
 import com.simple.Bookstore.utils.ReviewMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,17 +32,17 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewResponseDTO> findLatestNReviews(int n) {
+    public List<ReviewViewResponseDTO> findLatestNReviews(int n) {
         return reviewRepository
-                .findTopNByOrderByIdDesc(n)
+                .findTopNByOrderByIdDesc(n, PagingConstants.DEFAULT_PAGE_SIZE)
                 .stream()
-                .map(ReviewMapper::reviewToResponseDTO)
+                .map(ReviewMapper::viewProjectionToViewResponseDTO)
                 .toList();
     }
 
     @Override
-    public Optional<ReviewResponseDTO> findLatestReview() {
-        List<ReviewResponseDTO> latestNReviews = findLatestNReviews(1);
+    public Optional<ReviewViewResponseDTO> findLatestReview() {
+        List<ReviewViewResponseDTO> latestNReviews = findLatestNReviews(1);
         if (latestNReviews.isEmpty())
             return Optional.empty();
         return Optional.of(latestNReviews.getFirst());
@@ -92,10 +93,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewResponseDTO> findAllReviewsByUser(User user, Pageable pageable) {
+    public Page<ReviewViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable) {
         if (user == null)
             return Page.empty(pageable);
         return reviewRepository
-                .findAllReviewsByProfileId(user.getProfile().getId(), pageable);
+                .findAllReviewsByProfileId(user.getProfile().getId(), pageable.getPageSize(), pageable)
+                .map(ReviewMapper::viewProjectionToViewResponseDTO);
     }
 }

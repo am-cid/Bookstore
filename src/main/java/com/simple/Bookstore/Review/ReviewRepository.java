@@ -15,25 +15,72 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 
     @Query(value = """
-            SELECT r.*
+            SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
+                b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
+                u.username as username, p.display_name as userDisplayName,
+                (
+                    (
+                        -- need minus one for 0-indexed paging
+                        ROW_NUMBER() OVER (PARTITION BY r.book_id ORDER BY r.date DESC, r.id DESC) - 1
+                    ) / :pageSize
+                ) AS pageNumber
             FROM review r
-            ORDER BY r.id DESC
+            LEFT JOIN book b ON r.book_id = b.id
+            LEFT JOIN profile p ON r.profile_id = p.id
+            LEFT JOIN users u ON p.user_id = u.id
+            ORDER BY r.date DESC, r.id DESC
             LIMIT :n
-            """, nativeQuery = true)
-    List<Review> findTopNByOrderByIdDesc(int n);
+            """,
+            nativeQuery = true)
+    List<ReviewViewProjection> findTopNByOrderByIdDesc(
+            @Param("pageSize") Integer pageSize,
+            int n
+    );
+
+    @Query(value = """
+            SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
+                b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
+                u.username as username, p.display_name as userDisplayName,
+                (
+                    (
+                        -- need minus one for 0-indexed paging
+                        ROW_NUMBER() OVER (PARTITION BY r.book_id ORDER BY r.date DESC, r.id DESC) - 1
+                    ) / :pageSize
+                ) AS pageNumber
+            FROM review r
+            LEFT JOIN book b ON r.book_id = b.id
+            LEFT JOIN profile p ON r.profile_id = p.id
+            LEFT JOIN users u ON p.user_id = u.id
+            WHERE r.profile_id = :profileId
+            ORDER BY r.date DESC, r.id DESC
+            """, countQuery = """
+            SELECT COUNT(r.id)
+            FROM review r
+            WHERE r.profile_id = :profileId
+            """,
+            nativeQuery = true)
+    Page<ReviewViewProjection> findAllReviewsByProfileId(
+            @Param("profileId") Long profileId,
+            @Param("pageSize") Integer pageSize,
+            Pageable pageable
+    );
 
     @Query("""
             SELECT new com.simple.Bookstore.Review.ReviewResponseDTO(
-                        r.id, r.title, r.content, r.rating, r.date, r.edited,
-                        b.id, b.title, b.author, b.frontImage,
-                        u.username, p.displayName
+                r.id, r.title, r.content, r.rating, r.date, r.edited,
+                b.id, b.title, b.author, b.frontImage,
+                u.username, p.displayName
             )
             FROM Review r
             LEFT JOIN r.book b
             LEFT JOIN r.profile p
             LEFT JOIN p.user u
-            WHERE r.profile.id = :profileId
+            WHERE r.book.id = :bookId
             ORDER BY r.date DESC, r.id DESC
             """)
-    Page<ReviewResponseDTO> findAllReviewsByProfileId(@Param("profileId") Long profileId, Pageable pageable);
+    Page<ReviewResponseDTO> findAllReviewsByBookId(
+            @Param("bookId") Long bookId,
+            @Param("pageSize") Integer pageSize,
+            Pageable pageable
+    );
 }

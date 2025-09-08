@@ -5,8 +5,8 @@ import com.simple.Bookstore.Comment.CommentService;
 import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
 import com.simple.Bookstore.Profile.ProfileResponseDTO;
-import com.simple.Bookstore.Review.ReviewResponseDTO;
 import com.simple.Bookstore.Review.ReviewService;
+import com.simple.Bookstore.Review.ReviewViewResponseDTO;
 import com.simple.Bookstore.Theme.ThemeResponseDTO;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
@@ -85,7 +85,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
         if (redirect.isPresent())
             return new Result.Err<>(redirect.get());
 
-        Page<ReviewResponseDTO> reviews = reviewService.findAllReviewsByUser(foundUser, pageable);
+        Page<ReviewViewResponseDTO> reviews = reviewService.findAllReviewsByUser(foundUser, pageable);
         return new Result.Ok<>(Pair.of(
                 new ProfileViewModel(foundUser, foundProfile),
                 new ProfileViewReviewsModel(reviews)

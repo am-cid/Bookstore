@@ -32,7 +32,8 @@
         <div class="profile-result-content flex-column">
             <div class="profile-result-content-title flex-row space-between gap-10px">
                 <p class="margin-0">
-                    <a th:href="@{/api/v1/books/{id}(id=${review.bookId})}" th:text="${review.bookTitle}"></a>
+                    <a th:href="@{|/books/${review.bookId}?page=${review.pageNumber}#review-${review.id}|}"
+                       th:text="${review.bookTitle}"></a>
                     by
                     <a th:href="@{/search(query=${review.bookAuthor}, type='BOOK')}" th:text="${review.bookAuthor}"></a>
                 </p>
