@@ -13,16 +13,18 @@
         <th:block th:if="${!results.hasContent()}">No results found...</th:block>
         <div class="search-result-item w-100P" th:each="book, i : ${results}">
             <div class="search-result-item-image">
-                <img th:alt="'search-result-item-image-' + ${book.id}"
-                     th:src="${book.frontImage != null ?
+                <a th:href="@{/books/{id}(id=${book.id})}">
+                    <img th:alt="'search-result-item-image-' + ${book.id}"
+                         th:src="${book.frontImage != null ?
                                      book.frontImage : 'https://placehold.co/100x140?text=' +
                                          (#strings.isEmpty(book.title) ?
                                              'Book ' + book.id : book.title + '\n' + book.author
-                                 )}" />
+                     )}" />
+                </a>
             </div>
             <div class="search-result-item-details-div w-100P">
                 <div class="search-result-item-title">
-                    <a th:href="@{/api/v1/books/{id}(id=${book.id})}"
+                    <a th:href="@{/books/{id}(id=${book.id})}"
                        th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></a>
                 </div>
                 <div class="list-item-details">

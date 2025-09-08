@@ -13,8 +13,15 @@
      th:fragment="ratingStar(rating, viewWidth, viewHeight, letterSpacing)"
      th:title="${rating} + ' out of 5'">
     <title th:text="${rating} + ' out of 5'"></title>
-    <text th:attr="letter-spacing=${letterSpacing}" th:text="${#strings.repeat('★', rating)}"
-          x=2></text>
+    <text th:attr="letter-spacing=${letterSpacing}"
+          th:text="${#strings.repeat('★', T(java.lang.Math).floor(rating))}"
+          x="2"></text>
+    <th:block th:with="startX=${2 + letterSpacing + T(java.lang.Math).floor(rating) * viewHeight}">
+        <text th:attr="letter-spacing=${letterSpacing}, x=${startX}"
+              th:if="${rating - T(java.lang.Math).floor(rating) >= 0.5}"
+              th:text="'⯨'"
+        ></text>
+    </th:block>
 </svg>
 
 </body>

@@ -9,19 +9,21 @@
 
 <div class='flex-column' th:fragment="twoColBookList(bookDtoList, headingTitle)">
     <div class="book-list-content-div">
-        <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading(${headingTitle}, 290)}"></div>
+        <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading(${headingTitle}, 290, 18)}"></div>
         <div class="book-list-content">
             <div class="book-list-item gap-10px" th:each="book : ${bookDtoList}">
                 <div class="book-list-item-image">
-                    <img th:alt="'book-list-item-image-' + ${book.id}"
-                         th:src="${book.frontImage != null ?
-                     book.frontImage : 'https://placehold.co/100x140?text=' +
-                         (#strings.isEmpty(book.title) ?
-                             'Book ' + book.id : book.title + '\n' + book.author
-                 )}" />
+                    <a th:href="@{/books/{id}(id=${book.id})}">
+                        <img th:alt="'book-list-item-image-' + ${book.id}"
+                             th:src="${book.frontImage != null ?
+                                 book.frontImage : 'https://placehold.co/100x140?text=' +
+                                     (#strings.isEmpty(book.title) ?
+                                         'Book ' + book.id : book.title + '\n' + book.author
+                         )}" />
+                    </a>
                 </div>
                 <div class="list-item-details">
-                    <a th:href="@{/api/v1/books/{id}(id=${book.id})}"
+                    <a th:href="@{/books/{id}(id=${book.id})}"
                        th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></a>
                     <b class="rating-score" th:if="${book.averageRating != null}">
                         <span th:text="${book.averageRating}"></span> / 5

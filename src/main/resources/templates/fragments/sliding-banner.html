@@ -11,7 +11,7 @@
     <div id="sliding-banner-images">
         <ul class="flex-row" >
             <li th:each="book : ${bannerBooks}">
-                <a th:href="@{/api/v1/books/{id}(id=${book.id})}">
+                <a th:href="@{/books/{id}(id=${book.id})}">
                     <img th:alt="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"
                          th:src="${#strings.isEmpty(book.frontImage) ?
                                     (#strings.isEmpty(book.backImage) ?
