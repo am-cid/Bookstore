@@ -27,18 +27,19 @@
                         <span th:text="${book.averageRating}"></span> / 5
                     </b>
 
-                    <ul>
-                        <li class="genre-oval"
-                            th:classappend="${genre.getStyleClass()}"
-                            th:each="genre, iter : ${#lists.toList(book.genres)}"
-                            th:if="${iter.index < 5}"
-                            th:text="${genre.displayName}">
+                    <ul th:data-cutoff="${cutoff}" th:with="cutoff=5">
+                        <li th:each="genre, iter : ${#lists.toList(book.genres)}"
+                            th:if="${iter.index < cutoff}">
+                            <a class="genre-oval" th:classappend="${genre.getStyleClass()}"
+                               th:href="@{/search(type='BOOK', genres=${genre})}"
+                               th:text="${genre.displayName}"></a>
                         </li>
-                        <li class="genre-oval hidden-genre"
-                            th:classappend="${genre.getStyleClass()}"
-                            th:each="genre, iter : ${#lists.toList(book.genres)}"
-                            th:if="${iter.index >= 5}"
-                            th:text="${genre.displayName}"></li>
+                        <li class="hidden-genre" th:each="genre, iter : ${#lists.toList(book.genres)}"
+                            th:if="${iter.index >= cutoff}">
+                            <a class="genre-oval" th:classappend="${genre.getStyleClass()}"
+                               th:href="@{/search(type='BOOK', genres=${genre})}"
+                               th:text="${genre.displayName}"></a>
+                        </li>
                     </ul>
                 </div>
             </div>

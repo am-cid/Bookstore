@@ -10,6 +10,7 @@
     align-items: center;
     justify-content: center;
     word-break: break-word;
+    text-decoration: none;
 }
 
 .genre-color-style-00 {
