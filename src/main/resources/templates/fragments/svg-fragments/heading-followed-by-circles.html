@@ -3,15 +3,15 @@
 <body>
 
 <div style="z-index: 9999; display: inline-block; line-height: 1;"
-     th:fragment="svgHeading(text, circleCx)">
+     th:fragment="svgHeading(text, circleCx, circleCy)">
     <svg class="svg-text-heading" preserveAspectRatio="xMinYMid meet"
          style="overflow:visible; height:1em;"
          viewBox="0 0 1 35"
          xmlns="http://www.w3.org/2000/svg">
         <!-- circle with gradient colors-->
-        <circle cy="18"
-                r="4.5"
+        <circle r="4.5"
                 th:cx="${circleCx + i * 18}"
+                th:cy="${circleCy}"
                 th:each="i : ${#numbers.sequence(0, 24)}"
                 th:style="'fill: var(' + ${varName} + ', ' + ${fallbackColor} + ');'"
                 th:with="varName='--interpolated-color-' + (${i} < 10 ? '0' : '') + ${i},

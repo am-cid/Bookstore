@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="book" type="com.simple.Bookstore.Book.BookSearchResultDTO"*/-->
+<!--/*@thymesVar id="review" type="org.springframework.data.domain.Page<com.simple.Bookstore.Review.ReviewResponseDTO>"*/-->
+
+
+<div id="main-content" th:fragment="main-content">
+    <div class="flex-column" id="book">
+        <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading('Title Information', 280, 20)}"></div>
+        <div class="flex-row gap-10px">
+            <div class="flex-column gap-10px">
+                <img id="book-image" onclick="toggleCover(this)"
+                     th:alt="'book-image-' + ${book.id}"
+                     th:data-author="${book.author}"
+                     th:data-back-image="${book.backImage}"
+                     th:data-current-cover="'front'"
+                     th:data-front-image="${book.frontImage}"
+                     th:data-id="${book.id}"
+                     th:data-title="${book.title}"
+                     th:src="${book.frontImage != null ?
+                     book.frontImage : 'https://placehold.co/227x317?text=' +
+                         (#strings.isEmpty(book.title) ?
+                             'Book ' + book.id : book.title + '\n' + book.author + '\n(Front Cover)'
+                     )}"
+                />
+                <script th:src="@{/js/flip-cover.js}"></script>
+                <a href="#description" id="description-button">Description</a>
+            </div>
+            <div class="flex-column w-100P gap-10px" id="book-details">
+                <p class="col-span-2 margin-0" id="book-title" th:text="${book.title}"></p>
+                <div class="grid-tcol-1fr-4fr pad-0-15px">
+                    <strong>Author:</strong>
+                    <p class="margin-0" th:text="${book.author}"></p>
+
+                    <th:block th:if="${book.averageRating}">
+                        <strong>Reviews:</strong>
+                        <div class="grid-tcol-1fr-4fr grid-gap-10px" id="book-details-review">
+                            <svg th:replace="~{fragments/svg-fragments/rating-star ::
+                        ratingStar(${book.averageRating}, 66, 12, 5)}"></svg>
+                            <div class="flex-row gap-10px">
+                                <p class="margin-0" th:text="${book.averageRating} + ' out of 5'"></p>
+                                <p class="margin-0" th:if="${book.averageRating}">
+                                    (<a class="margin-0" href="#reviews" th:text="${review.getNumberOfElements()} + ' reviews'"></a>)
+                                </p>
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <strong>Genres:</strong>
+                    <div class="list-item-details">
+                        <ul id="book-details-genres" th:data-cutoff="${cutoff}" th:with="cutoff=3">
+                            <li th:each="genre, iter : ${#lists.toList(book.genres)}"
+                                th:if="${iter.index < cutoff}">
+                                <a class="genre-oval" th:classappend="${genre.getStyleClass()}"
+                                   th:href="@{/search(type='BOOK', genres=${genre})}"
+                                   th:text="${genre.displayName}"></a>
+                            </li>
+                            <li class="hidden-genre" th:each="genre, iter : ${#lists.toList(book.genres)}"
+                                th:if="${iter.index >= cutoff}">
+                                <a class="genre-oval" th:classappend="${genre.getStyleClass()}"
+                                   th:href="@{/search(type='BOOK', genres=${genre})}"
+                                   th:text="${genre.displayName}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <script th:src="@{/js/genre-expand.js}"></script>
+                </div>
+                <div class="flex-row" th:if="${!#arrays.isEmpty(book.contentImages)}">
+                    <img th:alt="'preview-' + ${i.index}"
+                         th:each="content, i : ${book.contentImages}" th:src="${content}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

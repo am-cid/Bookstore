@@ -78,8 +78,8 @@ public class ReviewSeeder implements CommandLineRunner {
                 ),
                 createReview(
                         books.get(12),
-                        profiles.get(2),
-                        5,
+                        profiles.get(0),
+                        4,
                         "An epic adventure with rich world-building",
                         "An epic adventure with rich world-building that will transport you to Middle-earth. Tolkien’s genius shines through on every page, creating a vast and detailed history that makes the story so much more than a simple quest. The characters are beautifully developed, and the stakes feel incredibly high, making for a truly unforgettable reading experience."
                 ),

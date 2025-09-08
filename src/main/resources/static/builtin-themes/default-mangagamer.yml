@@ -23,6 +23,7 @@ base07: FFF2D3
 #   center content heading fill,
 #   base heading outer outline,
 #   themes section button text outline
+#   book view description button bg
 # 3
 #   body color,
 #   start color for interpolation,
@@ -44,6 +45,7 @@ base07: FFF2D3
 #   sidebar left heading font color,
 #   search button bg,
 #   center content inner div color
+#   book view description button text color
 # 7
 #   center content div bg,
 #   center content heading inner outline,

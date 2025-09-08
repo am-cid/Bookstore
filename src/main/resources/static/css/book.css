@@ -1,0 +1,76 @@
+#book {
+    margin: 10px;
+}
+
+#book .svg-text-heading {
+    font-size: 33px;
+}
+
+#book-image {
+    width: 227px;
+    height: 317px;
+    cursor: pointer;
+}
+
+#description-button {
+    align-self: center;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bolder;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin: 0;
+    background-color: var(--color-02, #F61590);
+    color: var(--color-06, #FFE2E7);
+    box-shadow: inset 2px 2px 5px var(--color-06, #FFE2E7),
+    1px 1px 2px var(--color-00, #A40E60);
+}
+
+#book-title {
+    font-size: 20px;
+    color: var(--color-01, #FF0000);
+}
+
+#book-details {
+    background-color: var(--color-06, #FFE2E7);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#book-details-review svg {
+    justify-self: center;
+    align-self: center;
+}
+
+#book-details-review .rating-score {
+    font-size: 10px;
+}
+
+#book-details-genres {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 5px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* DESCRIPTIVE */
+.grid-tcol-1fr-4fr {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.grid-gap-10px {
+    grid-gap: 10px;
+}
+
+.justify-self-end {
+    justify-self: end;
+}
+
+.justify-self-stretch {
+    justify-self: stretch;
+}
