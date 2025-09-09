@@ -8,7 +8,7 @@
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
 <!--/*@thymesVar id="book" type="com.simple.Bookstore.Book.BookSearchResultDTO"*/-->
-<!--/*@thymesVar id="review" type="org.springframework.data.domain.Page<com.simple.Bookstore.Review.ReviewResponseDTO>"*/-->
+<!--/*@thymesVar id="reviews" type="org.springframework.data.domain.Page<com.simple.Bookstore.Review.ReviewResponseDTO>"*/-->
 <!--/*@thymesVar id="savedBookIds" type="java.util.List<java.lang.Long>"*/-->
 
 
@@ -49,7 +49,7 @@
                                 <div class="flex-row gap-10px">
                                     <p class="margin-0" th:text="${book.averageRating} + ' out of 5'"></p>
                                     <p class="margin-0" th:if="${book.averageRating}">
-                                        (<a class="margin-0" href="#reviews" th:text="${review.getNumberOfElements()} + ' reviews'"></a>)
+                                        (<a class="margin-0" href="#book-reviews-div" th:text="${reviews.getNumberOfElements()} + ' reviews'"></a>)
                                     </p>
                                 </div>
                             </div>
@@ -118,6 +118,36 @@
             <div th:replace="~{fragments/svg-fragments/heading-strikethrough-behind ::
                     svgHeading('Description', 620, 24, 244)}"></div>
             <p th:text="${book.description}"></p>
+        </div>
+
+        <div class="flex-column" id="book-reviews-div">
+            <div class="flex-row space-between">
+                <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Reviews', 1, 33)}"></div>
+                <div th:replace="~{fragments/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
+            </div>
+            <div class="flex-column gap-10px" id="book-reviews">
+                <div class="flex-row w-100P" th:each="review, i : ${reviews}" th:id="'review-' + ${review.id}">
+                    <div class="w-100P flex-column">
+                        <div class="flex-row space-between gap-10px">
+                            <strong th:text="${review.title}"></strong>
+                            <p class="margin-0" th:title="${#temporals.format(review.date, 'dd MMMM yyyy HH:mm')}">
+                                Posted
+                                <span th:text="${T(com.simple.Bookstore.utils.PostedDateFormatter)
+                                     .formatTimeAgo(review.date, review.edited)}"></span>
+                            </p>
+                        </div>
+
+                        <div class="grid-tcol-1fr-4fr pad-0-15px">
+                            <svg th:replace="~{fragments/svg-fragments/rating-star ::
+                                ratingStar(${review.rating}, 105, 16, 5)}"></svg>
+                            <a th:href="@{/profile/{username}(username=${review.username})}"
+                               th:text="${review.userDisplayName}"></a>
+                            <p class="margin-0 col-span-2 text-justify" th:text="${review.content}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
         </div>
     </div>
 </div>

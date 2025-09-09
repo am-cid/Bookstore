@@ -46,7 +46,7 @@ public class BookViewController {
                 .map(BookSearchResultDTO::id)
                 .toList();
         model.addAttribute("book", bookResult.get());
-        model.addAttribute("review", reviews);
+        model.addAttribute("reviews", reviews);
         model.addAttribute("savedBookIds", savedBookIds);
         return "book";
     }

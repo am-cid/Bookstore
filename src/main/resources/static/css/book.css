@@ -132,7 +132,38 @@
     fill: var(--color-02, #F61590);
 }
 
+#book-reviews-div {
+    padding: 10px;
+    margin: 15px;
+    border-radius: 10px;
+}
+
+#book-reviews-div .svg-text-heading {
+    font-size: 32px;
+    margin-left: 20px;
+    margin-bottom: -14px;
+}
+
+#book-reviews {
+    background-color: var(--color-06, #FFE2E7);
+    border: 2px solid var(--color-00, #A40E60);
+    padding: 20px 10px 10px 10px;
+    border-radius: 10px;
+}
+
 /* DESCRIPTIVE */
+.align-items-end {
+    align-items: end;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.fs-12px {
+    font-size: 12px;
+}
+
 .grid-tcol-1fr-4fr {
     display: grid;
     grid-template-columns: 1fr 4fr;
@@ -150,6 +181,6 @@
     justify-self: stretch;
 }
 
-.flex-wrap {
-    flex-wrap: wrap;
+.text-justify {
+    text-align: justify;
 }
