@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Optional;
 
@@ -302,5 +303,46 @@ public class ProfileViewController {
 
         HeaderAndSidebarsModelAttributes.defaults(null, model, bookService, reviewService, themeService);
         return "profile-delete-result";
+    }
+
+    /// PROFILE THEMES
+
+    @PostMapping("/theme")
+    public RedirectView setTheme(
+            @RequestParam("themeId") Long themeId,
+            @AuthenticationPrincipal User user,
+            @RequestHeader("Referer") String referer
+    ) {
+        profileService.setTheme(themeId, user);
+        return new RedirectView(referer);
+    }
+
+    @PostMapping(path = "/theme", params = {"_method=delete"})
+    public RedirectView unsetThemeAndUseDefaultTheme(
+            @AuthenticationPrincipal User user,
+            @RequestHeader("Referer") String referer
+    ) {
+        profileService.unsetThemeAndUseDefaultTheme(user);
+        return new RedirectView(referer);
+    }
+
+    @PostMapping("/saved-themes")
+    public RedirectView saveTheme(
+            @RequestParam("themeId") Long themeId,
+            @AuthenticationPrincipal User user,
+            @RequestHeader("Referer") String referer
+    ) {
+        profileService.saveTheme(themeId, user);
+        return new RedirectView(referer);
+    }
+
+    @PostMapping(path = "/saved-themes", params = {"_method=delete"})
+    public RedirectView unsaveTheme(
+            @RequestParam("themeId") Long themeId,
+            @AuthenticationPrincipal User user,
+            @RequestHeader("Referer") String referer
+    ) {
+        profileService.unsaveTheme(themeId, user);
+        return new RedirectView(referer);
     }
 }
