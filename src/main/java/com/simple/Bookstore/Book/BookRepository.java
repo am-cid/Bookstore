@@ -92,7 +92,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             GROUP BY b.id
             HAVING (:rating IS NULL OR AVG(r.rating) >= :rating)
             """,
-            nativeQuery = true)
+            nativeQuery = true
+    )
     Page<BookSearchResultProjection> searchBooks(
             @Param("query") String query,
             @Param("rating") Double rating,
@@ -112,6 +113,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id
             GROUP BY b.id
-            """, nativeQuery = true)
+            """, nativeQuery = true
+    )
     Page<BookSearchResultProjection> findAllAsPage(Pageable pageable);
 }

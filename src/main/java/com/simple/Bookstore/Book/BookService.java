@@ -1,6 +1,7 @@
 package com.simple.Bookstore.Book;
 
 import com.simple.Bookstore.Genre.Genre;
+import com.simple.Bookstore.User.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,6 +17,8 @@ public interface BookService {
     List<BookSearchResultDTO> findTopNRatedBooks(int n);
 
     List<BookSearchResultDTO> findRelevantBooks(int limit);
+
+    List<BookSearchResultDTO> findSavedBooks(User user);
 
     Optional<BookSearchResultDTO> findBookById(Long id);
 

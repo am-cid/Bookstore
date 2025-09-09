@@ -1,5 +1,8 @@
 package com.simple.Bookstore.Profile;
 
+import com.simple.Bookstore.Book.Book;
+import com.simple.Bookstore.Book.BookRepository;
+import com.simple.Bookstore.Exceptions.BookNotFoundException;
 import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
 import com.simple.Bookstore.Exceptions.UnauthorizedException;
 import com.simple.Bookstore.Exceptions.UserNotFoundException;
@@ -18,8 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
-    private final ThemeRepository themeRepository;
     private final UserRepository userRepository;
+    private final ThemeRepository themeRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public ProfileResponseDTO findOwn(User user) throws UnauthorizedException {
@@ -118,6 +122,41 @@ public class ProfileServiceImpl implements ProfileService {
         Profile savedProfile = profileRepository.save(profile);
         theme.getSavedByProfiles().remove(savedProfile);
         themeRepository.save(theme);
+    }
+
+    @Override
+    @Transactional
+    public ProfileResponseDTO saveBook(Long id, User user) throws UnauthorizedException, BookNotFoundException {
+        Book book = bookRepository
+                .findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepository.findById(user.getId()).get();
+        Profile profile = managedUser.getProfile();
+        profile.getSavedBooks().add(book);
+        Profile savedProfile = profileRepository.save(profile);
+        book.getSavedByProfiles().add(savedProfile);
+        bookRepository.save(book);
+        return ProfileMapper.profileToResponseDTO(savedProfile);
+    }
+
+    @Override
+    @Transactional
+    public void unsaveBook(Long id, User user) throws UnauthorizedException, BookNotFoundException {
+        Book book = bookRepository
+                .findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepository.findById(user.getId()).get();
+        Profile profile = managedUser.getProfile();
+        profile.getSavedBooks().remove(book);
+        Profile savedProfile = profileRepository.save(profile);
+        book.getSavedByProfiles().remove(savedProfile);
+        bookRepository.save(book);
     }
 
     @Override

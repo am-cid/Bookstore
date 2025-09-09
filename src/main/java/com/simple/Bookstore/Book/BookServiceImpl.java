@@ -2,6 +2,8 @@ package com.simple.Bookstore.Book;
 
 import com.simple.Bookstore.Exceptions.BookNotFoundException;
 import com.simple.Bookstore.Genre.Genre;
+import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.User.UserRepository;
 import com.simple.Bookstore.utils.BookMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ public class BookServiceImpl implements BookService {
     private static final double REVIEW_COUNT_WEIGHT = 0.20;
     private static final double DATE_WEIGHT = 0.10;
     private final BookRepository bookRepo;
+    private final UserRepository userRepo;
 
     @Override
     public List<BookSearchResultDTO> findAllBooks() {
@@ -85,6 +88,23 @@ public class BookServiceImpl implements BookService {
                 .map(projection -> BookMapper.relevancyProjectionToDTO(projection, bookRepo))
                 .toList()
                 .subList(0, limit);
+    }
+
+    @Override
+    @Transactional
+    public List<BookSearchResultDTO> findSavedBooks(User user) {
+        if (user == null)
+            return List.of();
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepo.findById(user.getId()).get();
+        return managedUser
+                .getProfile()
+                .getSavedBooks()
+                .stream()
+                .map(BookMapper::bookToSearchResultDTO)
+                .toList();
     }
 
     @Override
@@ -155,8 +175,8 @@ public class BookServiceImpl implements BookService {
         double normalizedDate = Math.max(0.0, 1.0 - (daysSincePublished / 365.0));
 
         return (normalizedRating * RATING_WEIGHT) +
-               (normalizedReviewCount * REVIEW_COUNT_WEIGHT) +
-               (normalizedDate * DATE_WEIGHT);
+                (normalizedReviewCount * REVIEW_COUNT_WEIGHT) +
+                (normalizedDate * DATE_WEIGHT);
     }
 
     private void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO newBook) {
