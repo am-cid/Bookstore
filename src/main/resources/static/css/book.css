@@ -36,6 +36,7 @@
     background-color: var(--color-06, #FFE2E7);
     border-radius: 10px;
     padding: 10px;
+    height: fit-content;
 }
 
 #book-details-review svg {
@@ -56,6 +57,80 @@
     padding: 0;
 }
 
+#save-book {
+    align-self: center;
+}
+
+#save-book button {
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: var(--color-04, #FFD376);
+}
+
+#save-book button .svg-text-heading {
+    font-size: 18px;
+}
+
+#save-book button .svg-text-heading .text-outline-outer {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--font-color, black);
+    stroke-linejoin: round;
+    stroke-width: 8;
+}
+
+#save-book button .svg-text-heading .text-outline-inner {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-04, #FFD376);
+    stroke-linejoin: round;
+    stroke-width: 4;
+}
+
+#save-book button .svg-text-heading .text-fill {
+    fill: var(--font-color, black);
+}
+
+#book-description {
+    align-items: center;
+    background-color: var(--color-06, #FFE2E7);
+    padding: 10px;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+#book-description p {
+    text-align: justify;
+}
+
+#book-description .svg-text-heading {
+    font-size: 24px;
+    text-align: center;
+}
+
+#book-description .svg-text-heading .text-underline-outline {
+    stroke: var(--color-02, #F61590);
+    stroke-width: 8;
+    filter: blur(2px);
+}
+
+#book-description .svg-text-heading .text-underline {
+    stroke: var(--color-02, #F61590);
+    stroke-width: 4;
+    filter: blur(1px);
+}
+
+#book-description .svg-text-heading .text-outline {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-06, #FFE2E7);
+    stroke-linejoin: round;
+    stroke-width: 4;
+}
+
+#book-description .svg-text-heading .text-fill {
+    fill: var(--color-02, #F61590);
+}
 
 /* DESCRIPTIVE */
 .grid-tcol-1fr-4fr {
@@ -73,4 +148,8 @@
 
 .justify-self-stretch {
     justify-self: stretch;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
 }
