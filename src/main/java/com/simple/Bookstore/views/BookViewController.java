@@ -2,6 +2,7 @@ package com.simple.Bookstore.views;
 
 import com.simple.Bookstore.Book.BookSearchResultDTO;
 import com.simple.Bookstore.Book.BookService;
+import com.simple.Bookstore.Profile.ProfileService;
 import com.simple.Bookstore.Review.ReviewResponseDTO;
 import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Theme.ThemeService;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -24,6 +26,7 @@ public class BookViewController {
     private final BookService bookService;
     private final ReviewService reviewService;
     private final ThemeService themeService;
+    private final ProfileService profileService;
 
     @GetMapping("/books/{bookId}")
     public String getBook(
@@ -38,8 +41,13 @@ public class BookViewController {
             // TODO: redirect to unknown book page
             return "redirect:/";
         Page<ReviewResponseDTO> reviews = reviewService.findAllReviewsByBookIdAsPage(bookId, pageable);
+        List<Long> savedBookIds = bookService.findSavedBooks(user)
+                .stream()
+                .map(BookSearchResultDTO::id)
+                .toList();
         model.addAttribute("book", bookResult.get());
         model.addAttribute("review", reviews);
+        model.addAttribute("savedBookIds", savedBookIds);
         return "book";
     }
 }

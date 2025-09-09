@@ -345,4 +345,26 @@ public class ProfileViewController {
         profileService.unsaveTheme(themeId, user);
         return new RedirectView(referer);
     }
+
+    /// PROFILE BOOKS
+
+    @PostMapping("/saved-books")
+    public RedirectView saveBook(
+            @RequestParam("bookId") Long bookId,
+            @AuthenticationPrincipal User user,
+            @RequestHeader("Referer") String referer
+    ) {
+        profileService.saveBook(bookId, user);
+        return new RedirectView(referer);
+    }
+
+    @PostMapping(path = "/saved-books", params = {"_method=delete"})
+    public RedirectView unsaveBook(
+            @RequestParam("bookId") Long bookId,
+            @AuthenticationPrincipal User user,
+            @RequestHeader("Referer") String referer
+    ) {
+        profileService.unsaveBook(bookId, user);
+        return new RedirectView(referer);
+    }
 }
