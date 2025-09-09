@@ -12,8 +12,8 @@
 
 
 <div id="main-content" th:fragment="main-content">
-    <div class="flex-column" id="book">
-        <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading('Title Information', 280, 20)}"></div>
+    <div class="flex-column gap-10px" id="book">
+        <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading('Title Information', 280, 20, 6)}"></div>
         <div class="flex-row gap-10px">
             <div class="flex-column gap-10px">
                 <img id="book-image" onclick="toggleCover(this)"

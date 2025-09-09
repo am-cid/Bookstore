@@ -3,24 +3,24 @@
 <body>
 
 <div style="z-index: 9999; display: inline-block; line-height: 1;"
-     th:fragment="svgHeading(text, viewWidth, viewHeight)">
+     th:fragment="svgHeading(text, viewWidth, viewHeight, textX)">
     <svg class="svg-text-heading" preserveAspectRatio="xMinYMid meet"
          style="overflow:visible; height:1em;"
          th:attr="viewBox='0 0 ' +  ${viewWidth} + ' ' + ${viewHeight}"
          xmlns="http://www.w3.org/2000/svg">
         <!-- horizontal line behind text -->
-        <line class="text-underline-outline" x1="0" x2="340" y1="14" y2="14" />
-        <line class="text-underline" x1="0" x2="340" y1="14" y2="14" />
+        <line class="text-underline-outline" th:x2="${viewWidth}" x1="0" y1="14" y2="14" />
+        <line class="text-underline" th:x2="${viewWidth}" x1="0" y1="14" y2="14" />
         <!-- outline -->
         <text class="text-outline"
               th:text="${text}"
-              x="35"
+              th:x="${textX}"
               y="0">
         </text>
         <!-- fill -->
         <text class="text-fill"
               th:text="${text}"
-              x="35"
+              th:x="${textX}"
               y="0">
         </text>
     </svg>
