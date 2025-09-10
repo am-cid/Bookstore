@@ -98,12 +98,32 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query(value = """
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
                 b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
-                u.username as username, p.display_name as userDisplayName
+                u.username as username, p.display_name as userDisplayName,
+                ARRAY_AGG(c_limited.id) as commentIds,
+                ARRAY_AGG(c_limited.content) as commentContents,
+                ARRAY_AGG(c_limited.date) as commentDates,
+                ARRAY_AGG(c_limited.edited) as commentEdited,
+                ARRAY_AGG(c_u.username) as commentUsernames,
+                ARRAY_AGG(c_p.display_name) as commentUserDisplayNames
             FROM review r
             LEFT JOIN book b ON r.book_id = b.id
             LEFT JOIN profile p ON r.profile_id = p.id
             LEFT JOIN users u ON p.user_id = u.id
+            -- subquery to limit queries comments since in the book view, reviews should only
+            -- contain 2 comments with "see more" to look at all comments.
+            LEFT JOIN LATERAL (
+                SELECT c.id, c.content, c.date, c.edited, c.profile_id
+                FROM comment c
+                WHERE c.review_id = r.id
+                ORDER BY c.date, c.id
+                LIMIT 2
+            ) as c_limited ON true
+            LEFT JOIN profile c_p ON c_limited.profile_id = c_p.id
+            LEFT JOIN users c_u ON c_p.user_id = c_u.id
             WHERE r.book_id = :bookId
+            GROUP BY r.id, r.title, r.content, r.rating, r.date, r.edited,
+                b.id, b.title, b.author, b.front_image,
+                u.username, p.display_name
             ORDER BY r.date DESC, r.id DESC
             """, countQuery = """
             SELECT COUNT(r.id)

@@ -1,6 +1,9 @@
 package com.simple.Bookstore.Review;
 
+import com.simple.Bookstore.Comment.CommentReviewViewResponseDTO;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ReviewResponseDTO(
         Long id,
@@ -14,6 +17,7 @@ public record ReviewResponseDTO(
         String bookAuthor,
         String bookFrontImage,
         String username,
-        String userDisplayName
+        String userDisplayName,
+        List<CommentReviewViewResponseDTO> comments
 ) {
 }

@@ -1,5 +1,6 @@
 package com.simple.Bookstore.Review;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public interface ReviewProjection {
@@ -13,7 +14,7 @@ public interface ReviewProjection {
 
     LocalDateTime getDate();
 
-    boolean getEdited();
+    Boolean getEdited();
 
     Long getBookId();
 
@@ -27,4 +28,15 @@ public interface ReviewProjection {
 
     String getUserDisplayName();
 
+    Long[] getCommentIds();
+
+    String[] getCommentContents();
+
+    Timestamp[] getCommentDates();
+
+    Boolean[] getCommentEdited();
+
+    String[] getCommentUsernames();
+
+    String[] getCommentUserDisplayNames();
 }

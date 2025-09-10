@@ -22,8 +22,19 @@ public class CommentMapper {
         );
     }
 
-    public static CommentViewResponseDTO viewProjectionToViewResponseDTO(CommentViewProjection projection) {
-        return new CommentViewResponseDTO(
+    public static CommentReviewViewResponseDTO commentToReviewViewResponseDTO(Comment comment) {
+        return new CommentReviewViewResponseDTO(
+                comment.getId(),
+                comment.getContent(),
+                comment.getDate(),
+                comment.isEdited(),
+                comment.getProfile().getUser().getUsername(),
+                comment.getProfile().getDisplayName()
+        );
+    }
+
+    public static CommentProfileViewResponseDTO viewProjectionToViewResponseDTO(CommentProfileViewProjection projection) {
+        return new CommentProfileViewResponseDTO(
                 projection.getId(),
                 projection.getContent(),
                 projection.getDate(),
