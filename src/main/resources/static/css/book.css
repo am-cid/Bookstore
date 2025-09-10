@@ -48,15 +48,6 @@
     font-size: 10px;
 }
 
-#book-details-genres {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    gap: 5px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
 #save-book {
     align-self: center;
 }

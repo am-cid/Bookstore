@@ -45,7 +45,7 @@
                             <strong>Reviews:</strong>
                             <div class="grid-tcol-1fr-4fr grid-gap-10px" id="book-details-review">
                                 <svg th:replace="~{fragments/svg-fragments/rating-star ::
-                        ratingStar(${book.averageRating}, 66, 12, 5)}"></svg>
+                                    ratingStar(${book.averageRating}, 66, 12, 5)}"></svg>
                                 <div class="flex-row gap-10px">
                                     <p class="margin-0" th:text="${book.averageRating} + ' out of 5'"></p>
                                     <p class="margin-0" th:if="${book.averageRating}">
@@ -59,22 +59,7 @@
                         <p class="margin-0" th:text="${#temporals.format(book.date, 'dd MMMM yyyy')}"></p>
 
                         <strong>Genres:</strong>
-                        <div class="list-item-details">
-                            <ul id="book-details-genres" th:data-cutoff="${cutoff}" th:with="cutoff=3">
-                                <li th:each="genre, iter : ${#lists.toList(book.genres)}"
-                                    th:if="${iter.index < cutoff}">
-                                    <a class="genre-oval" th:classappend="${genre.getStyleClass()}"
-                                       th:href="@{/search(type='BOOK', genres=${genre})}"
-                                       th:text="${genre.displayName}"></a>
-                                </li>
-                                <li class="hidden-genre" th:each="genre, iter : ${#lists.toList(book.genres)}"
-                                    th:if="${iter.index >= cutoff}">
-                                    <a class="genre-oval" th:classappend="${genre.getStyleClass()}"
-                                       th:href="@{/search(type='BOOK', genres=${genre})}"
-                                       th:text="${genre.displayName}"></a>
-                                </li>
-                            </ul>
-                        </div>
+                        <ul th:replace="~{fragments/components/genre-list :: genreList(${book.genres}, 3)}"></ul>
                         <script th:src="@{/js/genre-expand.js}"></script>
                     </div>
                 </div>

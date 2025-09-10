@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="genres" type="java.util.Set<com.simple.Bookstore.Genre.Genre>"*/-->
+<!--/*@thymesVar id="cutoff" type="java.lang.Integer"*/-->
+
+<ul class="genres-ul" th:data-cutoff="${cutoff}" th:fragment="genreList(genres, cutoff)">
+    <li th:each="genre, i : ${#lists.toList(genres)}"
+        th:if="${i.index < cutoff}">
+        <a class="genre-oval" th:classappend="${genre.getStyleClass()}"
+           th:href="@{/search(type='BOOK', genres=${genre})}"
+           th:text="${genre.displayName}"></a>
+    </li>
+    <li class="hidden-genre" th:each="hiddenGenre, i : ${#lists.toList(genres)}"
+        th:if="${i.index >= cutoff}">
+        <a class="genre-oval" th:classappend="${hiddenGenre.getStyleClass()}"
+           th:href="@{/search(type='BOOK', genres=${hiddenGenre})}"
+           th:text="${hiddenGenre.displayName}"></a>
+    </li>
+</ul>
+
+</body>
+</html>

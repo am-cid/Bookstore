@@ -6,6 +6,7 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
+<!--/*@thymesVar id="results" type="org.springframework.data.domain.Page<com.simple.Bookstore.Book.BookSearchResultDTO>"*/-->
 
 <div class="search-result-content-div" th:fragment="search-results">
     <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Search:Book', 1, 33)}"></div>
@@ -35,25 +36,12 @@
                     <strong>Description: </strong>
                     <p class="search-result-desc" th:text="${book.description}"></p>
                     <strong>Genre/s: </strong>
-                    <ul class="search-result-genres" th:data-cutoff="${cutoff}" th:with="cutoff=5">
-                        <li th:each="genre, iter : ${#lists.toList(book.genres)}"
-                            th:if="${iter.index < cutoff}">
-                            <a class="genre-oval" th:classappend="${genre.getStyleClass()}"
-                               th:href="@{/search(type='BOOK', genres=${genre})}"
-                               th:text="${genre.displayName}"></a>
-                        </li>
-                        <li class="hidden-genre" th:each="genre, iter : ${#lists.toList(book.genres)}"
-                            th:if="${iter.index >= cutoff}">
-                            <a class="genre-oval" th:classappend="${genre.getStyleClass()}"
-                               th:href="@{/search(type='BOOK', genres=${genre})}"
-                               th:text="${genre.displayName}"></a>
-                        </li>
-                    </ul>
+                    <ul th:replace="~{fragments/components/genre-list :: genreList(${book.genres}, 5)}"></ul>
                 </div>
             </div>
         </div>
+        <script th:src="@{/js/genre-expand.js}"></script>
     </div>
-    <script th:src="@{/js/genre-expand.js}"></script>
 </div>
 
 </body>

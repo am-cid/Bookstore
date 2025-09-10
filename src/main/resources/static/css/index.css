@@ -95,16 +95,6 @@
     margin: 0;
 }
 
-.list-item-details ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    max-width: 200px;
-    gap: 5px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
 /*DESCRIPTIVE*/
 .w-704px {
     width: 704px;
