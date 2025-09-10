@@ -37,14 +37,14 @@ public class BookMapper {
                 projection.getDate(),
                 projection.getGenres() == null
                         ? null
-                        : Arrays.stream(projection.getGenres().split(",")).map(Genre::valueOf).collect(Collectors.toSet()),
+                        : Arrays.stream(projection.getGenres()).map(Genre::valueOf).collect(Collectors.toSet()),
                 projection.getAverageRating(),
                 projection.getFrontImage(),
                 projection.getBackImage(),
                 projection.getSpineImage(),
                 projection.getContentImages() == null
                         ? null
-                        : Arrays.stream(projection.getContentImages().split(",")).collect(Collectors.toSet())
+                        : Arrays.stream(projection.getContentImages()).collect(Collectors.toSet())
         );
     }
 

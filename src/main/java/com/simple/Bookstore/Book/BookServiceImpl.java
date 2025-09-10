@@ -13,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -145,11 +142,15 @@ public class BookServiceImpl implements BookService {
             Double rating,
             Pageable pageable
     ) {
-        Set<Genre> validGenres = genres.orElse(new HashSet<>());
+        Set<String> validGenres = genres.orElse(new HashSet<>())
+                .stream()
+                .filter(Objects::nonNull)
+                .map(Genre::name)
+                .collect(Collectors.toSet());
         Page<BookSearchResultProjection> bookPage = bookRepo.searchBooks(
                 query,
                 rating,
-                validGenres.stream().map(Genre::name).collect(Collectors.toSet()),
+                validGenres,
                 validGenres.size(),
                 pageable
         );

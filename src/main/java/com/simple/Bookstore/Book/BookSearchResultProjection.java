@@ -22,9 +22,9 @@ public interface BookSearchResultProjection {
     Long getId();
 
     ///  Comma separated string
-    String getGenres();
+    String[] getGenres();
 
     ///  Comma separated string
-    String getContentImages();
+    String[] getContentImages();
 
 }

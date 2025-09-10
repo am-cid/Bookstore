@@ -53,14 +53,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value = """
             SELECT b.id, b.title, b.author, b.description, b.date,
-            b.front_image, b.back_image, b.spine_image,
-                        AVG(r.rating) AS averageRating,
-                        (SELECT STRING_AGG(bg_all.genre, ',') AS genres
-                         FROM book_genres bg_all
-                         WHERE bg_all.book_id = b.id) AS genres
+                b.front_image, b.back_image, b.spine_image,
+                AVG(r.rating) AS averageRating,
+                ARRAY_AGG(bg.genre) AS genres,
+                ARRAY_AGG(bci.image_url) AS contentImages
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id
             LEFT JOIN book_genres bg ON b.id = bg.book_id
+            LEFT JOIN book_content_images bci ON b.id = bci.book_id
             WHERE b.id IN (
                 SELECT bg_filter.book_id
                 FROM book_genres bg_filter
