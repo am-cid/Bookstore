@@ -1,18 +1,17 @@
-package com.simple.Bookstore.Review;
+package com.simple.Bookstore.Comment;
 
 import java.time.LocalDateTime;
 
-public record ReviewViewResponseDTO(
+public record CommentProfileViewResponseDTO(
         Long id,
-        String title,
         String content,
-        Integer rating,
         LocalDateTime date,
         boolean edited,
+        Long reviewId,
+        String reviewTitle,
+        String reviewerUsername,
+        String reviewerDisplayName,
         Long bookId,
-        String bookTitle,
-        String bookAuthor,
-        String bookFrontImage,
         String username,
         String userDisplayName,
         Integer pageNumber

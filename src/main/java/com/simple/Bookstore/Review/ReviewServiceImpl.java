@@ -32,7 +32,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewViewResponseDTO> findLatestNReviews(int n) {
+    public List<ReviewProfileViewResponseDTO> findLatestNReviews(int n) {
         return reviewRepository
                 .findTopNByOrderByIdDesc(n, PagingConstants.DEFAULT_PAGE_SIZE)
                 .stream()
@@ -41,8 +41,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Optional<ReviewViewResponseDTO> findLatestReview() {
-        List<ReviewViewResponseDTO> latestNReviews = findLatestNReviews(1);
+    public Optional<ReviewProfileViewResponseDTO> findLatestReview() {
+        List<ReviewProfileViewResponseDTO> latestNReviews = findLatestNReviews(1);
         if (latestNReviews.isEmpty())
             return Optional.empty();
         return Optional.of(latestNReviews.getFirst());
@@ -93,7 +93,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable) {
+    public Page<ReviewProfileViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable) {
         if (user == null)
             return Page.empty(pageable);
         return reviewRepository

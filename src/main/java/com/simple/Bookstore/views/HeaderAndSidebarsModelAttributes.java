@@ -2,8 +2,8 @@ package com.simple.Bookstore.views;
 
 import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Genre.Genre;
+import com.simple.Bookstore.Review.ReviewProfileViewResponseDTO;
 import com.simple.Bookstore.Review.ReviewService;
-import com.simple.Bookstore.Review.ReviewViewResponseDTO;
 import com.simple.Bookstore.Theme.ThemeResponseDTO;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
@@ -66,12 +66,12 @@ public class HeaderAndSidebarsModelAttributes {
         // left sidebar data
         model.addAttribute("genres", Arrays.stream(Genre.values()).toList());
         model.addAttribute("authors", bookService.findDistinctAuthors());
-        Optional<ReviewViewResponseDTO> latestReview = reviewService.findLatestReview(); // A new service method
+        Optional<ReviewProfileViewResponseDTO> latestReview = reviewService.findLatestReview(); // A new service method
         if (latestReview.isEmpty()) {
             model.addAttribute("_latestReview", null);
             model.addAttribute("_latestReviewDate", null);
         } else {
-            ReviewViewResponseDTO latestReviewDTO = latestReview.get();
+            ReviewProfileViewResponseDTO latestReviewDTO = latestReview.get();
             String formattedDate = PostedDateFormatter
                     .formatTimeAgo(latestReviewDTO.date(), latestReviewDTO.edited());
             model.addAttribute("_latestReview", latestReviewDTO);

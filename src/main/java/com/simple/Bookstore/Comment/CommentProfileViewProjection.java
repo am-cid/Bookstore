@@ -2,7 +2,7 @@ package com.simple.Bookstore.Comment;
 
 import java.time.LocalDateTime;
 
-public interface CommentViewProjection {
+public interface CommentProfileViewProjection {
     Long getId();
 
     String getContent();

@@ -2,7 +2,7 @@ package com.simple.Bookstore.Review;
 
 import java.time.LocalDateTime;
 
-public interface ReviewViewProjection {
+public interface ReviewProfileViewProjection {
     Long getId();
 
     String getTitle();

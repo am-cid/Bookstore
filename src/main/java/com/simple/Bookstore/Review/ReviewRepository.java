@@ -32,7 +32,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             LIMIT :n
             """,
             nativeQuery = true)
-    List<ReviewViewProjection> findTopNByOrderByIdDesc(
+    List<ReviewProfileViewProjection> findTopNByOrderByIdDesc(
             @Param("pageSize") Integer pageSize,
             int n
     );
@@ -60,7 +60,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             """,
             nativeQuery = true
     )
-    Page<ReviewViewProjection> findAllReviewsByProfileId(
+    Page<ReviewProfileViewProjection> findAllReviewsByProfileId(
             @Param("profileId") Long profileId,
             @Param("pageSize") Integer pageSize,
             Pageable pageable
@@ -89,7 +89,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             """,
             nativeQuery = true
     )
-    Page<ReviewViewProjection> findAllReviewsByBookId(
+    Page<ReviewProfileViewProjection> findAllReviewsByBookId(
             @Param("bookId") Long bookId,
             @Param("pageSize") Integer pageSize,
             Pageable pageable

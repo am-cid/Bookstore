@@ -1,11 +1,11 @@
 package com.simple.Bookstore.views.Profile;
 
+import com.simple.Bookstore.Comment.CommentProfileViewResponseDTO;
 import com.simple.Bookstore.Comment.CommentService;
-import com.simple.Bookstore.Comment.CommentViewResponseDTO;
 import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
 import com.simple.Bookstore.Profile.ProfileResponseDTO;
+import com.simple.Bookstore.Review.ReviewProfileViewResponseDTO;
 import com.simple.Bookstore.Review.ReviewService;
-import com.simple.Bookstore.Review.ReviewViewResponseDTO;
 import com.simple.Bookstore.Theme.ThemeResponseDTO;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
@@ -66,7 +66,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             return new Result.Err<>(accessResult.unwrapErr());
         ProfileViewModel profileViewModel = accessResult.unwrap();
 
-        Page<ReviewViewResponseDTO> reviews = reviewService.findAllReviewsByUser(profileViewModel.user(), pageable);
+        Page<ReviewProfileViewResponseDTO> reviews = reviewService.findAllReviewsByUser(profileViewModel.user(), pageable);
         return new Result.Ok<>(Pair.of(
                 profileViewModel,
                 new ProfileViewReviewsModel(reviews)
@@ -84,7 +84,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             return new Result.Err<>(accessResult.unwrapErr());
         ProfileViewModel profileViewModel = accessResult.unwrap();
 
-        Page<CommentViewResponseDTO> comments = commentService.findAllCommentsByUser(profileViewModel.user(), pageable);
+        Page<CommentProfileViewResponseDTO> comments = commentService.findAllCommentsByUser(profileViewModel.user(), pageable);
         return new Result.Ok<>(Pair.of(
                 profileViewModel,
                 new ProfileViewCommentsModel(comments)

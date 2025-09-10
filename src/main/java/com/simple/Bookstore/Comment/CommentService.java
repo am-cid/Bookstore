@@ -17,5 +17,5 @@ public interface CommentService {
 
     void deleteComment(User user, Long id);
 
-    Page<CommentViewResponseDTO> findAllCommentsByUser(User user, Pageable pageable);
+    Page<CommentProfileViewResponseDTO> findAllCommentsByUser(User user, Pageable pageable);
 }

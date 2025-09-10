@@ -39,8 +39,8 @@ public class ReviewMapper {
         );
     }
 
-    public static ReviewViewResponseDTO viewProjectionToViewResponseDTO(ReviewViewProjection projection) {
-        return new ReviewViewResponseDTO(
+    public static ReviewProfileViewResponseDTO viewProjectionToViewResponseDTO(ReviewProfileViewProjection projection) {
+        return new ReviewProfileViewResponseDTO(
                 projection.getId(),
                 projection.getTitle(),
                 projection.getContent(),

@@ -40,7 +40,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             WHERE c.profile_id = :profileId
             """,
             nativeQuery = true)
-    Page<CommentViewProjection> findAllCommentsByProfileId(
+    Page<CommentProfileViewProjection> findAllCommentsByProfileId(
             @Param("profileId") Long profileId,
             @Param("pageSize") Integer pageSize,
             Pageable pageable
