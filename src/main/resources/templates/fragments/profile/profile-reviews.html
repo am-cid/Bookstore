@@ -48,7 +48,7 @@
                 ratingStar(${review.rating}, 105, 16, 5)}"></svg>
                 <b th:text="${review.title}"></b>
                 <p class="margin-0 col-span-2" th:text="${review.content}"></p>
-                <p class="margin-0 col-span-2 text-align-end">
+                <p class="margin-0 col-span-2 text-end">
                     - <a th:href="@{/profile/{username}(username=${review.username})}"
                          th:text="${review.userDisplayName}"></a>
                 </p>

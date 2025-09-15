@@ -7,28 +7,21 @@
 </head>
 <body>
 
+<!--/*@thymesVar id="bannerBooks" type="java.util.List<com.simple.Bookstore.Book.BookPreviewDTO>"*/-->
+
 <div id="sliding-banner" th:fragment="sliding-banner" th:if="${bannerBooks != null and !#lists.isEmpty(bannerBooks)}">
     <div id="sliding-banner-images">
         <ul class="flex-row" >
             <li th:each="book : ${bannerBooks}">
                 <a th:href="@{/books/{id}(id=${book.id})}">
                     <img th:alt="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"
-                         th:src="${#strings.isEmpty(book.frontImage) ?
-                                    (#strings.isEmpty(book.backImage) ?
-                                        (#strings.isEmpty(book.spineImage) ?
-                                            (#lists.isEmpty(book.contentImages) ?
-                                                'https://placehold.co/700x200?text=' +
-                                                (#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title)
-                                                + '%0A' +
-                                                (#strings.isEmpty(book.author) ? '' : book.author)
-                                                : #lists.first(book.contentImages)
-                                            )
-                                            : book.spineImage
-                                        )
-                                        : book.backImage
-                                    )
-                                    : book.frontImage
-                                }">
+                         th:src="${#strings.isEmpty(book.frontImage)
+                             ? (
+                                 'https://placehold.co/700x200?text='
+                                     + (#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title)
+                                     + '%0A' + (#strings.isEmpty(book.author) ? '' : book.author)
+                             )
+                             : book.frontImage}">
                 </a>
             </li>
         </ul>
@@ -37,20 +30,12 @@
         <ul class="flex-row" >
             <li th:each="book : ${bannerBooks}">
                 <img th:alt="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"
-                     th:src="${#strings.isEmpty(book.frontImage) ?
-                                (#strings.isEmpty(book.backImage) ?
-                                    (#strings.isEmpty(book.spineImage) ?
-                                        (#lists.isEmpty(book.contentImages) ?
-                                            'https://placehold.co/80x20?text=' +
-                                            (#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title)
-                                            : #lists.first(book.contentImages)
-                                        )
-                                        : book.spineImage
-                                    )
-                                    : book.backImage
-                                )
-                                : book.frontImage
-                            }">
+                     th:src="${#strings.isEmpty(book.frontImage)
+                         ? (
+                             'https://placehold.co/80x20?text='
+                                 + (#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title)
+                         )
+                         : book.frontImage}">
             </li>
         </ul>
     </div>

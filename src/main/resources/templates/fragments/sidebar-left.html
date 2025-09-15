@@ -24,11 +24,11 @@
                    th:text="${author}"></a>
             </th:block>
             <div th:if="${#lists.size(authors) > 10}">
-                <a class="sidebar-left-list-item float-right show-more-link more-less-link"
+                <a class="sidebar-left-list-item float-right show-more-link cursor-pointer italic"
                    href="javascript:toggleVisibility('authors-list', 'show-more-link', 'show-less-link')">
                     More...
                 </a>
-                <a class="sidebar-left-list-item float-right show-less-link more-less-link"
+                <a class="sidebar-left-list-item float-right show-less-link cursor-pointer italic"
                    href="javascript:toggleVisibility('authors-list', 'show-more-link', 'show-less-link')"
                    style="display: none">
                     Less...
@@ -47,11 +47,11 @@
                    th:text="${genre.displayName}"></a>
             </th:block>
             <div th:if="${#lists.size(genres) > 10}">
-                <a class="sidebar-left-list-item float-right show-more-link more-less-link"
+                <a class="sidebar-left-list-item float-right show-more-link cursor-pointer italic"
                    href="javascript:toggleVisibility('genres-list', 'show-more-link', 'show-less-link')">
                     More...
                 </a>
-                <a class="sidebar-left-list-item float-right show-less-link more-less-link"
+                <a class="sidebar-left-list-item float-right show-less-link cursor-pointer italic"
                    href="javascript:toggleVisibility('genres-list', 'show-more-link', 'show-less-link')"
                    style="display: none">
                     Less...

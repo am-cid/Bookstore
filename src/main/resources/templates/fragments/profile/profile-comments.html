@@ -38,7 +38,7 @@
             </div>
             <div class="flex-column space-between pad-0-15px">
                 <p class="margin-0" th:text="${comment.content}"></p>
-                <p class="margin-0 text-align-end">
+                <p class="margin-0 text-end">
                     - <a th:href="@{/profile/{username}(username=${comment.username})}"
                          th:text="${comment.userDisplayName}"></a>
                 </p>

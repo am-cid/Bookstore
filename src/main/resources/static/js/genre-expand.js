@@ -7,7 +7,8 @@ document.querySelectorAll(".genres-ul").forEach(ul => {
         const toggleLi = document.createElement("li");
         toggleLi.textContent = "More...";
         toggleLi.classList.add("toggle-genre");
-        toggleLi.classList.add("more-less-link");
+        toggleLi.classList.add("italic");
+        toggleLi.classList.add("cursor-pointer");
         toggleLi.classList.add("genre-oval");
         toggleLi.classList.add("genre-color-style-00");
         ul.appendChild(toggleLi);
