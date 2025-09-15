@@ -23,11 +23,13 @@ public class ReviewMapper {
                 review.getBook().getFrontImage(),
                 review.getProfile().getUser().getUsername(),
                 review.getProfile().getDisplayName(),
-                review.getComments()
+                review.getComments() == null
+                        ? null
+                        : review.getComments()
                         .stream()
                         .map(CommentMapper::commentToReviewViewResponseDTO)
                         .toList(),
-                review.getComments().size()
+                review.getComments() == null ? 0 : review.getComments().size()
         );
     }
 
@@ -86,7 +88,7 @@ public class ReviewMapper {
         review.setProfile(user.getProfile());
         review.setBook(book);
         review.setRating(request.rating());
-        review.setTitle(request.title());
+        review.setTitle(request.title() == null || request.title().isEmpty() ? book.getTitle() + " Review" : request.title());
         review.setContent(request.content());
         return review;
     }

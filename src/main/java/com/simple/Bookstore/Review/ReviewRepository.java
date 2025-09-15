@@ -160,5 +160,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             Pageable pageable
     );
 
+    List<Review> findByBookIdAndProfileId(Long bookId, Long profileId);
+
     Long countByBookId(Long bookId);
 }

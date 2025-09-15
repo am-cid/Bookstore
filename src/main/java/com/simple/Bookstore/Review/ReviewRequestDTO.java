@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 
 public record ReviewRequestDTO(
         @NotNull(message = "Rating must not be null.")
-        @DecimalMin(value = "0", message = "Rating must be at least 0 stars.")
+        @DecimalMin(value = "1", message = "Rating must be at least 1 star.")
         @DecimalMax(value = "5", message = "Rating must not exceed 5 stars.")
         Integer rating,
 
@@ -17,4 +17,14 @@ public record ReviewRequestDTO(
         @Size(max = 2000, message = "Stop yapping! 2000 chars only!")
         String content
 ) {
+    public static ReviewRequestDTO empty() {
+        return new ReviewRequestDTO(null, null, null);
+    }
+
+    /**
+     * @return whether the request is a blank request
+     */
+    public boolean isEmpty() {
+        return rating == null;
+    }
 }

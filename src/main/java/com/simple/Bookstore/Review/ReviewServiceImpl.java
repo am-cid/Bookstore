@@ -57,7 +57,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewResponseDTO createReview(User user, Long bookId, ReviewRequestDTO request) {
+    public ReviewResponseDTO createReview(
+            User user, Long bookId,
+            ReviewRequestDTO request
+    ) throws IllegalStateException {
+        if (isAlreadyReviewedByUser(bookId, user))
+            throw new IllegalStateException("This book is already reviewed by user");
+
         Book book = bookRepository
                 .findById(bookId)
                 .orElseThrow(() -> new BookNotFoundException(bookId));
@@ -95,6 +101,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Long countByBookId(Long bookId) {
         return reviewRepository.countByBookId(bookId);
+    }
+
+    @Override
+    public boolean isAlreadyReviewedByUser(Long bookId, User user) {
+        List<Review> result = reviewRepository.findByBookIdAndProfileId(bookId, user == null ? null : user.getProfile().getId());
+        return result != null && !result.isEmpty();
     }
 
     @Override
