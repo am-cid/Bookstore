@@ -11,13 +11,18 @@
     justify-self: end;
 }
 
-.profile-details input not .profile-details-checkbox
+.profile-details input not .profile-details-checkbox,
 .profile-details-value {
     justify-self: stretch;
 }
 
-.profile-details-checkbox {
+.profile-details-checkbox,
+.profile-details select {
     justify-self: start;
+}
+
+.profile-details textarea {
+    resize: vertical;
 }
 
 .required {

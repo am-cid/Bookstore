@@ -119,23 +119,32 @@
     fill: var(--color-02, #F61590);
 }
 
-#book-reviews-div {
+#book-reviews-div, #create-review-div {
     padding: 10px;
     margin: 15px;
     border-radius: 10px;
 }
 
-#book-reviews-div .svg-text-heading {
+#book-reviews-div .svg-text-heading,
+#create-review-div .svg-text-heading {
     font-size: 32px;
     margin-left: 20px;
     margin-bottom: -14px;
 }
 
+#book-reviews, #create-review {
+    padding: 20px 10px 10px 10px;
+    border-radius: 10px;
+}
+
 #book-reviews {
     background-color: var(--color-06, #FFE2E7);
     border: 2px solid var(--color-00, #A40E60);
-    padding: 20px 10px 10px 10px;
-    border-radius: 10px;
+}
+
+#create-review {
+    background-color: var(--color-04, #FFD376);
+    border: 2px solid var(--interpolated-color-17, #FCBC82);
 }
 
 /* DESCRIPTIVE */
