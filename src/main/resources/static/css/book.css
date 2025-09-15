@@ -90,10 +90,6 @@
     border-radius: 10px;
 }
 
-#book-description p {
-    text-align: justify;
-}
-
 #book-description .svg-text-heading {
     font-size: 24px;
     text-align: center;
@@ -143,6 +139,10 @@
 }
 
 /* DESCRIPTIVE */
+.align-self-start {
+    align-self: start;
+}
+
 .align-items-end {
     align-items: end;
 }
@@ -153,6 +153,10 @@
 
 .fs-12px {
     font-size: 12px;
+}
+
+.gap-5px {
+    gap: 5px;
 }
 
 .grid-tcol-1fr-4fr {
@@ -168,10 +172,19 @@
     justify-self: end;
 }
 
+.justify-self-start {
+    justify-self: start;
+}
+
 .justify-self-stretch {
     justify-self: stretch;
 }
 
 .text-justify {
     text-align: justify;
+}
+
+.link-style {
+    color: var(--link-color, blue);
+    text-decoration: underline;
 }

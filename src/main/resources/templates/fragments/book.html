@@ -102,10 +102,10 @@
         <div class="flex-column" id="book-description">
             <div th:replace="~{fragments/svg-fragments/heading-strikethrough-behind ::
                     svgHeading('Description', 620, 24, 244)}"></div>
-            <p th:text="${book.description}"></p>
+            <p class="text-justify" th:text="${book.description}"></p>
         </div>
 
-        <div class="flex-column" id="book-reviews-div">
+        <div class="flex-column" id="book-reviews-div" th:if="${reviews.hasContent()}">
             <div class="flex-row space-between">
                 <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Reviews', 1, 33)}"></div>
                 <div th:replace="~{fragments/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
@@ -125,9 +125,30 @@
                         <div class="grid-tcol-1fr-4fr pad-0-15px">
                             <svg th:replace="~{fragments/svg-fragments/rating-star ::
                                 ratingStar(${review.rating}, 105, 16, 5)}"></svg>
-                            <a th:href="@{/profile/{username}(username=${review.username})}"
+                            <a class="justify-self-start"
+                               th:href="@{/profile/{username}(username=${review.username})}"
                                th:text="${review.userDisplayName}"></a>
                             <p class="margin-0 col-span-2 text-justify" th:text="${review.content}"></p>
+                            <details class="col-span-2" th:if="${review.commentCount > 0}">
+                                <summary class="cursor-pointer link-style">Comments</summary>
+                                <div class="flex-column col-span-2 gap-5px">
+                                    <div class="grid-tcol-1fr-4fr pad-0-15px"
+                                         th:each="comment, i : ${review.comments}">
+                                        <a class="margin-0 justify-self-start"
+                                           th:href="@{/profile/{username}(username=${comment.username})}"
+                                           th:text="${comment.userDisplayName}"></a>
+                                        <p class="margin-0 justify-self-start"
+                                           th:text="${T(com.simple.Bookstore.utils.PostedDateFormatter)
+                                             .formatTimeAgo(comment.date, comment.edited)}"
+                                           th:title="${#temporals.format(comment.date, 'dd MMMM yyyy HH:mm')}"></p>
+                                        <p class="margin-0 col-span-2" th:text="${comment.content}"></p>
+                                    </div>
+                                </div>
+                                <a class="flex-row col-span-2 align-items-end" th:href="@{/book/{bookId}/reviews/{reviewId}(bookId=${book.id}, reviewId=${review.id})}"
+                                   th:if="${review.commentCount > 2}"
+                                   th:text="${'See all comments (' + review.commentCount + ')'}">
+                                </a>
+                            </details>
                         </div>
                     </div>
                 </div>
