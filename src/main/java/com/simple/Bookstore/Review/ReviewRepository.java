@@ -138,7 +138,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             LEFT JOIN users c_u ON c_p.user_id = c_u.id
             WHERE r.book_id = :bookId
                 AND (
-                    c_p.is_public = true
+                    p.is_public = true
                     OR (:profileId IS NOT NULL AND r.profile_id = :profileId)
                 )
             GROUP BY r.id, r.title, r.content, r.rating, r.date, r.edited,
@@ -148,9 +148,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             """, countQuery = """
             SELECT COUNT(r.id)
             FROM review r
+            LEFT JOIN profile p ON r.profile_id = p.id
             WHERE r.book_id = :bookId
                 AND (
-                    c_p.is_public = true
+                    p.is_public = true
                     OR (:profileId IS NOT NULL AND r.profile_id = :profileId)
                 )
             """)
