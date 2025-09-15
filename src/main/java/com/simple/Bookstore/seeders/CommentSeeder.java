@@ -29,6 +29,21 @@ public class CommentSeeder implements CommandLineRunner {
     @Value("${spring.profiles.active:dev}")
     private String activeProfile;
 
+    private static Comment createComment(
+            Review review,
+            Profile profile,
+            String content
+    ) {
+        Comment comment = new Comment();
+        comment.setReview(review);
+        comment.setProfile(profile);
+        comment.setContent(content);
+        comment.setDate(LocalDateTime.now());
+        comment.setEdited(false);
+        log.info("Seeded new comment for {}", review.getTitle());
+        return comment;
+    }
+
     @Override
     public void run(String... args) throws Exception {
         activeProfile = (activeProfile == null || activeProfile.isBlank()) ? "dev" : activeProfile;
@@ -45,28 +60,33 @@ public class CommentSeeder implements CommandLineRunner {
             return;
         }
 
-        Comment comment1 = new Comment();
-        comment1.setReview(reviews.get(0));
-        comment1.setProfile(profiles.get(1));
-        comment1.setContent("I completely agree! The world-building is fantastic.");
-        comment1.setDate(LocalDateTime.now());
-        comment1.setEdited(false);
-
-        Comment comment2 = new Comment();
-        comment2.setReview(reviews.get(1));
-        comment2.setProfile(profiles.get(0));
-        comment2.setContent("Couldn't have said it better myself. Tolkien is a genius.");
-        comment2.setDate(LocalDateTime.now());
-        comment2.setEdited(false);
-
-        Comment comment3 = new Comment();
-        comment3.setReview(reviews.get(1));
-        comment3.setProfile(profiles.get(2));
-        comment3.setContent("Amazing book, glad you enjoyed it!");
-        comment3.setDate(LocalDateTime.now());
-        comment3.setEdited(false);
-
-        commentRepo.saveAll(List.of(comment1, comment2, comment3));
+        commentRepo.saveAll(List.of(
+                createComment(
+                        reviews.get(0),
+                        profiles.get(1),
+                        "I completely agree! The world-building is fantastic."
+                ),
+                createComment(
+                        reviews.get(1),
+                        profiles.get(0),
+                        "Couldn't have said it better myself. Tolkien is a genius."
+                ),
+                createComment(
+                        reviews.get(1),
+                        profiles.get(2),
+                        "Amazing book, glad you enjoyed it!"
+                ),
+                createComment(
+                        reviews.get(1),
+                        profiles.get(1),
+                        "wowowowowow!"
+                ),
+                createComment(
+                        reviews.get(2),
+                        profiles.get(1),
+                        "Stop the yappachino!"
+                )
+        ));
         log.info("Seeded {} profileComments.", commentRepo.count());
     }
 }
