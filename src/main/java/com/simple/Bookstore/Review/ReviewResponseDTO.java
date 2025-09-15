@@ -18,6 +18,7 @@ public record ReviewResponseDTO(
         String bookFrontImage,
         String username,
         String userDisplayName,
-        List<CommentReviewViewResponseDTO> comments
+        List<CommentReviewViewResponseDTO> comments,
+        Integer commentCount
 ) {
 }

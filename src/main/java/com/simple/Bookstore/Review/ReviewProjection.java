@@ -28,6 +28,8 @@ public interface ReviewProjection {
 
     String getUserDisplayName();
 
+    Integer getCommentCount();
+
     Long[] getCommentIds();
 
     String[] getCommentContents();

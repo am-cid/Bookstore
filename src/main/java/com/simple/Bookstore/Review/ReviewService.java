@@ -24,5 +24,11 @@ public interface ReviewService {
 
     Page<ReviewProfileViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable);
 
-    Page<ReviewResponseDTO> findAllReviewsByBookIdAsPage(Long bookId, Pageable pageable);
+    /**
+     * @param bookId    id of book
+     * @param profileId may be null if user is anonymous
+     * @param pageable  pageable passed in through path params
+     * @return paged reviews
+     */
+    Page<ReviewResponseDTO> findAllReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable);
 }

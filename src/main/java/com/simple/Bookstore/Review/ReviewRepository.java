@@ -3,6 +3,7 @@ package com.simple.Bookstore.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -95,14 +96,24 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             Pageable pageable
     );
 
-    @Query(value = """
+    @NativeQuery(value = """
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
                 b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
                 u.username as username, p.display_name as userDisplayName,
-                ARRAY_AGG(c_limited.id) as commentIds,
-                ARRAY_AGG(c_limited.content) as commentContents,
-                ARRAY_AGG(c_limited.date) as commentDates,
-                ARRAY_AGG(c_limited.edited) as commentEdited,
+                (
+                    SELECT COUNT(c.id)
+                    FROM comment c
+                    LEFT JOIN profile c_p ON c.profile_id = c_p.id
+                    WHERE c.review_id = r.id
+                    AND (
+                        c_p.is_public = true
+                        OR (:profileId IS NOT NULL AND c.profile_id = :profileId)
+                    )
+                ) AS commentCount,
+                ARRAY_AGG(c_agg.id) as commentIds,
+                ARRAY_AGG(c_agg.content) as commentContents,
+                ARRAY_AGG(c_agg.date) as commentDates,
+                ARRAY_AGG(c_agg.edited) as commentEdited,
                 ARRAY_AGG(c_u.username) as commentUsernames,
                 ARRAY_AGG(c_p.display_name) as commentUserDisplayNames
             FROM review r
@@ -114,11 +125,16 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             LEFT JOIN LATERAL (
                 SELECT c.id, c.content, c.date, c.edited, c.profile_id
                 FROM comment c
+                LEFT JOIN profile c_p ON c.profile_id = c_p.id
                 WHERE c.review_id = r.id
+                    AND (
+                        c_p.is_public = true
+                        OR (:profileId IS NOT NULL AND c.profile_id = :profileId)
+                    )
                 ORDER BY c.date, c.id
                 LIMIT 2
-            ) as c_limited ON true
-            LEFT JOIN profile c_p ON c_limited.profile_id = c_p.id
+            ) as c_agg ON true
+            LEFT JOIN profile c_p ON c_agg.profile_id = c_p.id
             LEFT JOIN users c_u ON c_p.user_id = c_u.id
             WHERE r.book_id = :bookId
             GROUP BY r.id, r.title, r.content, r.rating, r.date, r.edited,
@@ -129,11 +145,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             SELECT COUNT(r.id)
             FROM review r
             WHERE r.book_id = :bookId
-            """,
-            nativeQuery = true
-    )
+            """)
     Page<ReviewProjection> findAllReviewsByBookId(
             @Param("bookId") Long bookId,
+            @Param("profileId") Long profileId,
             Pageable pageable
     );
 }

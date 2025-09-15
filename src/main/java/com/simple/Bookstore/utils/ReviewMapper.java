@@ -26,7 +26,8 @@ public class ReviewMapper {
                 review.getComments()
                         .stream()
                         .map(CommentMapper::commentToReviewViewResponseDTO)
-                        .toList()
+                        .toList(),
+                review.getComments().size()
         );
     }
 
@@ -57,7 +58,8 @@ public class ReviewMapper {
                 projection.getBookFrontImage(),
                 projection.getUsername(),
                 projection.getUserDisplayName(),
-                comments
+                comments,
+                projection.getCommentCount()
         );
     }
 

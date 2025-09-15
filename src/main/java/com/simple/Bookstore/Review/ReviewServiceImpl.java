@@ -102,9 +102,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewResponseDTO> findAllReviewsByBookIdAsPage(Long bookId, Pageable pageable) {
+    public Page<ReviewResponseDTO> findAllReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable) {
         return reviewRepository
-                .findAllReviewsByBookId(bookId, pageable)
+                .findAllReviewsByBookId(bookId, profileId, pageable)
                 .map(ReviewMapper::projectionToResponseDTO);
     }
 }
