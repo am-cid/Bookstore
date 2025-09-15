@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Bookstore Fragment: main-content</title>
@@ -46,7 +48,7 @@
                         <strong>Description: </strong>
                         <p class="margin-0" th:text="${theme.description}"></p>
                     </th:block>
-                    <th:block th:if="${user != null}">
+                    <th:block sec:authorize="isAuthenticated()">
                         <form action="#" class="apply-form" method="post" th:action="@{/profile/theme}">
                             <input name="themeId" th:value="${theme.id}" type="hidden" />
                             <button th:if="${viewThemesModel.currentUserTheme() == null}" type="submit">Apply</button>

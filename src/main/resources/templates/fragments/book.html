@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Bookstore Fragment: main-content</title>
@@ -63,7 +65,7 @@
                         <script th:src="@{/js/genre-expand.js}"></script>
                     </div>
                 </div>
-                <th:block th:if="${user != null}">
+                <th:block sec:authorize="isAuthenticated()">
                     <form action="#" id="save-book" method="post"
                           th:action="@{/profile/saved-books}"
                           th:if="${!#lists.contains(savedBookIds, book.id)}">
