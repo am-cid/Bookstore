@@ -44,12 +44,14 @@ public class BookViewController {
                 user != null ? user.getProfile().getId() : null,
                 pageable
         );
+        Long reviewCount = reviewService.countByBookId(bookId);
         List<Long> savedBookIds = bookService.findSavedBooks(user)
                 .stream()
                 .map(BookSearchResultDTO::id)
                 .toList();
         model.addAttribute("book", bookResult.get());
         model.addAttribute("reviews", reviews);
+        model.addAttribute("reviewCount", reviewCount);
         model.addAttribute("savedBookIds", savedBookIds);
         return "book";
     }

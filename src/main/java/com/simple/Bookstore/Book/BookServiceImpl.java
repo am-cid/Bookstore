@@ -26,6 +26,39 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepo;
     private final UserRepository userRepo;
 
+    // HELPERS
+
+    private static Double calculateRelevancy(
+            BookRelevanceProjection projection,
+            double maxRating,
+            long maxReviewCount,
+            LocalDateTime maxDate
+    ) {
+        double normalizedRating = (projection.getAverageRating() != null)
+                ? projection.getAverageRating() / maxRating
+                : 0.0;
+        double normalizedReviewCount = (projection.getReviewCount() != null)
+                ? (double) projection.getReviewCount() / maxReviewCount
+                : 0.0;
+        long daysSincePublished = ChronoUnit.DAYS.between(projection.getDate(), maxDate);
+        double normalizedDate = Math.max(0.0, 1.0 - (daysSincePublished / 365.0));
+
+        return (normalizedRating * RATING_WEIGHT) +
+                (normalizedReviewCount * REVIEW_COUNT_WEIGHT) +
+                (normalizedDate * DATE_WEIGHT);
+    }
+
+    private static void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO newBook) {
+        oldBook.setTitle(newBook.title() != null ? newBook.title() : oldBook.getTitle());
+        oldBook.setAuthor(newBook.author() != null ? newBook.author() : oldBook.getAuthor());
+        oldBook.setDescription(newBook.description() != null ? newBook.description() : oldBook.getDescription());
+        oldBook.extendGenres(newBook.genres());
+        oldBook.setFrontImage(newBook.frontImage() != null ? newBook.frontImage() : oldBook.getFrontImage());
+        oldBook.setBackImage(newBook.backImage() != null ? newBook.backImage() : oldBook.getBackImage());
+        oldBook.setSpineImage(newBook.spineImage() != null ? newBook.spineImage() : oldBook.getSpineImage());
+        oldBook.extendContentImages(newBook.contentImages());
+    }
+
     @Override
     public List<BookSearchResultDTO> findAllBooks() {
         return bookRepo.findAll().stream()
@@ -156,38 +189,5 @@ public class BookServiceImpl implements BookService {
         );
         return bookPage
                 .map(BookMapper::searchResultProjectionToDTO);
-    }
-
-    // HELPERS
-
-    private Double calculateRelevancy(
-            BookRelevanceProjection projection,
-            double maxRating,
-            long maxReviewCount,
-            LocalDateTime maxDate
-    ) {
-        double normalizedRating = (projection.getAverageRating() != null)
-                ? projection.getAverageRating() / maxRating
-                : 0.0;
-        double normalizedReviewCount = (projection.getReviewCount() != null)
-                ? (double) projection.getReviewCount() / maxReviewCount
-                : 0.0;
-        long daysSincePublished = ChronoUnit.DAYS.between(projection.getDate(), maxDate);
-        double normalizedDate = Math.max(0.0, 1.0 - (daysSincePublished / 365.0));
-
-        return (normalizedRating * RATING_WEIGHT) +
-                (normalizedReviewCount * REVIEW_COUNT_WEIGHT) +
-                (normalizedDate * DATE_WEIGHT);
-    }
-
-    private void updateOldBookWithRequestDTO(Book oldBook, BookRequestDTO newBook) {
-        oldBook.setTitle(newBook.title() != null ? newBook.title() : oldBook.getTitle());
-        oldBook.setAuthor(newBook.author() != null ? newBook.author() : oldBook.getAuthor());
-        oldBook.setDescription(newBook.description() != null ? newBook.description() : oldBook.getDescription());
-        oldBook.extendGenres(newBook.genres());
-        oldBook.setFrontImage(newBook.frontImage() != null ? newBook.frontImage() : oldBook.getFrontImage());
-        oldBook.setBackImage(newBook.backImage() != null ? newBook.backImage() : oldBook.getBackImage());
-        oldBook.setSpineImage(newBook.spineImage() != null ? newBook.spineImage() : oldBook.getSpineImage());
-        oldBook.extendContentImages(newBook.contentImages());
     }
 }

@@ -93,6 +93,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Long countByBookId(Long bookId) {
+        return reviewRepository.countByBookId(bookId);
+    }
+
+    @Override
     public Page<ReviewProfileViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable) {
         if (user == null)
             return Page.empty(pageable);

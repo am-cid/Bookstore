@@ -151,4 +151,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             @Param("profileId") Long profileId,
             Pageable pageable
     );
+
+    Long countByBookId(Long bookId);
 }

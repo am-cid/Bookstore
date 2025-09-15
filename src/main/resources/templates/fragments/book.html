@@ -11,6 +11,7 @@
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
 <!--/*@thymesVar id="book" type="com.simple.Bookstore.Book.BookSearchResultDTO"*/-->
 <!--/*@thymesVar id="reviews" type="org.springframework.data.domain.Page<com.simple.Bookstore.Review.ReviewResponseDTO>"*/-->
+<!--/*@thymesVar id="reviewCount" type="java.lang.Long"*/-->
 <!--/*@thymesVar id="savedBookIds" type="java.util.List<java.lang.Long>"*/-->
 
 
@@ -49,9 +50,11 @@
                                 <svg th:replace="~{fragments/svg-fragments/rating-star ::
                                     ratingStar(${book.averageRating}, 66, 12, 5)}"></svg>
                                 <div class="flex-row gap-10px">
-                                    <p class="margin-0" th:text="${book.averageRating} + ' out of 5'"></p>
+                                    <p class="margin-0" th:text="${#numbers.formatDecimal(book.averageRating, 0, 2)} + ' out of 5'"></p>
                                     <p class="margin-0" th:if="${book.averageRating}">
-                                        (<a class="margin-0" href="#book-reviews-div" th:text="${reviews.getNumberOfElements()} + ' reviews'"></a>)
+                                        (<a class="margin-0" href="#book-reviews-div"
+                                            th:text="${reviewCount} + ' reviews'"
+                                            title="Including reviews from private profiles"></a>)
                                     </p>
                                 </div>
                             </div>
