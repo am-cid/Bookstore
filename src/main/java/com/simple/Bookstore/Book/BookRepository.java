@@ -13,15 +13,17 @@ import java.util.Set;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = """
-            SELECT b.id, b.title, b.author, b.description, b.date, b.front_image, b.back_image, b.spine_image,
-                STRING_AGG(bg.genre, ',') AS genres
+            SELECT b.id, b.title, b.author, b.front_image,
+                AVG(r.rating) as averageRating,
+                ARRAY_AGG(bg.genre) AS genres
             FROM book b
+            LEFT JOIN review r ON b.id = r.book_id
             LEFT JOIN book_genres bg ON b.id = bg.book_id
             GROUP BY b.id
             ORDER BY b.id DESC
             LIMIT :n
             """, nativeQuery = true)
-    List<BookSearchResultProjection> findLatestNBooks(int n);
+    List<BookPreviewProjection> findLatestNBooks(int n);
 
     @Query("SELECT DISTINCT b.author FROM Book b ORDER BY b.author")
     List<String> findDistinctAuthors();

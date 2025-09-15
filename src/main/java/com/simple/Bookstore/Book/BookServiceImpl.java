@@ -43,11 +43,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookSearchResultDTO> findLatestNBooks(int n) {
+    public List<BookPreviewDTO> findLatestNBooks(int n) {
         return bookRepo
                 .findLatestNBooks(n)
                 .stream()
-                .map(BookMapper::searchResultProjectionToDTO)
+                .map(BookMapper::previewProjectionToDTO)
                 .toList();
     }
 

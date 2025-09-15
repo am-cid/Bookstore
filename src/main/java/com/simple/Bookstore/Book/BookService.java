@@ -12,7 +12,7 @@ import java.util.Set;
 public interface BookService {
     List<BookSearchResultDTO> findAllBooks();
 
-    List<BookSearchResultDTO> findLatestNBooks(int n);
+    List<BookPreviewDTO> findLatestNBooks(int n);
 
     List<BookSearchResultDTO> findTopNRatedBooks(int n);
 

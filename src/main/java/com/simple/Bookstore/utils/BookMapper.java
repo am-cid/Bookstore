@@ -23,6 +23,19 @@ public class BookMapper {
         return book;
     }
 
+    public static BookPreviewDTO previewProjectionToDTO(BookPreviewProjection projection) {
+        return new BookPreviewDTO(
+                projection.getId(),
+                projection.getTitle(),
+                projection.getAuthor(),
+                projection.getFrontImage(),
+                projection.getAverageRating(),
+                Arrays.stream(projection.getGenres())
+                        .map(Genre::valueOf)
+                        .collect(Collectors.toSet())
+        );
+    }
+
     /**
      * Helper method to perform the mapping from projection to DTO
      */

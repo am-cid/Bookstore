@@ -1,6 +1,6 @@
 package com.simple.Bookstore.views;
 
-import com.simple.Bookstore.Book.BookSearchResultDTO;
+import com.simple.Bookstore.Book.BookPreviewDTO;
 import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Theme.ThemeService;
@@ -28,7 +28,7 @@ public class HomeViewController {
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
 
         // center content data
-        List<BookSearchResultDTO> latestBooks = bookService.findLatestNBooks(10);
+        List<BookPreviewDTO> latestBooks = bookService.findLatestNBooks(10);
         model.addAttribute("bannerBooks", latestBooks.subList(0, Math.min(6, latestBooks.size())));
 
         // TODO: format below as "2 days ago. <username> just posted <book-title>. <description: 50 char cutoff>"
