@@ -31,7 +31,7 @@
                 <div class="list-item-details">
                     <strong th:if="${book.averageRating != null}">Rating: </strong>
                     <b class="rating-score" th:if="${book.averageRating != null}">
-                        <span th:text="${book.averageRating}"></span> / 5
+                        <span th:text="${T(com.simple.Bookstore.utils.DecimalFormatter).formatDecimal(book.averageRating)}"></span> / 5
                     </b>
                     <strong>Description: </strong>
                     <p class="search-result-desc" th:text="${book.description}"></p>

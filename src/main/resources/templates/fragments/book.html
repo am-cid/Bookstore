@@ -52,7 +52,10 @@
                                 <svg th:replace="~{fragments/svg-fragments/rating-star ::
                                     ratingStar(${book.averageRating}, 66, 12, 5)}"></svg>
                                 <div class="flex-row gap-10px">
-                                    <p class="margin-0" th:text="${#numbers.formatDecimal(book.averageRating, 0, 2)} + ' out of 5'"></p>
+                                    <!-- th:text="${#numbers.formatDecimal(book.averageRating, 0, 2)} + ' out of 5'"-->
+                                    <p class="margin-0"
+                                       th:text="${T(com.simple.Bookstore.utils.DecimalFormatter).formatDecimal(book.averageRating)}
+                                       + ' out of 5'"></p>
                                     <p class="margin-0" th:if="${book.averageRating}">
                                         (<a class="margin-0" href="#book-reviews-div"
                                             th:text="${reviewCount} + ' reviews'"

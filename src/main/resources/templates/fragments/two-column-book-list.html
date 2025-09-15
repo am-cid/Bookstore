@@ -27,7 +27,7 @@
                     <a th:href="@{/books/{id}(id=${book.id})}"
                        th:text="${#strings.isEmpty(book.title) ? 'Book ' + book.id : book.title}"></a>
                     <b class="rating-score" th:if="${book.averageRating != null}">
-                        <span th:text="${book.averageRating}"></span> / 5
+                        <span th:text="${T(com.simple.Bookstore.utils.DecimalFormatter).formatDecimal(book.averageRating)}"></span> / 5
                     </b>
                     <ul th:replace="~{fragments/components/genre-list :: genreList(${book.genres}, 5)}"></ul>
                 </div>
