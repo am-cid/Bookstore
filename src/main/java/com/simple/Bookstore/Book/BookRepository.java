@@ -3,15 +3,33 @@ package com.simple.Bookstore.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
+
+    @NativeQuery("""
+            SELECT
+                b.id, b.title, b.author, b.description, b.date, b.front_image, b.back_image, b.spine_image,
+                AVG(r.rating) AS averageRating,
+                ARRAY_AGG(DISTINCT bg.genre) AS genres,
+                ARRAY_AGG(DISTINCT image_url) AS contentImages
+            FROM book b
+            LEFT JOIN review r ON b.id = r.book_id
+            LEFT JOIN book_genres bg ON b.id = bg.book_id
+            LEFT JOIN book_content_images bci ON b.id = bci_agg.book_id
+            WHERE b.id = :id
+            GROUP BY b.id, b.title, b.author, b.description, b.date, b.front_image, b.back_image, b.spine_image
+            """)
+    Optional<BookSearchResultProjection> findBookById(@Param("id") Long id);
+
     @Query(value = """
             SELECT b.id, b.title, b.author, b.front_image,
                 AVG(r.rating) as averageRating,

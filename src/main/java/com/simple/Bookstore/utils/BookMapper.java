@@ -48,16 +48,16 @@ public class BookMapper {
                 projection.getAuthor(),
                 projection.getDescription(),
                 projection.getDate(),
-                projection.getGenres() == null
-                        ? null
-                        : Arrays.stream(projection.getGenres()).map(Genre::valueOf).collect(Collectors.toSet()),
                 projection.getAverageRating(),
                 projection.getFrontImage(),
                 projection.getBackImage(),
                 projection.getSpineImage(),
                 projection.getContentImages() == null
                         ? null
-                        : Arrays.stream(projection.getContentImages()).collect(Collectors.toSet())
+                        : Arrays.stream(projection.getContentImages()).collect(Collectors.toSet()),
+                projection.getGenres() == null
+                        ? null
+                        : Arrays.stream(projection.getGenres()).map(Genre::valueOf).collect(Collectors.toSet())
         );
     }
 
@@ -80,12 +80,12 @@ public class BookMapper {
                 book.getAuthor(),
                 book.getDescription(),
                 book.getDate(),
-                book.getGenres(),
                 avgRating,
                 book.getFrontImage(),
                 book.getBackImage(),
                 book.getSpineImage(),
-                book.getContentImages()
+                book.getContentImages(),
+                book.getGenres()
         );
     }
 
@@ -102,12 +102,12 @@ public class BookMapper {
                 projection.getAuthor(),
                 projection.getDescription(),
                 projection.getDate(),
-                book.getGenres(),
                 projection.getAverageRating(),
                 projection.getFrontImage(),
                 projection.getBackImage(),
                 projection.getSpineImage(),
-                book.getContentImages()
+                book.getContentImages(),
+                book.getGenres()
         );
     }
 }

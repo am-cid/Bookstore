@@ -3,6 +3,8 @@ package com.simple.Bookstore.Book;
 import java.time.LocalDateTime;
 
 public interface BookSearchResultProjection {
+    Long getId();
+
     String getTitle();
 
     String getAuthor();
@@ -19,12 +21,8 @@ public interface BookSearchResultProjection {
 
     Double getAverageRating();
 
-    Long getId();
-
-    ///  Comma separated string
     String[] getGenres();
 
-    ///  Comma separated string
     String[] getContentImages();
 
 }

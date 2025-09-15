@@ -11,11 +11,11 @@ public record BookSearchResultDTO(
         String author,
         String description,
         LocalDateTime date,
-        Set<Genre> genres,
         Double averageRating,
         String frontImage,
         String backImage,
         String spineImage,
-        Set<String> contentImages
+        Set<String> contentImages,
+        Set<Genre> genres
 ) {
 }
