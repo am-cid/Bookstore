@@ -18,7 +18,7 @@ public class ReviewController {
     @GetMapping("/books/{bookId}/reviews")
     public ResponseEntity<List<ReviewResponseDTO>> getReviews(@PathVariable Long bookId) {
         return new ResponseEntity<>(
-                reviewService.findAllReviewsByBookId(bookId),
+                reviewService.findAllPublicOrOwnedReviewsByBookId(bookId),
                 HttpStatus.OK
         );
     }

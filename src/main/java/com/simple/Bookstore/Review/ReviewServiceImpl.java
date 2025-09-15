@@ -23,9 +23,9 @@ public class ReviewServiceImpl implements ReviewService {
     private final BookRepository bookRepository;
 
     @Override
-    public List<ReviewResponseDTO> findAllReviewsByBookId(Long bookId) {
+    public List<ReviewResponseDTO> findAllPublicOrOwnedReviewsByBookId(Long bookId) {
         return reviewRepository
-                .findAllReviewsByBookId(bookId)
+                .findAllPublicOrOwnedReviewsByBookId(bookId)
                 .stream()
                 .map(ReviewMapper::reviewToResponseDTO)
                 .toList();
@@ -107,9 +107,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewResponseDTO> findAllReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable) {
+    public Page<ReviewResponseDTO> findAllPublicOrOwnedReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable) {
         return reviewRepository
-                .findAllReviewsByBookId(bookId, profileId, pageable)
+                .findAllPublicOrOwnedReviewsByBookId(bookId, profileId, pageable)
                 .map(ReviewMapper::projectionToResponseDTO);
     }
 }

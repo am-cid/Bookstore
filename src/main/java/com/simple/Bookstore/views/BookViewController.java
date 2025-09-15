@@ -40,7 +40,8 @@ public class BookViewController {
         if (bookResult.isEmpty())
             // TODO: redirect to unknown book page
             return "redirect:/";
-        Page<ReviewResponseDTO> reviews = reviewService.findAllReviewsByBookIdAsPage(bookId,
+        Page<ReviewResponseDTO> reviews = reviewService.findAllPublicOrOwnedReviewsByBookIdAsPage(
+                bookId,
                 user != null ? user.getProfile().getId() : null,
                 pageable
         );

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReviewService {
-    List<ReviewResponseDTO> findAllReviewsByBookId(Long bookId);
+    List<ReviewResponseDTO> findAllPublicOrOwnedReviewsByBookId(Long bookId);
 
     List<ReviewProfileViewResponseDTO> findLatestNReviews(int n);
 
@@ -16,7 +16,8 @@ public interface ReviewService {
 
     ReviewResponseDTO findReviewById(Long id);
 
-    ReviewResponseDTO createReview(User user, Long bookId, ReviewRequestDTO request);
+    ReviewResponseDTO createReview(User user, Long bookId, ReviewRequestDTO request)
+            throws IllegalStateException, BookNotFoundException;
 
     ReviewResponseDTO updateReview(User user, Long id, ReviewRequestDTO request);
 
@@ -32,5 +33,5 @@ public interface ReviewService {
      * @param pageable  pageable passed in through path params
      * @return paged reviews
      */
-    Page<ReviewResponseDTO> findAllReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable);
+    Page<ReviewResponseDTO> findAllPublicOrOwnedReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable);
 }

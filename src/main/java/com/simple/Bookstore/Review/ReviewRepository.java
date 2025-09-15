@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    List<Review> findAllReviewsByBookId(Long bookId);
+    List<Review> findAllPublicOrOwnedReviewsByBookId(Long bookId);
 
 
     @Query(value = """
@@ -90,7 +90,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             """,
             nativeQuery = true
     )
-    Page<ReviewProfileViewProjection> findAllReviewsByBookId(
+    Page<ReviewProfileViewProjection> findAllPublicOrOwnedReviewsByBookId(
             @Param("bookId") Long bookId,
             @Param("pageSize") Integer pageSize,
             Pageable pageable
@@ -137,6 +137,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             LEFT JOIN profile c_p ON c_agg.profile_id = c_p.id
             LEFT JOIN users c_u ON c_p.user_id = c_u.id
             WHERE r.book_id = :bookId
+                AND (
+                    c_p.is_public = true
+                    OR (:profileId IS NOT NULL AND r.profile_id = :profileId)
+                )
             GROUP BY r.id, r.title, r.content, r.rating, r.date, r.edited,
                 b.id, b.title, b.author, b.front_image,
                 u.username, p.display_name
@@ -145,8 +149,12 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             SELECT COUNT(r.id)
             FROM review r
             WHERE r.book_id = :bookId
+                AND (
+                    c_p.is_public = true
+                    OR (:profileId IS NOT NULL AND r.profile_id = :profileId)
+                )
             """)
-    Page<ReviewProjection> findAllReviewsByBookId(
+    Page<ReviewProjection> findAllPublicOrOwnedReviewsByBookId(
             @Param("bookId") Long bookId,
             @Param("profileId") Long profileId,
             Pageable pageable
