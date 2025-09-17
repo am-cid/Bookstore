@@ -44,7 +44,7 @@
     align-self: center;
 }
 
-#book-details-review .rating-score {
+#book-details-review .rating-star {
     font-size: 10px;
 }
 
@@ -145,6 +145,10 @@
 #create-review {
     background-color: var(--color-04, #FFD376);
     border: 2px solid var(--interpolated-color-17, #FCBC82);
+}
+
+.border-top-1px-dotted {
+    border-top: 1px dotted var(--color-00, #A40E60);
 }
 
 /* DESCRIPTIVE */

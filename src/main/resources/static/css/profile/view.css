@@ -85,6 +85,6 @@
     grid-template-rows: repeat(3, auto);
 }
 
-.profile-result-content-details .rating-score {
+.profile-result-content-details .rating-star {
     font-size: 16px;
 }

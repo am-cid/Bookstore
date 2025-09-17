@@ -25,7 +25,11 @@
     fill: var(--color-02, #F61590);
 }
 
-.rating-score text {
+.rating-score {
+    color: var(--color-01, #FF0000);
+}
+
+.rating-star text {
     fill: var(--color-04, #FFD376);
     paint-order: stroke;
     stroke: var(--font-color, black);
@@ -48,6 +52,14 @@
 
 .pad-0-15px {
     padding: 0 15px;
+}
+
+.margin-0-15px {
+    margin: 0 15px;
+}
+
+.margin-15px-15px-0-15px {
+    margin: 15px 15px 0 15px;
 }
 
 .justify-content-center {

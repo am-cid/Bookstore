@@ -52,7 +52,6 @@
                                 <svg th:replace="~{fragments/svg-fragments/rating-star ::
                                     ratingStar(${book.averageRating}, 66, 12, 5)}"></svg>
                                 <div class="flex-row gap-10px">
-                                    <!-- th:text="${#numbers.formatDecimal(book.averageRating, 0, 2)} + ' out of 5'"-->
                                     <p class="margin-0"
                                        th:text="${T(com.simple.Bookstore.utils.DecimalFormatter).formatDecimal(book.averageRating)}
                                        + ' out of 5'"></p>
@@ -142,19 +141,20 @@
                             <details class="col-span-2" th:if="${review.commentCount > 0}">
                                 <summary class="cursor-pointer link-style">Comments</summary>
                                 <div class="flex-column col-span-2 gap-5px">
-                                    <div class="grid-tcol-1fr-4fr pad-0-15px"
+                                    <div class="grid-tcol-1fr-4fr margin-0-15px"
+                                         th:classappend="${i.index != 0 ? 'border-top-1px-dotted' : '' }"
                                          th:each="comment, i : ${review.comments}">
                                         <a class="margin-0 justify-self-start"
                                            th:href="@{/profile/{username}(username=${comment.username})}"
                                            th:text="${comment.userDisplayName}"></a>
-                                        <p class="margin-0 justify-self-start"
+                                        <p class="margin-0 justify-self-end"
                                            th:text="${T(com.simple.Bookstore.utils.PostedDateFormatter)
                                              .formatTimeAgo(comment.date, comment.edited)}"
                                            th:title="${#temporals.format(comment.date, 'dd MMMM yyyy HH:mm')}"></p>
                                         <p class="margin-0 col-span-2" th:text="${comment.content}"></p>
                                     </div>
                                 </div>
-                                <a class="flex-row col-span-2 align-items-end" th:href="@{/book/{bookId}/reviews/{reviewId}(bookId=${book.id}, reviewId=${review.id})}"
+                                <a class="flex-row col-span-2 align-items-end margin-15px-15px-0-15px" th:href="@{/book/{bookId}/reviews/{reviewId}(bookId=${book.id}, reviewId=${review.id})}"
                                    th:if="${review.commentCount > 2}"
                                    th:text="${'See all comments (' + review.commentCount + ')'}">
                                 </a>
