@@ -1,6 +1,7 @@
 package com.simple.Bookstore.Review;
 
 import com.simple.Bookstore.Exceptions.BookNotFoundException;
+import com.simple.Bookstore.Exceptions.ReviewNotFoundException;
 import com.simple.Bookstore.User.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,13 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReviewService {
+    ReviewResponseDTO findReviewById(Long id) throws ReviewNotFoundException;
+
     List<ReviewResponseDTO> findAllPublicOrOwnedReviewsByBookId(Long bookId);
 
-    List<ReviewProfileViewResponseDTO> findLatestNReviews(int n);
-
     Optional<ReviewProfileViewResponseDTO> findLatestReview();
-
-    ReviewResponseDTO findReviewById(Long id);
 
     ReviewResponseDTO createReview(User user, Long bookId, ReviewRequestDTO request)
             throws IllegalStateException, BookNotFoundException;
@@ -28,6 +27,8 @@ public interface ReviewService {
 
     Long countByBookId(Long bookId);
 
+    List<ReviewProfileViewResponseDTO> findLatestNReviews(int n);
+
     Page<ReviewProfileViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable);
 
     /**
@@ -36,5 +37,5 @@ public interface ReviewService {
      * @param pageable  pageable passed in through path params
      * @return paged reviews
      */
-    Page<ReviewResponseDTO> findAllPublicOrOwnedReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable);
+    Page<ReviewBookViewResponseDTO> findAllPublicOrOwnedReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable);
 }

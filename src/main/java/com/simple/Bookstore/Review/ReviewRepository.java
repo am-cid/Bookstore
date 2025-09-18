@@ -98,7 +98,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @NativeQuery(value = """
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
-                b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
                 u.username as username, p.display_name as userDisplayName,
                 (
                     SELECT COUNT(c.id)
@@ -117,7 +116,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                 ARRAY_AGG(c_u.username) as commentUsernames,
                 ARRAY_AGG(c_p.display_name) as commentUserDisplayNames
             FROM review r
-            LEFT JOIN book b ON r.book_id = b.id
             LEFT JOIN profile p ON r.profile_id = p.id
             LEFT JOIN users u ON p.user_id = u.id
             -- subquery to limit queries comments since in the book view, reviews should only
@@ -142,7 +140,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                     OR (:profileId IS NOT NULL AND r.profile_id = :profileId)
                 )
             GROUP BY r.id, r.title, r.content, r.rating, r.date, r.edited,
-                b.id, b.title, b.author, b.front_image,
                 u.username, p.display_name
             ORDER BY r.date DESC, r.id DESC
             """, countQuery = """
@@ -155,7 +152,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                     OR (:profileId IS NOT NULL AND r.profile_id = :profileId)
                 )
             """)
-    Page<ReviewProjection> findAllPublicOrOwnedReviewsByBookId(
+    Page<ReviewBookViewProjection> findAllPublicOrOwnedReviewsByBookId(
             @Param("bookId") Long bookId,
             @Param("profileId") Long profileId,
             Pageable pageable

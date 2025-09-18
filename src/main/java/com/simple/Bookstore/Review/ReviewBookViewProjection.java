@@ -3,7 +3,7 @@ package com.simple.Bookstore.Review;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public interface ReviewProjection {
+public interface ReviewBookViewProjection {
     Long getId();
 
     String getTitle();
@@ -15,14 +15,6 @@ public interface ReviewProjection {
     LocalDateTime getDate();
 
     Boolean getEdited();
-
-    Long getBookId();
-
-    String getBookTitle();
-
-    String getBookAuthor();
-
-    String getBookFrontImage();
 
     String getUsername();
 

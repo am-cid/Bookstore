@@ -3,6 +3,7 @@ package com.simple.Bookstore.views;
 import com.simple.Bookstore.Book.BookSearchResultDTO;
 import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Profile.ProfileService;
+import com.simple.Bookstore.Review.ReviewBookViewResponseDTO;
 import com.simple.Bookstore.Review.ReviewRequestDTO;
 import com.simple.Bookstore.Review.ReviewResponseDTO;
 import com.simple.Bookstore.Review.ReviewService;
@@ -46,7 +47,7 @@ public class BookViewController {
         if (bookResult.isEmpty())
             // TODO: redirect to unknown book page
             return "redirect:/";
-        Page<ReviewResponseDTO> reviews = reviewService.findAllPublicOrOwnedReviewsByBookIdAsPage(
+        Page<ReviewBookViewResponseDTO> reviews = reviewService.findAllPublicOrOwnedReviewsByBookIdAsPage(
                 bookId,
                 user != null ? user.getProfile().getId() : null,
                 pageable
@@ -63,7 +64,12 @@ public class BookViewController {
         model.addAttribute("reviewCount", reviewCount);
         model.addAttribute("savedBookIds", savedBookIds);
         model.addAttribute("alreadyReviewed", alreadyReviewed);
-        model.addAttribute("reviewRequestDTO", ReviewRequestDTO.empty());
+        model.addAttribute(
+                "reviewRequestDTO",
+                reviewRequest.isEmpty()
+                        ? ReviewRequestDTO.empty()
+                        : reviewRequest
+        );
         return "book";
     }
 

@@ -23,20 +23,19 @@ public class ReviewServiceImpl implements ReviewService {
     private final BookRepository bookRepository;
 
     @Override
+    public ReviewResponseDTO findReviewById(Long id) throws ReviewNotFoundException {
+        return reviewRepository
+                .findById(id)
+                .map(ReviewMapper::reviewToResponseDTO)
+                .orElseThrow(() -> new ReviewNotFoundException(id));
+    }
+
+    @Override
     public List<ReviewResponseDTO> findAllPublicOrOwnedReviewsByBookId(Long bookId) {
         return reviewRepository
                 .findAllPublicOrOwnedReviewsByBookId(bookId)
                 .stream()
                 .map(ReviewMapper::reviewToResponseDTO)
-                .toList();
-    }
-
-    @Override
-    public List<ReviewProfileViewResponseDTO> findLatestNReviews(int n) {
-        return reviewRepository
-                .findTopNByOrderByIdDesc(n, PagingConstants.DEFAULT_PAGE_SIZE)
-                .stream()
-                .map(ReviewMapper::viewProjectionToViewResponseDTO)
                 .toList();
     }
 
@@ -49,11 +48,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewResponseDTO findReviewById(Long id) {
+    public List<ReviewProfileViewResponseDTO> findLatestNReviews(int n) {
         return reviewRepository
-                .findById(id)
-                .map(ReviewMapper::reviewToResponseDTO)
-                .orElseThrow(() -> new ReviewNotFoundException(id));
+                .findTopNByOrderByIdDesc(n, PagingConstants.DEFAULT_PAGE_SIZE)
+                .stream()
+                .map(ReviewMapper::viewProjectionToViewResponseDTO)
+                .toList();
     }
 
     @Override
@@ -119,9 +119,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewResponseDTO> findAllPublicOrOwnedReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable) {
+    public Page<ReviewBookViewResponseDTO> findAllPublicOrOwnedReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable) {
         return reviewRepository
                 .findAllPublicOrOwnedReviewsByBookId(bookId, profileId, pageable)
-                .map(ReviewMapper::projectionToResponseDTO);
+                .map(ReviewMapper::bookViewProjectionToBookViewResponseDTO);
     }
 }
