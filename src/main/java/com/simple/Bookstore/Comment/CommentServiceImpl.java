@@ -80,4 +80,14 @@ public class CommentServiceImpl implements CommentService {
                 .findAllCommentsByProfileId(user.getProfile().getId(), pageable.getPageSize(), pageable)
                 .map(CommentMapper::viewProjectionToViewResponseDTO);
     }
+
+    @Override
+    public Page<CommentReviewViewResponseDTO> findAllPublicOrOwnedCommentsByReviewIdAsPage(Long reviewId, User user, Pageable pageable) {
+        return commentRepository
+                .findAllPublicOrOwnedByReviewId(
+                        reviewId,
+                        user != null ? user.getProfile().getId() : null,
+                        pageable
+                );
+    }
 }

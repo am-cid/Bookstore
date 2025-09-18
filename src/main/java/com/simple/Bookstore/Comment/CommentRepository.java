@@ -45,4 +45,21 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             @Param("pageSize") Integer pageSize,
             Pageable pageable
     );
+
+    @Query("""
+            SELECT new com.simple.Bookstore.Comment.CommentReviewViewResponseDTO(
+                c.id, c.content, c.date, c.edited, u.username, p.displayName
+            )
+            FROM Comment c
+            LEFT JOIN c.profile p
+            LEFT JOIN p.user u
+            WHERE c.review.id = :reviewId
+                AND (p.isPublic = true OR (:profileId IS NOT NULL AND p.id = :profileId))
+            """)
+    Page<CommentReviewViewResponseDTO> findAllPublicOrOwnedByReviewId(
+            @Param("reviewId") Long reviewId,
+            @Param("profileId") Long profileId,
+            Pageable pageable
+    );
+
 }

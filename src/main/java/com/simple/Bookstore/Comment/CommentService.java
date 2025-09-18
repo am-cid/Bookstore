@@ -18,4 +18,6 @@ public interface CommentService {
     void deleteComment(User user, Long id);
 
     Page<CommentProfileViewResponseDTO> findAllCommentsByUser(User user, Pageable pageable);
+
+    Page<CommentReviewViewResponseDTO> findAllPublicOrOwnedCommentsByReviewIdAsPage(Long reviewId, User user, Pageable pageable);
 }
