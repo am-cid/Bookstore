@@ -1,8 +1,4 @@
-#book {
-    margin: 10px;
-}
-
-#book .svg-text-heading {
+#main-content .svg-text-heading {
     font-size: 33px;
 }
 
@@ -200,4 +196,8 @@
 .link-style {
     color: var(--link-color, blue);
     text-decoration: underline;
+}
+
+.user-select-none {
+    user-select: none;
 }

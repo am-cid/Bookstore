@@ -9,17 +9,6 @@
     justify-content: end;
 }
 
-.profile-themes-div {
-    display: flex;
-    flex-direction: column;
-    margin: 10px;
-    row-gap: 2em;
-
-    text {
-        font-size: 33px;
-    }
-}
-
 .profile-result-div {
     flex-wrap: wrap;
     gap: 20px;

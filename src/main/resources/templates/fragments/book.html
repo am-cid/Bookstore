@@ -10,7 +10,7 @@
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
 <!--/*@thymesVar id="book" type="com.simple.Bookstore.Book.BookSearchResultDTO"*/-->
-<!--/*@thymesVar id="reviews" type="org.springframework.data.domain.Page<com.simple.Bookstore.Review.ReviewResponseDTO>"*/-->
+<!--/*@thymesVar id="reviews" type="org.springframework.data.domain.Page<com.simple.Bookstore.Review.ReviewBookViewResponseDTO>"*/-->
 <!--/*@thymesVar id="reviewCount" type="java.lang.Long"*/-->
 <!--/*@thymesVar id="savedBookIds" type="java.util.List<java.lang.Long>"*/-->
 <!--/*@thymesVar id="alreadyReviewed" type="boolean"*/-->
@@ -18,7 +18,7 @@
 
 
 <div id="main-content" th:fragment="main-content">
-    <div class="flex-column gap-10px" id="book">
+    <div class="flex-column gap-10px margin-10px">
         <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading('Title Information', 280, 20, 6)}"></div>
         <div class="flex-row gap-10px">
             <div class="flex-column gap-10px">
@@ -93,12 +93,13 @@
                 </th:block>
             </div>
         </div>
+
         <div class="flex-row" th:if="${!#arrays.isEmpty(book.contentImages)}">
             <img th:alt="'preview-' + ${i.index}"
                  th:each="content, i : ${book.contentImages}" th:src="${content}" />
         </div>
         <div class="flex-row flex-wrap gap-10px justify-content-center" th:if="${#arrays.isEmpty(book.contentImages)}">
-            <img class="book-content-images" onclick="toggleCover(this)" th:alt="'book-image-' + ${book.id}"
+            <img class="book-content-images" th:alt="'book-image-' + ${book.id}"
                  th:each="i : ${#numbers.sequence(1, 10)}"
                  th:src="${book.frontImage != null ?
                          book.frontImage : 'https://placehold.co/124x93?text=' +
@@ -108,6 +109,7 @@
                          )}"
             />
         </div>
+
         <div class="flex-column" id="book-description">
             <div th:replace="~{fragments/svg-fragments/heading-strikethrough-behind ::
                     svgHeading('Description', 620, 24, 244)}"></div>
@@ -117,13 +119,15 @@
         <div class="flex-column" id="book-reviews-div" th:if="${reviews.hasContent()}">
             <div class="flex-row space-between">
                 <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Reviews', 1, 33)}"></div>
-                <div th:replace="~{fragments/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
+                <div th:replace="~{fragments/components/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
             </div>
             <div class="flex-column gap-10px" id="book-reviews">
                 <div class="flex-row w-100P" th:each="review, i : ${reviews}" th:id="'review-' + ${review.id}">
                     <div class="w-100P flex-column">
                         <div class="flex-row space-between gap-10px">
-                            <strong th:text="${review.title}"></strong>
+                            <a th:href="@{/books/{bookId}/reviews/{reviewId}(bookId=${book.id}, reviewId=${review.id})}">
+                                <strong th:text="${review.title}"></strong>
+                            </a>
                             <p class="margin-0" th:title="${#temporals.format(review.date, 'dd MMMM yyyy HH:mm')}">
                                 Posted
                                 <span th:text="${T(com.simple.Bookstore.utils.PostedDateFormatter)
@@ -139,22 +143,14 @@
                                th:text="${review.userDisplayName}"></a>
                             <p class="margin-0 col-span-2 text-justify" th:text="${review.content}"></p>
                             <details class="col-span-2" th:if="${review.commentCount > 0}">
-                                <summary class="cursor-pointer link-style">Comments</summary>
-                                <div class="flex-column col-span-2 gap-5px">
-                                    <div class="grid-tcol-1fr-4fr margin-0-15px"
-                                         th:classappend="${i.index != 0 ? 'border-top-1px-dotted' : '' }"
-                                         th:each="comment, i : ${review.comments}">
-                                        <a class="margin-0 justify-self-start"
-                                           th:href="@{/profile/{username}(username=${comment.username})}"
-                                           th:text="${comment.userDisplayName}"></a>
-                                        <p class="margin-0 justify-self-end"
-                                           th:text="${T(com.simple.Bookstore.utils.PostedDateFormatter)
-                                             .formatTimeAgo(comment.date, comment.edited)}"
-                                           th:title="${#temporals.format(comment.date, 'dd MMMM yyyy HH:mm')}"></p>
-                                        <p class="margin-0 col-span-2" th:text="${comment.content}"></p>
-                                    </div>
+                                <summary class="cursor-pointer link-style user-select-none">Comments</summary>
+                                <div class="flex-column gap-10px">
+                                    <th:block th:each="comment, i : ${review.comments}"
+                                              th:insert="~{fragments/components/comment :: comment(${comment})}">
+                                    </th:block>
                                 </div>
-                                <a class="flex-row col-span-2 align-items-end margin-15px-15px-0-15px" th:href="@{/book/{bookId}/reviews/{reviewId}(bookId=${book.id}, reviewId=${review.id})}"
+                                <a class="flex-row col-span-2 align-items-end margin-15px-15px-0-15px"
+                                   th:href="@{/books/{bookId}/reviews/{reviewId}(bookId=${book.id}, reviewId=${review.id})}"
                                    th:if="${review.commentCount > 2}"
                                    th:text="${'See all comments (' + review.commentCount + ')'}">
                                 </a>
@@ -163,8 +159,9 @@
                     </div>
                 </div>
             </div>
-            <div th:replace="~{fragments/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
+            <div th:replace="~{fragments/components/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
         </div>
+
         <div class="flex-column" id="create-review-div" sec:authorize="isAuthenticated()" th:if="!${alreadyReviewed}">
             <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Write a Review', 1, 33)}"></div>
             <div class="flex-column gap-10px" id="create-review">

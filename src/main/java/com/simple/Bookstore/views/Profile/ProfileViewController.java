@@ -91,6 +91,12 @@ public class ProfileViewController {
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
         model.addAttribute("pathUsername", pathUsername);
+        model.addAttribute(
+                "accountHeader",
+                user != null && user.getUsername().equals(pathUsername)
+                        ? "My Account"
+                        : "Account"
+        );
         return "profile";
     }
 

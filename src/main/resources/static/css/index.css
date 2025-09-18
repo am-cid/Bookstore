@@ -84,6 +84,11 @@
     max-width: 325px;
 }
 
+.book-list-item-image {
+    width: 100px;
+    height: 140px;
+}
+
 .list-item-details {
     display: flex;
     flex-direction: column;

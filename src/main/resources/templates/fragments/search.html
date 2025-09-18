@@ -19,7 +19,7 @@
                 : param.genres.getFirst()
              : ''
             }">
-    <div th:replace="~{fragments/pagination :: pagination(${results}, '/search', ${queryString})}"></div>
+    <div th:replace="~{fragments/components/pagination :: pagination(${results}, '/search', ${queryString})}"></div>
     <th:block th:switch="${param.type.toString()}">
         <th:block th:case="${T(com.simple.Bookstore.Search.SearchType).BOOK.name()}">
             <div th:replace="~{fragments/search/book :: search-results}"></div>
@@ -31,7 +31,7 @@
             <div th:replace="~{fragments/search/profile :: search-results}"></div>
         </th:block>
     </th:block>
-    <div th:replace="~{fragments/pagination :: pagination(${results}, '/search', ${queryString})}"></div>
+    <div th:replace="~{fragments/components/pagination :: pagination(${results}, '/search', ${queryString})}"></div>
 </div>
 
 </body>

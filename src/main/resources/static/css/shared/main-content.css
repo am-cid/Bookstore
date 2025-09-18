@@ -69,3 +69,7 @@
 .text-end {
     text-align: end;
 }
+
+.margin-10px {
+    margin: 10px;
+}

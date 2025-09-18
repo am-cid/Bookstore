@@ -19,7 +19,7 @@
 <div class="profile-result-div flex-column" th:fragment="themes">
     <div class="flex-row space-between">
         <div th:replace="~{fragments/profile/profile-view-dropdown :: view-dropdown}"></div>
-        <div th:replace="~{fragments/pagination :: pagination(${viewThemesModel.profileThemes()}, '/profile/' + ${pathUsername}, null)}"></div>
+        <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesModel.profileThemes()}, '/profile/' + ${pathUsername}, null)}"></div>
     </div>
     <th:block th:if="${!viewThemesModel.profileThemes().hasContent()}">No results found...</th:block>
     <div class="profile-result flex-row w-100P" th:each="theme, i : ${viewThemesModel.profileThemes()}">
@@ -75,7 +75,7 @@
             </th:block>
         </div>
     </div>
-    <div th:replace="~{fragments/pagination :: pagination(${viewThemesModel.profileThemes()}, '/profile/' + ${pathUsername}, null)}"></div>
+    <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesModel.profileThemes()}, '/profile/' + ${pathUsername}, null)}"></div>
 </div>
 
 </body>

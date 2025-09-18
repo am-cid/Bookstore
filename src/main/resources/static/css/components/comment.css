@@ -1,0 +1,8 @@
+.review-comment {
+    border: 2px solid var(--color-00, #A40E60);
+}
+
+.review-comment-header {
+    background-color: var(--color-04, #FFD376);
+    padding: 0 5px;
+}

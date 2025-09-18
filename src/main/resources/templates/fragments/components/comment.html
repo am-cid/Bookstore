@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="comment" type="com.simple.Bookstore.Comment.CommentResponseDTO"*/-->
+
+<div class="flex-column review-comment" th:fragment="comment(comment)"
+     th:id="'comment-' + ${comment.id}">
+    <div class="flex-row space-between review-comment-header">
+        <a class="margin-0 justify-self-start"
+           th:href="@{/profile/{username}(username=${comment.username})}"
+           th:text="${comment.userDisplayName}"></a>
+        <p class="margin-0 justify-self-end"
+           th:text="${T(com.simple.Bookstore.utils.PostedDateFormatter)
+                                             .formatTimeAgo(comment.date, comment.edited)}"
+           th:title="${#temporals.format(comment.date, 'dd MMMM yyyy HH:mm')}"></p>
+    </div>
+    <p class="margin-0 pad-0-15px" th:text="${comment.content}"></p>
+</div>
+
+</body>
+</html>

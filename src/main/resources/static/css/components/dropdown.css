@@ -18,6 +18,7 @@ Based off:
     width: var(--dropdown-width, 140px);
     justify-content: space-between;
     cursor: pointer;
+    user-select: none;
 }
 
 .dropdown-expand {

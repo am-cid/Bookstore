@@ -37,7 +37,7 @@
     background-color: var(--color-06, #FFE2E7);
     border: 2px solid var(--color-02, #F61590);
     border-top: 10px solid var(--color-02, #F61590);
-    border-bottom: 2px solid var(--color-02, #F61590);
+    border-bottom: 10px solid var(--color-02, #F61590);
     border-radius: 10px;
     padding: 10px;
 }
