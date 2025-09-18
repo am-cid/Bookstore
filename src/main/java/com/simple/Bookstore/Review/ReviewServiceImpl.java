@@ -124,4 +124,12 @@ public class ReviewServiceImpl implements ReviewService {
                 .findAllPublicOrOwnedReviewsByBookId(bookId, profileId, pageable)
                 .map(ReviewMapper::bookViewProjectionToBookViewResponseDTO);
     }
+
+    @Override
+    public ReviewViewResponseDTO findReviewViewById(Long id) throws ReviewNotFoundException {
+        return reviewRepository
+                .findReviewById(id)
+                .orElseThrow(() -> new ReviewNotFoundException(id));
+    }
+
 }

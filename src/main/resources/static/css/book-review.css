@@ -1,0 +1,77 @@
+#main-content .svg-text-heading {
+    font-size: 33px;
+}
+
+#book-image-thumb {
+    width: 100px;
+    height: 140px;
+}
+
+#book-title {
+    font-size: 16px;
+    color: var(--color-01, #FF0000);
+}
+
+#review-heading {
+    font-size: 20px;
+}
+
+#review-comments-div .svg-text-heading {
+    font-size: 29px;
+    margin-bottom: -15px;
+    margin-left: 5px;
+}
+
+#review-comments,
+#create-comment {
+    padding: 20px 10px 10px 10px;
+    border-radius: 10px;
+}
+
+#review-comments {
+    background-color: var(--color-06, #FFE2E7);
+    border: 2px solid var(--color-02, #F61590);
+    border-top: 7px solid var(--color-02, #F61590);
+    border-bottom: 7px solid var(--color-02, #F61590);
+}
+
+#create-comment {
+    background-color: var(--color-04, #FFD376);
+    border: 2px solid var(--interpolated-color-17, #FCBC82);
+}
+
+#create-comment-div .svg-text-heading {
+    font-size: 32px;
+    margin-left: 20px;
+    margin-bottom: -14px;
+}
+
+.border-top-1px-dotted {
+    border-top: 1px dotted var(--color-00, #A40E60);
+}
+
+/* DESCRIPTIVE */
+.justify-self-start {
+    justify-self: start;
+}
+
+.justify-self-end {
+    justify-self: end;
+}
+
+.align-items-end {
+    align-items: end;
+}
+
+.grid-tcol-1fr-4fr {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.justify-self-start {
+    justify-self: start;
+}
+
+.text-justify {
+    text-align: justify;
+}

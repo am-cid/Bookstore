@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="bookId" type="java.lang.Long"*/-->
+<!--/*@thymesVar id="review" type="com.simple.Bookstore.Review.ReviewViewResponseDTO"*/-->
+<!--/*@thymesVar id="comments" type="org.springframework.data.domain.Page<com.simple.Bookstore.Comment.CommentReviewViewResponseDTO>"*/-->
+<!--/*@thymesVar id="commentRequestDTO" type="com.simple.Bookstore.Comment.CommentRequestDTO"*/-->
+
+
+<div id="main-content" th:fragment="main-content">
+    <div class="flex-column gap-10px margin-10px">
+        <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Review Thread', 280, 33)}"></div>
+        <div class="flex-row gap-10px">
+            <a th:href="@{/books/{bookId}(bookId=${bookId})}">
+                <img id="book-image-thumb"
+                     th:alt="'book-image-' + ${bookId}"
+                     th:src="${review.bookFrontImage != null ?
+                 review.bookFrontImage : 'https://placehold.co/227x317?text=' +
+                     (#strings.isEmpty(review.bookTitle) ?
+                         'Book ' + bookId : review.bookTitle + '\n' + review.bookAuthor + '\n(Front Cover)'
+                 )}"
+                />
+            </a>
+            <div class="w-100P flex-column">
+                <div class="flex-row space-between gap-10px">
+                    <strong th:text="${review.title}"></strong>
+                    <p class="margin-0" th:title="${#temporals.format(review.date, 'dd MMMM yyyy HH:mm')}">
+                        Posted
+                        <span th:text="${T(com.simple.Bookstore.utils.PostedDateFormatter)
+                                     .formatTimeAgo(review.date, review.edited)}"></span>
+                    </p>
+                </div>
+
+                <div class="grid-tcol-1fr-4fr pad-0-15px">
+                    <svg th:replace="~{fragments/svg-fragments/rating-star ::
+                                ratingStar(${review.rating}, 105, 16, 5)}"></svg>
+                    <a class="justify-self-start"
+                       th:href="@{/profile/{username}(username=${review.username})}"
+                       th:text="${review.userDisplayName}"></a>
+                    <p class="margin-0 col-span-2 text-justify" th:text="${review.content}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-column" id="review-comments-div" th:if="${comments.hasContent()}">
+            <div class="flex-row space-between">
+                <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Comments', 1, 33)}"></div>
+                <div th:replace="~{fragments/components/pagination :: pagination(${comments}, '/books/' + ${bookId} + '/reviews/' + ${review.id}, null)}"></div>
+            </div>
+            <div class="flex-column gap-10px" id="review-comments">
+                <th:block th:each="comment, i : ${comments}"
+                          th:insert="~{fragments/components/comment :: comment(${comment})}">
+                </th:block>
+            </div>
+            <div th:replace="~{fragments/components/pagination :: pagination(${comments}, '/books/' + ${bookId} + '/reviews/' + ${review.id}, null)}"></div>
+        </div>
+
+        <div class="flex-column" id="create-comment-div" sec:authorize="isAuthenticated()">
+            <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Write a Comment', 1, 33)}"></div>
+            <div class="flex-column gap-10px" id="create-comment">
+                <form class="profile-details" method="post" th:action="@{/books/{bookId}/reviews/{reviewId}/comments(bookId=${bookId}, reviewId=${review.id})}"
+                      th:object="${commentRequestDTO}">
+                    <label th:for="${#ids.next('content')}" title="required">Comment<span class="required">*</span>:</label>
+                    <textarea maxlength="2000" minlength="1"
+                              required th:field="*{content}"
+                              title="Maximum of 2000 characters"
+                              type="text">
+                    </textarea>
+                    <span class="error-message" th:errors="*{content}" th:if="${#fields.hasErrors('content')}"></span>
+
+                    <button class="col-span-2 justify-self-center" type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

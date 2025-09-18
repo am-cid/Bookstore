@@ -38,4 +38,6 @@ public interface ReviewService {
      * @return paged reviews
      */
     Page<ReviewBookViewResponseDTO> findAllPublicOrOwnedReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable);
+
+    ReviewViewResponseDTO findReviewViewById(Long id) throws ReviewNotFoundException;
 }

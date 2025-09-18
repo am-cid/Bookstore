@@ -9,11 +9,24 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findAllPublicOrOwnedReviewsByBookId(Long bookId);
 
+    @Query("""
+            SELECT new com.simple.Bookstore.Review.ReviewViewResponseDTO(
+                r.id, r.title, r.content, r.rating, r.date, r.edited,
+                b.title, b.author, b.frontImage, u.username, p.displayName
+            )
+            FROM Review r
+            LEFT JOIN r.book b
+            LEFT JOIN r.profile p
+            LEFT JOIN p.user u
+            WHERE r.id = :id
+            """)
+    Optional<ReviewViewResponseDTO> findReviewById(@Param("id") Long id);
 
     @Query(value = """
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
