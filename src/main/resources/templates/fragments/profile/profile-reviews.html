@@ -14,10 +14,15 @@
 <!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
 <!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
 
-<div class="profile-result-div flex-column" th:fragment="reviews">
+<div class="profile-result-div flex-column" th:fragment="reviews"
+     th:with="view=${T(com.simple.Bookstore.views.Profile.ProfileViewType).REVIEWS.name}">
     <div class="flex-row space-between">
         <div th:replace="~{fragments/profile/profile-view-dropdown :: view-dropdown}"></div>
-        <div th:replace="~{fragments/components/pagination :: pagination(${viewReviewsModel.profileReviews()}, '/profile/' + ${pathUsername}, null)}"></div>
+        <div th:replace="~{fragments/components/pagination :: pagination(
+            ${viewReviewsModel.profileReviews},
+            '/profile/' + ${pathUsername} + '?view=' + ${view},
+            null
+        )}"></div>
     </div>
     <th:block th:if="${!viewReviewsModel.profileReviews().hasContent()}">No results found...</th:block>
     <div class="profile-result flex-row w-100P" th:each="review, i : ${viewReviewsModel.profileReviews()}">
@@ -55,7 +60,11 @@
             </div>
         </div>
     </div>
-    <div th:replace="~{fragments/components/pagination :: pagination(${viewReviewsModel.profileReviews()}, '/profile/' + ${pathUsername}, null)}"></div>
+    <div th:replace="~{fragments/components/pagination :: pagination(
+        ${viewReviewsModel.profileReviews()},
+        '/profile/' + ${pathUsername} + '?view=' + ${view},
+        null
+    )}"></div>
 </div>
 
 </body>
