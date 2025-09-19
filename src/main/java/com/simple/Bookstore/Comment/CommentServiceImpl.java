@@ -90,4 +90,16 @@ public class CommentServiceImpl implements CommentService {
                         pageable
                 );
     }
+
+    @Override
+    public Integer countAllPublicOrOwnedCommentsByReviewId(
+            Long reviewId,
+            User user
+    ) {
+        return commentRepository
+                .countAllPublicOrOwnedByReviewId(
+                        reviewId,
+                        user != null ? user.getProfile().getId() : null
+                );
+    }
 }

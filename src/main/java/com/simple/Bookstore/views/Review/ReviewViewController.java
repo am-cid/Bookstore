@@ -109,7 +109,12 @@ public class ReviewViewController {
         }
 
         commentService.createComment(user, reviewId, commentRequest);
-        return "redirect:/books/%d/reviews/%d".formatted(bookId, reviewId);
+        int totalPages = Math.ceilDiv(
+                commentService.countAllPublicOrOwnedCommentsByReviewId(reviewId, user),
+                pageable.getPageSize()
+        );
+        int lastPage = totalPages > 0 ? totalPages - 1 : 0;
+        return "redirect:/books/%d/reviews/%d?page=%d".formatted(bookId, reviewId, lastPage);
     }
 
 }

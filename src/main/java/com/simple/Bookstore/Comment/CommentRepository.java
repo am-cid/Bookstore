@@ -62,4 +62,15 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             Pageable pageable
     );
 
+    @Query("""
+            SELECT COUNT(c.id)
+            FROM Comment c
+            LEFT JOIN c.profile p
+            WHERE c.review.id = :reviewId
+                AND (p.isPublic = true OR (:profileId IS NOT NULL AND p.id = :profileId))
+            """)
+    Integer countAllPublicOrOwnedByReviewId(
+            @Param("reviewId") Long reviewId,
+            @Param("profileId") Long profileId
+    );
 }

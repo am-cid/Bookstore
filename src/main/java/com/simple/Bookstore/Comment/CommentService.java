@@ -20,4 +20,6 @@ public interface CommentService {
     Page<CommentProfileViewResponseDTO> findAllCommentsByUser(User user, Pageable pageable);
 
     Page<CommentReviewViewResponseDTO> findAllPublicOrOwnedCommentsByReviewIdAsPage(Long reviewId, User user, Pageable pageable);
+
+    Integer countAllPublicOrOwnedCommentsByReviewId(Long reviewId, User user);
 }
