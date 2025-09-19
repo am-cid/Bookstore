@@ -16,20 +16,20 @@
                required th:field="*{username}"
                title="Between 3 to 20 alphanumeric characters (including _ . -)"
                type="text">
-        <span class="error-message" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></span>
+        <span class="profile-details-error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></span>
 
         <label th:for="${#ids.next('password')}" title="required">Password<span class="required">*</span>:</label>
         <input pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,30}$"
                required th:field="*{password}"
                title="Password must be between 8 and 30 characters, and must contain at least one digit, one lowercase letter, one uppercase letter, and one special character"
                type="password">
-        <span class="error-message" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></span>
+        <span class="profile-details-error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></span>
 
         <label th:for="${#ids.next('confirmPassword')}" title="required">(again)<span class="required">*</span>:</label>
         <input pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,30}$"
                required th:field="*{confirmPassword}"
                title="Confirm Password" type="password">
-        <span class="error-message" th:errors="*{confirmPassword}" th:if="${#fields.hasErrors('confirmPassword')}"></span>
+        <span class="profile-details-error" th:errors="*{confirmPassword}" th:if="${#fields.hasErrors('confirmPassword')}"></span>
 
         <label th:for="${#ids.next('isPublic')}"
                title="Make your profile public and searchable by others">Public Profile:</label>
@@ -46,7 +46,7 @@
         <input maxlength="50" minlength="1"
            th:field="*{displayName}"
            type="text">
-        <span class="error-message" th:errors="*{displayName}" th:if="${#fields.hasErrors('displayName')}"></span>
+        <span class="profile-details-error" th:errors="*{displayName}" th:if="${#fields.hasErrors('displayName')}"></span>
 
         <button class="grid-col-start-1-span-2 justify-self-center" type="submit">Confirm & Create Account</button>
     </form>

@@ -171,7 +171,7 @@
                            th:field="*{title}"
                            title="Maximum of 100 characters (optional)"
                            type="text">
-                    <span class="error-message" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></span>
+                    <span class="profile-details-error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></span>
 
                     <label th:for="${#ids.next('rating')}" title="required">Stars<span class="required">*</span>:</label>
                     <select class="profile-details-select"
@@ -183,7 +183,7 @@
                         <option value="2">2</option>
                         <option value="1">1</option>
                     </select>
-                    <span class="error-message" th:errors="*{rating}" th:if="${#fields.hasErrors('rating')}"></span>
+                    <span class="profile-details-error" th:errors="*{rating}" th:if="${#fields.hasErrors('rating')}"></span>
 
                     <label th:for="${#ids.next('content')}" title="optional">Comment:</label>
                     <textarea maxlength="2000" minlength="1"
@@ -191,7 +191,7 @@
                               title="Maximum of 2000 characters (optional)"
                               type="text">
                     </textarea>
-                    <span class="error-message" th:errors="*{content}" th:if="${#fields.hasErrors('content')}"></span>
+                    <span class="profile-details-error" th:errors="*{content}" th:if="${#fields.hasErrors('content')}"></span>
 
                     <button class="col-span-2 justify-self-center" type="submit">Submit</button>
                 </form>

@@ -20,7 +20,7 @@
                required th:field="*{username}"
                title="Between 3 to 20 alphanumeric characters (including _ . -)"
                type="text">
-        <span class="error-message" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></span>
+        <span class="profile-details-error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></span>
 
         <label for="show-change-password" title="Check to change password">Change Password?</label>
         <input class="profile-details-checkbox show-hidden-trigger" id="show-change-password"
@@ -31,7 +31,7 @@
                    th:field="*{newPassword}"
                    title="Password must be between 8 and 30 characters, and must contain at least one digit, one lowercase letter, one uppercase letter, and one special character"
                    type="password">
-            <span class="error-message" th:errors="*{newPassword}" th:if="${#fields.hasErrors('newPassword')}"></span>
+            <span class="profile-details-error" th:errors="*{newPassword}" th:if="${#fields.hasErrors('newPassword')}"></span>
 
             <label for="confirmNewPassword" title="required">(again)<span class="required">*</span>:</label>
             <input pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,30}$"
@@ -39,7 +39,7 @@
                    title="Confirm Password"
                    type="password">
         </div>
-        <span class="error-message" th:errors="*{confirmNewPassword}" th:if="${#fields.hasErrors('confirmNewPassword')}"></span>
+        <span class="profile-details-error" th:errors="*{confirmNewPassword}" th:if="${#fields.hasErrors('confirmNewPassword')}"></span>
 
         <label for="isPublic"
                title="Make your profile public and searchable by others">Public Profile:</label>
@@ -51,13 +51,13 @@
         <input maxlength="50" minlength="1"
                th:field="*{displayName}"
                type="text">
-        <span class="error-message" th:errors="*{displayName()}" th:if="${#fields.hasErrors('displayName')}"></span>
+        <span class="profile-details-error" th:errors="*{displayName()}" th:if="${#fields.hasErrors('displayName')}"></span>
 
         <label for="oldPassword" title="required">Old password<span class="required">*</span>:</label>
         <input pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,30}$"
                required th:field="*{oldPassword}"
                title="Old Password" type="password">
-        <span class="error-message" th:errors="*{oldPassword}" th:if="${#fields.hasErrors('oldPassword')}"></span>
+        <span class="profile-details-error" th:errors="*{oldPassword}" th:if="${#fields.hasErrors('oldPassword')}"></span>
 
         <i id="old-password-hint">Please input the current password to change these data</i>
 
