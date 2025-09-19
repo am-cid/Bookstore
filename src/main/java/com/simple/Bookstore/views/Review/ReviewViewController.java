@@ -103,6 +103,7 @@ public class ReviewViewController {
 
         if (result.hasErrors()) {
             // TODO: need to maintain pageable so i need to handle the href of form by passing the pageable in the model
+            // TODO: decide if want to maintain page when failing a comment creation request.
             HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
             model.addAttribute("viewModel", viewResult.unwrap());
             return "book-review";
@@ -113,7 +114,7 @@ public class ReviewViewController {
                 commentService.countAllPublicOrOwnedCommentsByReviewId(reviewId, user),
                 pageable.getPageSize()
         );
-        int lastPage = totalPages > 0 ? totalPages - 1 : 0;
+        int lastPage = totalPages > 0 ? totalPages - 1 : 0; // 0-indexed TODO: change to 1-indexed
         return "redirect:/books/%d/reviews/%d?page=%d".formatted(bookId, reviewId, lastPage);
     }
 

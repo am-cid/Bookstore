@@ -40,17 +40,21 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Optional<ReviewProfileViewResponseDTO> findLatestReview() {
-        List<ReviewProfileViewResponseDTO> latestNReviews = findLatestNReviews(1);
+    public Optional<ReviewProfileViewResponseDTO> findLatestReview(User user) {
+        List<ReviewProfileViewResponseDTO> latestNReviews = findLatestNReviews(1, user);
         if (latestNReviews.isEmpty())
             return Optional.empty();
         return Optional.of(latestNReviews.getFirst());
     }
 
     @Override
-    public List<ReviewProfileViewResponseDTO> findLatestNReviews(int n) {
+    public List<ReviewProfileViewResponseDTO> findLatestNReviews(int n, User user) {
         return reviewRepository
-                .findTopNByOrderByIdDesc(n, PagingConstants.DEFAULT_PAGE_SIZE)
+                .findTopNByOrderByIdDesc(
+                        n,
+                        user != null ? user.getProfile().getId() : null,
+                        PagingConstants.DEFAULT_PAGE_SIZE
+                )
                 .stream()
                 .map(ReviewMapper::viewProjectionToViewResponseDTO)
                 .toList();

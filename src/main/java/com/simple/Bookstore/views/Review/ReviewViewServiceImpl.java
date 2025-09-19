@@ -92,6 +92,7 @@ public class ReviewViewServiceImpl implements ReviewViewService {
         boolean isReviewOwner = user != null && user.getUsername().equals(review.username());
         if (review.isPublic() || isReviewOwner)
             return new Result.Ok<>(null);
+        // TODO: redirect to unknown review page
         return new Result.Err<>("redirect:/books/%d".formatted(bookId));
     }
 

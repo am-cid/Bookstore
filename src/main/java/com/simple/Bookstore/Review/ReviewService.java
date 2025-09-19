@@ -14,7 +14,7 @@ public interface ReviewService {
 
     List<ReviewResponseDTO> findAllPublicOrOwnedReviewsByBookId(Long bookId);
 
-    Optional<ReviewProfileViewResponseDTO> findLatestReview();
+    Optional<ReviewProfileViewResponseDTO> findLatestReview(User user);
 
     ReviewResponseDTO createReview(User user, Long bookId, ReviewRequestDTO request)
             throws IllegalStateException, BookNotFoundException;
@@ -23,7 +23,7 @@ public interface ReviewService {
 
     void deleteReview(User user, Long id);
 
-    List<ReviewProfileViewResponseDTO> findLatestNReviews(int n);
+    List<ReviewProfileViewResponseDTO> findLatestNReviews(int n, User user);
 
     Page<ReviewProfileViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable);
 

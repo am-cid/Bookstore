@@ -32,11 +32,13 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
                 b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
                 u.username as username, p.display_name as userDisplayName,
-                (
-                    (
-                        -- need minus one for 0-indexed paging
-                        ROW_NUMBER() OVER (PARTITION BY r.book_id ORDER BY r.date DESC, r.id DESC) - 1
-                    ) / :pageSize
+                ( -- TODO: change to 1-indexed
+                    SELECT FLOOR(COUNT(r2.id) / :pageSize)
+                    FROM review r2
+                    LEFT JOIN profile p2 ON r2.profile_id = p2.id
+                    WHERE r2.book_id = r.book_id
+                        AND r2.date > r.date -- greater than since reviews under book view is ORDER BY DESC so you count newer ones that come before it.
+                        AND (p2.is_public OR (:profileId IS NOT NULL AND p2.id = :profileId)) -- only query public or owned comments
                 ) AS pageNumber
             FROM review r
             LEFT JOIN book b ON r.book_id = b.id
@@ -48,6 +50,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             nativeQuery = true)
     List<ReviewProfileViewProjection> findTopNByOrderByIdDesc(
             @Param("pageSize") Integer pageSize,
+            @Param("profileId") Long profileId,
             int n
     );
 
@@ -55,11 +58,13 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
                 b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
                 u.username as username, p.display_name as userDisplayName,
-                (
-                    (
-                        -- need minus one for 0-indexed paging
-                        ROW_NUMBER() OVER (PARTITION BY r.book_id ORDER BY r.date DESC, r.id DESC) - 1
-                    ) / :pageSize
+                ( -- TODO: change to 1-indexed
+                    SELECT FLOOR(COUNT(r2.id) / :pageSize)
+                    FROM review r2
+                    LEFT JOIN profile p2 ON r2.profile_id = p2.id
+                    WHERE r2.book_id = r.book_id
+                        AND r2.date > r.date -- greater than since reviews under book view is ORDER BY DESC so you count newer ones that come before it.
+                        AND (p2.is_public OR (:profileId IS NOT NULL AND p2.id = :profileId)) -- only query public or owned comments
                 ) AS pageNumber
             FROM review r
             LEFT JOIN book b ON r.book_id = b.id
@@ -84,17 +89,23 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
                 b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
                 u.username as username, p.display_name as userDisplayName,
-                (
-                    (
-                        -- need minus one for 0-indexed paging
-                        ROW_NUMBER() OVER (PARTITION BY r.book_id ORDER BY r.date DESC, r.id DESC) - 1
-                    ) / :pageSize
+                ( -- TODO: change to 1-indexed
+                    SELECT FLOOR(COUNT(r2.id) / :pageSize)
+                    FROM review r2
+                    LEFT JOIN profile p2 ON r2.profile_id = p2.id
+                    WHERE r2.book_id = r.book_id
+                        AND r2.date > r.date -- greater than since reviews under book view is ORDER BY DESC so you count newer ones that come before it.
+                        AND (p2.is_public OR (:profileId IS NOT NULL AND p2.id = :profileId)) -- only query public or owned comments
                 ) AS pageNumber
             FROM review r
             LEFT JOIN book b ON r.book_id = b.id
             LEFT JOIN profile p ON r.profile_id = p.id
             LEFT JOIN users u ON p.user_id = u.id
             WHERE r.book_id = :bookId
+                AND (
+                    p.is_public = true
+                    OR (:profileId IS NOT NULL AND r.profile_id = :profileId)
+                )
             ORDER BY r.date DESC, r.id DESC
             """, countQuery = """
             SELECT COUNT(r.id)
@@ -105,6 +116,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     )
     Page<ReviewProfileViewProjection> findAllPublicOrOwnedReviewsByBookId(
             @Param("bookId") Long bookId,
+            @Param("profileId") Long profileId,
             @Param("pageSize") Integer pageSize,
             Pageable pageable
     );

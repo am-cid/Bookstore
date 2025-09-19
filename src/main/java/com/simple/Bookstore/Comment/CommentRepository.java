@@ -19,11 +19,13 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
                 u_r.username as reviewerUsername, p_r.display_name reviewerDisplayName,
                 b.id as bookId,
                 u.username as username, p.display_name as userDisplayName,
-                (
-                    (
-                        -- need minus one for 0-indexed paging
-                        ROW_NUMBER() OVER (PARTITION BY c.review_id ORDER BY c.date DESC, c.id DESC) - 1
-                    ) / :pageSize
+                ( -- TODO: change to 1-indexed
+                    SELECT FLOOR(COUNT(c2.id) / :pageSize)
+                    FROM comment c2
+                    LEFT JOIN profile p2 ON c2.profile_id = p2.id
+                    WHERE c2.review_id = c.review_id
+                        AND c2.date < c.date -- less than since comments under review thread view is ORDER BY ASC so count older ones that come before it
+                        AND (p2.is_public OR (:profileId IS NOT NULL AND p2.id = :profileId)) -- only query public or owned comments
                 ) AS pageNumber
             FROM comment c
             LEFT JOIN review r ON c.review_id = r.id
