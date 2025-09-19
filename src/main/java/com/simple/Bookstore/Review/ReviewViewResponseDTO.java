@@ -3,11 +3,8 @@ package com.simple.Bookstore.Review;
 import java.time.LocalDateTime;
 
 /**
- * reviews to be rendered on the book's review view. This means it does needs
- * the book information since the book will not be requested alongside this.
- * <p>
- * note that the book id is left out because it will be a path parameter.
- * better to pass it in the model as a separate value
+ * reviews to be rendered on the book's review view. This means it does need
+ * the book information since the book will <strong>NOT</strong> be requested alongside this.
  * <p>
  * these reviews should be rendered under:
  * <code>/books/{bookId}/reviews/{reviewId}</code>
@@ -31,6 +28,8 @@ public record ReviewViewResponseDTO(
         Integer rating,
         LocalDateTime date,
         boolean edited,
+        boolean isPublic,
+        Long bookId,
         String bookTitle,
         String bookAuthor,
         String bookFrontImage,

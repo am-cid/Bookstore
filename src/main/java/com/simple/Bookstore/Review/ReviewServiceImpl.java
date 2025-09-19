@@ -99,17 +99,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Long countByBookId(Long bookId) {
-        return reviewRepository.countByBookId(bookId);
-    }
-
-    @Override
-    public boolean isAlreadyReviewedByUser(Long bookId, User user) {
-        List<Review> result = reviewRepository.findByBookIdAndProfileId(bookId, user == null ? null : user.getProfile().getId());
-        return result != null && !result.isEmpty();
-    }
-
-    @Override
     public Page<ReviewProfileViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable) {
         if (user == null)
             return Page.empty(pageable);
@@ -132,4 +121,14 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new ReviewNotFoundException(id));
     }
 
+    @Override
+    public Long countByBookId(Long bookId) {
+        return reviewRepository.countByBookId(bookId);
+    }
+
+    @Override
+    public boolean isAlreadyReviewedByUser(Long bookId, User user) {
+        List<Review> result = reviewRepository.findByBookIdAndProfileId(bookId, user == null ? null : user.getProfile().getId());
+        return result != null && !result.isEmpty();
+    }
 }

@@ -23,10 +23,6 @@ public interface ReviewService {
 
     void deleteReview(User user, Long id);
 
-    boolean isAlreadyReviewedByUser(Long bookId, User user);
-
-    Long countByBookId(Long bookId);
-
     List<ReviewProfileViewResponseDTO> findLatestNReviews(int n);
 
     Page<ReviewProfileViewResponseDTO> findAllReviewsByUser(User user, Pageable pageable);
@@ -40,4 +36,9 @@ public interface ReviewService {
     Page<ReviewBookViewResponseDTO> findAllPublicOrOwnedReviewsByBookIdAsPage(Long bookId, Long profileId, Pageable pageable);
 
     ReviewViewResponseDTO findReviewViewById(Long id) throws ReviewNotFoundException;
+
+    boolean isAlreadyReviewedByUser(Long bookId, User user);
+
+    Long countByBookId(Long bookId);
+
 }

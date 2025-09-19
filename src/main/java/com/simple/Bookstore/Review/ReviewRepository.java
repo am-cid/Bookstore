@@ -17,8 +17,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("""
             SELECT new com.simple.Bookstore.Review.ReviewViewResponseDTO(
-                r.id, r.title, r.content, r.rating, r.date, r.edited,
-                b.title, b.author, b.frontImage, u.username, p.displayName
+                r.id, r.title, r.content, r.rating, r.date, r.edited, p.isPublic,
+                b.id, b.title, b.author, b.frontImage, u.username, p.displayName
             )
             FROM Review r
             LEFT JOIN r.book b
