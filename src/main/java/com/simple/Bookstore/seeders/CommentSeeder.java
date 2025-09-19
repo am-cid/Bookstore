@@ -62,27 +62,27 @@ public class CommentSeeder implements CommandLineRunner {
 
         commentRepo.saveAll(List.of(
                 createComment(
-                        reviews.get(0),
+                        reviews.get(20),
                         profiles.get(1),
                         "I completely agree! The world-building is fantastic."
                 ),
                 createComment(
-                        reviews.get(1),
+                        reviews.get(21),
                         profiles.get(0),
                         "Couldn't have said it better myself. Tolkien is a genius."
                 ),
                 createComment(
-                        reviews.get(1),
+                        reviews.get(21),
                         profiles.get(2),
                         "Amazing book, glad you enjoyed it!"
                 ),
                 createComment(
-                        reviews.get(1),
+                        reviews.get(21),
                         profiles.get(1),
                         "wowowowowow!"
                 ),
                 createComment(
-                        reviews.get(2),
+                        reviews.get(22),
                         profiles.get(1),
                         "Stop the yappachino!"
                 )
