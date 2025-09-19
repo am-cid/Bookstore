@@ -14,6 +14,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Random;
 
 @Slf4j
 @Component
@@ -61,6 +62,15 @@ public class ReviewSeeder implements CommandLineRunner {
             return;
         }
 
+        for (int i = 0; i < 20; i++) {
+            reviewRepo.save(createReview(
+                    books.get(6),
+                    profiles.get(2),
+                    new Random().nextInt(6),
+                    "Random Review " + i,
+                    "review content for random review " + i
+            ));
+        }
         reviewRepo.saveAll(List.of(
                 createReview(
                         books.get(0),
@@ -120,10 +130,17 @@ public class ReviewSeeder implements CommandLineRunner {
                 ),
                 createReview(
                         books.get(6),
-                        profiles.get(2),
+                        profiles.get(0),
                         5,
                         "The perfect finale to an amazing series",
                         "The perfect finale to an amazing series. It ties everything together beautifully, providing a satisfying conclusion to the central conflict and the journeys of the main characters. The action is relentless, the emotional moments are powerful, and the themes of love and sacrifice are brought to a moving climax. A fitting and powerful end to a literary phenomenon."
+                ),
+                createReview(
+                        books.get(6),
+                        profiles.get(1),
+                        1,
+                        "huh?",
+                        "voldemort is so stupid man"
                 ),
                 createReview(
                         books.get(21),

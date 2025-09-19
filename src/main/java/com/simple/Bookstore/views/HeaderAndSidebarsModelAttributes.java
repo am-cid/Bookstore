@@ -66,7 +66,7 @@ public class HeaderAndSidebarsModelAttributes {
         // left sidebar data
         model.addAttribute("genres", Arrays.stream(Genre.values()).toList());
         model.addAttribute("authors", bookService.findDistinctAuthors());
-        Optional<ReviewProfileViewResponseDTO> latestReview = reviewService.findLatestReview(); // A new service method
+        Optional<ReviewProfileViewResponseDTO> latestReview = reviewService.findLatestReview(user);
         if (latestReview.isEmpty()) {
             model.addAttribute("_latestReview", null);
             model.addAttribute("_latestReviewDate", null);

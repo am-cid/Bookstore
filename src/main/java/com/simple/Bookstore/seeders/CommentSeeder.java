@@ -87,6 +87,9 @@ public class CommentSeeder implements CommandLineRunner {
                         "Stop the yappachino!"
                 )
         ));
+        for (int i = 0; i < 20; i++) {
+            commentRepo.save(createComment(reviews.get(1), profiles.get(2), String.valueOf(i + 1)));
+        }
         log.info("Seeded {} profileComments.", commentRepo.count());
     }
 }
