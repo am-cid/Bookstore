@@ -1,0 +1,60 @@
+#flash-error-close-on-check {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+#flash-error {
+    width: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid var(--color-00, #A40E60);
+    border-radius: 5px;
+    gap: 5px;
+    background-color: var(--color-06, #FFE2E7);
+}
+
+#flash-error strong {
+    color: red;
+}
+
+#flash-error label {
+    display: flex;
+    justify-content: end;
+}
+
+#flash-error label svg {
+    padding: 5px;
+}
+
+#flash-error label svg:hover {
+    background-color: var(--color-03, #F88B9E);
+}
+
+#flash-error label .svg-text-heading {
+    font-size: 13px;
+    text-align: center;
+}
+
+#flash-error label .svg-text-heading .text-outline-outer {
+    stroke: none;
+    stroke-width: 0;
+}
+
+#flash-error label .svg-text-heading .text-outline-inner {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-02, #F61590);
+    stroke-linejoin: round;
+    stroke-width: 3;
+}
+
+#flash-error label .svg-text-heading .text-fill {
+    fill: var(--color-06, #FFE2E7);
+}
+
+#flash-error-checkbox[type=checkbox]:checked + #flash-error-close-on-check {
+    display: none;
+}

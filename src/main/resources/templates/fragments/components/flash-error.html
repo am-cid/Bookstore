@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!--/*@thymesVar id="message" type="java.lang.String"*/-->
+<th:block th:fragment="flashError(message)" th:if="${!#strings.isEmpty(message)}">
+    <input hidden id="flash-error-checkbox" type="checkbox">
+    <div id="flash-error-close-on-check">
+        <div id="flash-error">
+            <strong th:text="${message}"></strong>
+            <label for="flash-error-checkbox">
+                <div th:replace="~{/fragments/svg-fragments/heading-plain :: svgHeading('X', 10, 13)}"></div>
+            </label>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

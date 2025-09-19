@@ -116,13 +116,17 @@
             <p class="text-justify" th:text="${book.description}"></p>
         </div>
 
-        <div class="flex-column" id="book-reviews-div" th:if="${reviews.hasContent()}">
+        <div class="flex-column" id="book-reviews-div">
             <div class="flex-row space-between">
                 <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Reviews', 1, 33)}"></div>
                 <div th:replace="~{fragments/components/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
             </div>
             <div class="flex-column gap-10px" id="book-reviews">
-                <div class="flex-row w-100P" th:each="review, i : ${reviews}" th:id="'review-' + ${review.id}">
+                <p class="margin-0" th:if="${!reviews.hasContent()}">No reviews found...</p>
+                <div class="flex-row w-100P"
+                     th:each="review, i : ${reviews}"
+                     th:id="'review-' + ${review.id}"
+                     th:if="${reviews.hasContent()}">
                     <div class="w-100P flex-column">
                         <div class="flex-row space-between gap-10px">
                             <a th:href="@{/books/{bookId}/reviews/{reviewId}(bookId=${book.id}, reviewId=${review.id})}">
