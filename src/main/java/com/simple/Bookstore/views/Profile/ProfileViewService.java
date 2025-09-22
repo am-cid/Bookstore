@@ -5,6 +5,7 @@ import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserDeleteRequestDTO;
 import com.simple.Bookstore.utils.Result;
+import com.simple.Bookstore.views.SharedModels.ViewThemesModel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 
@@ -15,7 +16,7 @@ public interface ProfileViewService {
      * @param pageable     ownedTheme paging
      * @return view model if ok. return a "redirect:/some/path" or a "template-name" if any failed any checks
      */
-    Result<Pair<ProfileViewModel, ProfileViewThemesModel>, String> buildProfileViewThemes(
+    Result<Pair<ProfileViewModel, ViewThemesModel>, String> buildProfileViewThemes(
             User currentUser,
             String pathUsername,
             Pageable pageable

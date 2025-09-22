@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -12,70 +11,17 @@
 <!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
 <!--/*@thymesVar id="viewType" type="com.simple.Bookstore.views.Profile.ProfileViewType"*/-->
 <!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileViewModel"*/-->
-<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.Profile.ProfileViewThemesModel"*/-->
+<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.SharedModels.ViewThemesModel"*/-->
 <!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
 <!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
 
 <div class="profile-result-div flex-column" th:fragment="themes">
     <div class="flex-row space-between">
         <div th:replace="~{fragments/profile/profile-view-dropdown :: view-dropdown}"></div>
-        <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesModel.profileThemes}, '/profile/' + ${pathUsername}, null)}"></div>
+        <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesModel.themes}, '/profile/' + ${pathUsername}, null)}"></div>
     </div>
-    <th:block th:if="${!viewThemesModel.profileThemes().hasContent()}">No results found...</th:block>
-    <div class="profile-result flex-row w-100P" th:each="theme, i : ${viewThemesModel.profileThemes()}">
-        <div class="profile-theme-colors">
-            <ul class="theme-colors-list">
-                <li class="theme-color" th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
-                <li class="theme-color" th:style="'background-color: #' + ${theme.base01} " th:title="'#' + ${theme.base01}"></li>
-                <li class="theme-color" th:style="'background-color: #' + ${theme.base02} " th:title="'#' + ${theme.base02}"></li>
-                <li class="theme-color" th:style="'background-color: #' + ${theme.base03} " th:title="'#' + ${theme.base03}"></li>
-                <li class="theme-color" th:style="'background-color: #' + ${theme.base04} " th:title="'#' + ${theme.base04}"></li>
-                <li class="theme-color" th:style="'background-color: #' + ${theme.base05} " th:title="'#' + ${theme.base05}"></li>
-                <li class="theme-color" th:style="'background-color: #' + ${theme.base06} " th:title="'#' + ${theme.base06}"></li>
-                <li class="theme-color" th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
-            </ul>
-        </div>
-        <div class="flex-column w-100P">
-            <div class="profile-result-content-title">
-                <p class="margin-0">
-                    <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
-                       th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
-                </p>
-            </div>
-            <th:block th:if="${!#strings.isEmpty(theme.description) || user != null}">
-                <div class="profile-result-content-details pad-0-15px">
-                    <th:block th:if="${!#strings.isEmpty(theme.description)}">
-                        <strong>Description: </strong>
-                        <p class="margin-0" th:text="${theme.description}"></p>
-                    </th:block>
-                    <th:block sec:authorize="isAuthenticated()">
-                        <form action="#" class="apply-form" method="post" th:action="@{/profile/theme}">
-                            <input name="themeId" th:value="${theme.id}" type="hidden" />
-                            <button th:if="${viewThemesModel.currentUserTheme() == null}" type="submit">Apply</button>
-                            <th:block th:if="${viewThemesModel.currentUserTheme() != null}">
-                                <i th:if="${viewThemesModel.currentUserTheme().id == theme.id}">In Use</i>
-                                <button th:if="${viewThemesModel.currentUserTheme().id != theme.id}" type="submit">Apply</button>
-                            </th:block>
-                        </form>
-                        <form action="#" method="post"
-                              th:action="@{/profile/saved-themes}"
-                              th:if="${!#lists.contains(viewThemesModel.currentUserSavedThemeIds(), theme.id)}">
-                            <input name="themeId" th:value="${theme.id}" type="hidden" />
-                            <button type="submit">Save</button>
-                        </form>
-                        <form action="#" method="post"
-                              th:action="@{/profile/saved-themes}"
-                              th:if="${#lists.contains(viewThemesModel.currentUserSavedThemeIds(), theme.id)}">
-                            <input name="_method" type="hidden" value="delete" />
-                            <input name="themeId" th:value="${theme.id}" type="hidden" />
-                            <button type="submit">Unsave</button>
-                        </form>
-                    </th:block>
-                </div>
-            </th:block>
-        </div>
-    </div>
-    <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesModel.profileThemes}, '/profile/' + ${pathUsername}, null)}"></div>
+    <th:block th:replace="~{fragments/components/themes-section :: themes(${viewThemesModel})}"></th:block>
+    <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesModel.themes}, '/profile/' + ${pathUsername}, null)}"></div>
 </div>
 
 </body>

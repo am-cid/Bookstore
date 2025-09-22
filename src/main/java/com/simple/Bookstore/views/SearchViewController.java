@@ -1,14 +1,20 @@
 package com.simple.Bookstore.views;
 
+import com.simple.Bookstore.Book.BookSearchResultDTO;
 import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Genre.Genre;
+import com.simple.Bookstore.Profile.ProfileResponseDTO;
 import com.simple.Bookstore.Profile.ProfileService;
 import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Search.SearchType;
 import com.simple.Bookstore.Theme.ThemeResponseDTO;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.views.SharedModels.ViewBooksModel;
+import com.simple.Bookstore.views.SharedModels.ViewProfilesModel;
+import com.simple.Bookstore.views.SharedModels.ViewThemesModel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +33,24 @@ public class SearchViewController {
     private final ThemeService themeService;
     private final ProfileService profileService;
     private final ReviewService reviewService;
+
+    // HELPERS
+    private static String queryString(SearchType searchType, String query, Double rating, Optional<Set<Genre>> genres) {
+        StringBuilder res = new StringBuilder();
+        res.append("type=");
+        res.append(searchType.name());
+        res.append("&query=");
+        res.append(query);
+        res.append("&rating=");
+        res.append(rating);
+        if (genres.isPresent()) {
+            for (Genre genre : genres.get()) {
+                res.append("&genres=");
+                res.append(genre.name());
+            }
+        }
+        return res.toString();
+    }
 
     @GetMapping("/search")
     public String search(
@@ -47,41 +71,36 @@ public class SearchViewController {
         // search result data
         switch (searchType) {
             case BOOK -> {
+                Page<BookSearchResultDTO> results = bookService.searchBooks(query, genres, rating, pageable);
+                model.addAttribute("results", results);
                 model.addAttribute(
-                        "results",
-                        bookService.searchBooks(query, genres, rating, pageable)
+                        "viewBooksModel",
+                        new ViewBooksModel(
+                                results,
+                                bookService.findSavedBookIds(user)
+                        )
                 );
             }
             case THEME -> {
+                Page<ThemeResponseDTO> results = themeService.searchThemes(query, (user != null) ? user.getId() : null, pageable);
+                model.addAttribute("results", results);
                 model.addAttribute(
-                        "results",
-                        themeService.searchThemes(
-                                query,
-                                (user != null)
-                                        ? user.getId()
-                                        : null,
-                                pageable
+                        "viewThemesModel",
+                        new ViewThemesModel(
+                                results,
+                                themeService.findUsedTheme(user),
+                                themeService.findSavedThemeIds(user)
                         )
                 );
-                model.addAttribute(
-                        "usedTheme",
-                        themeService.findUsedTheme(user)
-                );
-                model.addAttribute(
-                        "savedThemeIds",
-                        themeService
-                                .findSavedThemes(user)
-                                .stream()
-                                .map(ThemeResponseDTO::id)
-                                .toList()
-                );
             }
-            case PROFILE ->
-                    model.addAttribute(
-                            "results",
-                            profileService.searchProfiles(query, user, pageable)
-                    );
+            case PROFILE -> {
+                Page<ProfileResponseDTO> results = profileService.searchProfiles(query, user, pageable);
+                model.addAttribute("results", results);
+                model.addAttribute("viewProfilesModel", new ViewProfilesModel(results));
+            }
         }
+
+        model.addAttribute("queryString", queryString(searchType, query, rating, genres));
         return "search";
     }
 }

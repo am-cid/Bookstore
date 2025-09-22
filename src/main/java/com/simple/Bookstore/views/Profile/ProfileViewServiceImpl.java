@@ -14,6 +14,7 @@ import com.simple.Bookstore.User.UserService;
 import com.simple.Bookstore.utils.FormRequest;
 import com.simple.Bookstore.utils.ProfileMapper;
 import com.simple.Bookstore.utils.Result;
+import com.simple.Bookstore.views.SharedModels.ViewThemesModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +33,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
     private final CommentService commentService;
 
     @Override
-    public Result<Pair<ProfileViewModel, ProfileViewThemesModel>, String> buildProfileViewThemes(
+    public Result<Pair<ProfileViewModel, ViewThemesModel>, String> buildProfileViewThemes(
             User currentUser,
             String pathUsername,
             Pageable pageable
@@ -51,7 +52,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
                 .toList();
         return new Result.Ok<>(Pair.of(
                 profileViewModel,
-                new ProfileViewThemesModel(ownedThemes, usedTheme, savedThemeIds)
+                new ViewThemesModel(ownedThemes, usedTheme, savedThemeIds)
         ));
     }
 
