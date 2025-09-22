@@ -138,6 +138,37 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
+    public List<Long> findSavedBookIds(User user) {
+        if (user == null)
+            return List.of();
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepo.findById(user.getId()).get();
+        return bookRepo
+                .findProfileSavedBookIds(managedUser.getProfile().getId());
+    }
+
+    @Override
+    @Transactional
+    public Page<BookSearchResultDTO> findSavedBooks(User user, Pageable pageable) {
+        if (user == null)
+            return Page.empty(pageable);
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepo.findById(user.getId()).get();
+        return bookRepo
+                .findProfileSavedBooks(
+                        managedUser.getProfile().getId(),
+                        pageable
+                )
+                .map(BookMapper::searchResultProjectionToDTO);
+
+    }
+
+    @Override
     public Optional<BookSearchResultDTO> findBookById(Long id) {
         return bookRepo.findById(id).map(BookMapper::bookToSearchResultDTO);
     }

@@ -69,4 +69,8 @@ public interface ThemeService {
     ThemeResponseDTO findUsedTheme(User user);
 
     List<ThemeResponseDTO> findSavedThemes(User user);
+
+    List<Long> findSavedThemeIds(User user);
+
+    Page<ThemeResponseDTO> findSavedThemes(User user, Pageable pageable);
 }

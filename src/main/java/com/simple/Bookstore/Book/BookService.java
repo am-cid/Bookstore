@@ -20,6 +20,10 @@ public interface BookService {
 
     List<BookSearchResultDTO> findSavedBooks(User user);
 
+    List<Long> findSavedBookIds(User user);
+
+    Page<BookSearchResultDTO> findSavedBooks(User user, Pageable pageable);
+
     Optional<BookSearchResultDTO> findBookById(Long id);
 
     List<String> findDistinctAuthors();

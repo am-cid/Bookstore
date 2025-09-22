@@ -305,4 +305,32 @@ public class ThemeServiceImpl implements ThemeService {
                 .map(ThemeMapper::themeToResponseDTO)
                 .toList();
     }
+
+    @Override
+    @Transactional
+    public List<Long> findSavedThemeIds(User user) {
+        if (user == null)
+            return List.of();
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepository.findById(user.getId()).get();
+        return themeRepository
+                .findProfileSavedThemeIds(managedUser.getProfile().getId());
+    }
+
+    @Override
+    @Transactional
+    public Page<ThemeResponseDTO> findSavedThemes(User user, Pageable pageable) {
+        if (user == null)
+            return Page.empty(pageable);
+        // need to re-get user since the User passed in is from @AuthenticationPrincipal,
+        // which is outside the @Transactional block of this method.
+        // This was a headache and a half!
+        User managedUser = userRepository.findById(user.getId()).get();
+        return themeRepository.findProfileSavedThemes(
+                managedUser.getProfile().getId(),
+                pageable
+        );
+    }
 }

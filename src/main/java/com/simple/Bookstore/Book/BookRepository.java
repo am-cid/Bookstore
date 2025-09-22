@@ -71,6 +71,35 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             nativeQuery = true)
     List<BookSearchResultProjection> findTopNRatedBooks(@Param("n") int n);
 
+    @Query("""
+            SELECT b.id
+            FROM Book b
+            LEFT JOIN b.savedByProfiles p
+            WHERE p.id = :profileId
+            """)
+    List<Long> findProfileSavedBookIds(@Param("profileId") Long profileId);
+
+    @NativeQuery("""
+            SELECT b.id, b.title, b.author, b.description, b.date,
+                b.front_image, b.back_image, b.spine_image,
+                AVG(r.rating) AS averageRating,
+                ARRAY_AGG(bg.genre) AS genres,
+                ARRAY_AGG(bci.image_url) AS contentImages
+            FROM book b
+            LEFT JOIN profile_saved_books psb ON b.id = psb.book_id
+            LEFT JOIN profile p ON psb.profile_id = p.id
+            LEFT JOIN review r ON b.id = r.book_id
+            LEFT JOIN book_genres bg ON b.id = bg.book_id
+            LEFT JOIN book_content_images bci ON b.id = bci.book_id
+            WHERE p.id = :profileId
+            GROUP BY b.id, b.title, b.author, b.description, b.date,
+                b.front_image, b.back_image, b.spine_image
+            """)
+    Page<BookSearchResultProjection> findProfileSavedBooks(
+            @Param("profileId") Long profileId,
+            Pageable pageable
+    );
+
     @Query(value = """
             SELECT b.id, b.title, b.author, b.description, b.date,
                 b.front_image, b.back_image, b.spine_image,

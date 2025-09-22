@@ -30,6 +30,29 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
             """)
     Page<Theme> findByPublishedOrOwnedUnpublishedThemes(@Param("user") User user, Pageable pageable);
 
+    @Query("""
+            SELECT t.id
+            FROM Theme t
+            LEFT JOIN t.savedByProfiles p
+            WHERE p.id = :profileId
+            """)
+    List<Long> findProfileSavedThemeIds(@Param("profileId") Long profileId);
+
+    @Query("""
+            SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
+                t.id, t.name, t.description, t.date, p.id, u.username, p.displayName,
+                t.base00, t.base01, t.base02, t.base03, t.base04, t.base05, t.base06, t.base07
+            )
+            FROM Theme t
+            LEFT JOIN t.savedByProfiles p
+            LEFT JOIN p.user u
+            WHERE p.id = :profileId
+            """)
+    Page<ThemeResponseDTO> findProfileSavedThemes(
+            @Param("profileId") Long profileId,
+            Pageable pageable
+    );
+
     @Query(value = """
             SELECT t.id, t.name, t.description, t.date,
                    t.profile_id AS profileId,
