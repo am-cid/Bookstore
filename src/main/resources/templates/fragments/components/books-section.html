@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.SharedModels.ViewThemesModel"*/-->
+
+<th:block th:fragment="themes(viewThemesModel)">
+    <th:block th:if="${!viewThemesModel.themes().hasContent()}">No results found...</th:block>
+    <div class="theme-item" th:each="theme, i : ${viewThemesModel.themes()}">
+        <ul>
+            <li th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
+            <li th:style="'background-color: #' + ${theme.base01} " th:title="'#' + ${theme.base01}"></li>
+            <li th:style="'background-color: #' + ${theme.base02} " th:title="'#' + ${theme.base02}"></li>
+            <li th:style="'background-color: #' + ${theme.base03} " th:title="'#' + ${theme.base03}"></li>
+            <li th:style="'background-color: #' + ${theme.base04} " th:title="'#' + ${theme.base04}"></li>
+            <li th:style="'background-color: #' + ${theme.base05} " th:title="'#' + ${theme.base05}"></li>
+            <li th:style="'background-color: #' + ${theme.base06} " th:title="'#' + ${theme.base06}"></li>
+            <li th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
+        </ul>
+        <a class="theme-title" th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
+           th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
+        <th:block th:if="${!#strings.isEmpty(theme.description)}">
+            <strong class="theme-details-label">Description: </strong>
+            <p class="theme-details-value" th:text="${theme.description}"></p>
+        </th:block>
+        <th:block sec:authorize="isAuthenticated()">
+            <form action="#" class="theme-details-label" method="post" th:action="@{/profile/theme}">
+                <input name="themeId" th:value="${theme.id}" type="hidden" />
+                <button th:if="${viewThemesModel.currentUserTheme() == null}" type="submit">Apply</button>
+                <th:block th:if="${viewThemesModel.currentUserTheme() != null}">
+                    <i th:if="${viewThemesModel.currentUserTheme().id == theme.id}">In Use</i>
+                    <button th:if="${viewThemesModel.currentUserTheme().id != theme.id}" type="submit">Apply</button>
+                </th:block>
+            </form>
+            <form action="#" class="theme-details-value" method="post"
+                  th:action="@{/profile/saved-themes}"
+                  th:if="${!#lists.contains(viewThemesModel.currentUserSavedThemeIds(), theme.id)}">
+                <input name="themeId" th:value="${theme.id}" type="hidden" />
+                <button type="submit">Save</button>
+            </form>
+            <form action="#" class="theme-details-value" method="post"
+                  th:action="@{/profile/saved-themes}"
+                  th:if="${#lists.contains(viewThemesModel.currentUserSavedThemeIds(), theme.id)}">
+                <input name="_method" type="hidden" value="delete" />
+                <input name="themeId" th:value="${theme.id}" type="hidden" />
+                <button type="submit">Unsave</button>
+            </form>
+        </th:block>
+    </div>
+</th:block>
+
+</body>
+</html>

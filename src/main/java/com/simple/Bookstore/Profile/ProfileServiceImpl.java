@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
@@ -160,9 +162,9 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Page<ProfileResponseDTO> searchProfiles(String query, User user, Pageable pageable) {
+    public Page<ProfileResponseDTO> searchProfiles(Optional<String> query, User user, Pageable pageable) {
         return profileRepository
-                .searchProfiles(query, user == null ? null : user.getId(), pageable)
+                .searchProfiles(query.orElse(null), user == null ? null : user.getId(), pageable)
                 .map(ProfileMapper::projectionToResponseDTO);
     }
 

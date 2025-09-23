@@ -35,33 +35,38 @@ public class SearchViewController {
     private final ReviewService reviewService;
 
     // HELPERS
-    private static String queryString(SearchType searchType, String query, Double rating, Optional<Set<Genre>> genres) {
+    private static String queryString(
+            SearchType searchType,
+            Optional<String> query,
+            Optional<Double> rating,
+            Optional<Set<Genre>> genres
+    ) {
         StringBuilder res = new StringBuilder();
         res.append("type=");
         res.append(searchType.name());
         res.append("&query=");
-        res.append(query);
+        query.ifPresent(res::append);
         res.append("&rating=");
-        res.append(rating);
-        if (genres.isPresent()) {
-            for (Genre genre : genres.get()) {
+        rating.ifPresent(res::append);
+        genres.ifPresent((g) -> {
+            for (Genre genre : g) {
                 res.append("&genres=");
                 res.append(genre.name());
             }
-        }
+        });
         return res.toString();
     }
 
     @GetMapping("/search")
     public String search(
             @RequestParam("type") SearchType searchType,
-            @RequestParam(required = false) String query,
+            @RequestParam(required = false) Optional<String> query,
             // need specifically for collection types since a null collection's
             // type cannot be inferred by JPA in repository native queries,
             // even if there is a null check in the WHERE clause:
             // ':genres IS NULL OR'
             @RequestParam(required = false) Optional<Set<Genre>> genres,
-            @RequestParam(required = false) Double rating,
+            @RequestParam(required = false) Optional<Double> rating,
             @AuthenticationPrincipal User user,
             @PageableDefault Pageable pageable,
             Model model

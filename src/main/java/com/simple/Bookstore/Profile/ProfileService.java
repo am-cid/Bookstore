@@ -7,6 +7,8 @@ import com.simple.Bookstore.User.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 public interface ProfileService {
     ProfileResponseDTO findOwn(User user) throws UnauthorizedException;
 
@@ -24,7 +26,7 @@ public interface ProfileService {
 
     void unsaveBook(Long id, User user) throws UnauthorizedException, BookNotFoundException;
 
-    Page<ProfileResponseDTO> searchProfiles(String query, User user, Pageable pageable);
+    Page<ProfileResponseDTO> searchProfiles(Optional<String> query, User user, Pageable pageable);
 
     Profile updateProfile(Profile profile, ProfileEditRequestDTO request);
 }

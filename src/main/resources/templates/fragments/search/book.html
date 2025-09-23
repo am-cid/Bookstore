@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Bookstore Fragment: main-content</title>
@@ -7,6 +9,7 @@
 </head>
 <body>
 <!--/*@thymesVar id="results" type="org.springframework.data.domain.Page<com.simple.Bookstore.Book.BookSearchResultDTO>"*/-->
+<!--/*@thymesVar id="savedBookIds" type="java.util.List<java.lang.Long>"*/-->
 
 <div class="search-result-content-div" th:fragment="search-results">
     <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Search:Book', 1, 33)}"></div>
@@ -37,6 +40,21 @@
                     <p class="search-result-desc" th:text="${book.description}"></p>
                     <strong>Genre/s: </strong>
                     <ul th:replace="~{fragments/components/genre-list :: genreList(${book.genres}, 5)}"></ul>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <form action="#" method="post"
+                              th:action="@{/profile/saved-books}"
+                              th:if="${!#lists.contains(savedBookIds, book.id)}">
+                            <input name="bookId" th:value="${book.id}" type="hidden" />
+                            <button type="submit">Save</button>
+                        </form>
+                        <form action="#" method="post"
+                              th:action="@{/profile/saved-books}"
+                              th:if="${!#lists.contains(savedBookIds, book.id)}">
+                            <input name="_method" type="hidden" value="delete" />
+                            <input name="bookId" th:value="${book.id}" type="hidden" />
+                            <button type="submit">Unsave</button>
+                        </form>
+                    </th:block>
                 </div>
             </div>
         </div>

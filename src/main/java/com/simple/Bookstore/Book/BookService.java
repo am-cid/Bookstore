@@ -34,5 +34,10 @@ public interface BookService {
 
     void deleteBook(Long id);
 
-    Page<BookSearchResultDTO> searchBooks(String query, Optional<Set<Genre>> genres, Double rating, Pageable pageable);
+    Page<BookSearchResultDTO> searchBooks(
+            Optional<String> query,
+            Optional<Set<Genre>> genres,
+            Optional<Double> rating,
+            Pageable pageable
+    );
 }

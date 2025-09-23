@@ -201,9 +201,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<BookSearchResultDTO> searchBooks(
-            String query,
+            Optional<String> query,
             Optional<Set<Genre>> genres,
-            Double rating,
+            Optional<Double> rating,
             Pageable pageable
     ) {
         Set<String> validGenres = genres.orElse(new HashSet<>())
@@ -212,8 +212,8 @@ public class BookServiceImpl implements BookService {
                 .map(Genre::name)
                 .collect(Collectors.toSet());
         Page<BookSearchResultProjection> bookPage = bookRepo.searchBooks(
-                query,
-                rating,
+                query.orElse(null),
+                rating.orElse(null),
                 validGenres,
                 validGenres.size(),
                 pageable

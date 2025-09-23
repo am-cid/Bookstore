@@ -20,6 +20,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
@@ -218,8 +219,11 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable)
-            throws ThemeNotFoundException {
+    public Page<ThemeResponseDTO> searchThemes(
+            Optional<String> query,
+            Long userId,
+            Pageable pageable
+    ) throws ThemeNotFoundException {
         Long profileId = userId == null
                 ? null
                 : userRepository
@@ -228,7 +232,7 @@ public class ThemeServiceImpl implements ThemeService {
                 .getProfile()
                 .getId();
         return themeRepository
-                .searchThemes(query, profileId, pageable)
+                .searchThemes(query.orElse(null), profileId, pageable)
                 .map(ThemeMapper::projectionToResponseDTO);
     }
 

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface ThemeService {
     Page<ThemeResponseDTO> findPublishedOrOwnedUnpublishedThemes(User user, Pageable pageable);
@@ -52,7 +53,11 @@ public interface ThemeService {
             @Nullable String customDescription
     ) throws IOException;
 
-    Page<ThemeResponseDTO> searchThemes(String query, Long userId, Pageable pageable) throws ThemeNotFoundException;
+    Page<ThemeResponseDTO> searchThemes(
+            Optional<String> query,
+            Long userId,
+            Pageable pageable
+    ) throws ThemeNotFoundException;
 
     String getThemeAsCss(Long id, User user, int steps) throws ThemeNotFoundException;
 

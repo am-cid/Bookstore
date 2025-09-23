@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1/themes")
 @RequiredArgsConstructor
@@ -61,7 +63,7 @@ public class ThemeController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<ThemeResponseDTO>> searchThemes(
-            @RequestParam(required = false) String query,
+            @RequestParam(required = false) Optional<String> query,
             @AuthenticationPrincipal User user,
             @PageableDefault(size = 10, page = 0) Pageable pageable
     ) {
