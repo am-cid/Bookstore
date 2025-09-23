@@ -41,6 +41,7 @@
 .theme-title {
     grid-area: header;
     background-color: var(--color-04, #FFD376);
+    margin: 0;
     padding: 0 5px;
 }
 

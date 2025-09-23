@@ -23,8 +23,10 @@
             <li th:style="'background-color: #' + ${theme.base06} " th:title="'#' + ${theme.base06}"></li>
             <li th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
         </ul>
-        <a class="theme-title" th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
-           th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
+        <p class="theme-title">
+            <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
+               th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
+        </p>
         <th:block th:if="${!#strings.isEmpty(theme.description)}">
             <strong class="theme-details-label">Description: </strong>
             <p class="theme-details-value" th:text="${theme.description}"></p>

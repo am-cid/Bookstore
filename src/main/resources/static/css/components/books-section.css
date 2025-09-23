@@ -1,0 +1,45 @@
+.book-item {
+    display: grid;
+    grid-template-rows: repeat(6, auto);
+    grid-template-columns: 100px 2fr 7fr;
+    grid-template-areas:
+            'preview header header'
+            'preview body body' /* description */
+            'preview body body' /* rating if any */
+            'preview body body' /* genres */
+            'preview body body' /* save/unsave button */
+            'preview body body'; /* spacer to push above content together. idk how to grid yo... */
+    border: 2px solid var(--color-00, #A40E60);
+    grid-gap: 0;
+}
+
+.book-item a {
+    grid-area: preview;
+    align-self: center;
+}
+
+.book-item a img {
+    width: 100px;
+    height: 140px
+}
+
+.book-title {
+    grid-area: header;
+    background-color: var(--color-04, #FFD376);
+    margin: 0;
+    padding: 0 5px;
+    align-self: start;
+}
+
+.book-details-label {
+    grid-column: 2 / 3;
+    margin-left: 15px;
+    place-self: start;
+}
+
+.book-details-value {
+    margin: 0;
+    grid-column: 3 / 4;
+    justify-self: stretch;
+    align-self: start;
+}
