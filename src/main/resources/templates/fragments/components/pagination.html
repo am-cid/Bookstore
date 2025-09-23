@@ -12,9 +12,10 @@
 
 <nav class="pagination-nav"
      th:fragment="pagination(page, baseUrl, pathParams)"
-     th:if="${page != null && page.hasContent()}">
+     th:with="hasContent=${page != null && page.hasContent()}">
     <p class="pagination-title">Page: </p>
-    <ul class="pagination-list">
+
+    <ul class="pagination-list" th:if="${hasContent}">
         <li class="page-item">
             <th:block th:if="${page.first}">
                 <strong class="active"><</strong>
@@ -72,6 +73,18 @@
                     >
                 </a>
             </th:block>
+        </li>
+    </ul>
+
+    <ul class="pagination-list" th:if="${!hasContent}">
+        <li class="page-item">
+            <strong class="active"><</strong>
+        </li>
+        <li class="page-item">
+            <strong class="active">1</strong>
+        </li>
+        <li class="page-item">
+            <strong class="active">></strong>
         </li>
     </ul>
 </nav>

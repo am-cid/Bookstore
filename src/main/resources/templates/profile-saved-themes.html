@@ -24,21 +24,11 @@
 </head>
 <body>
 
-<div id="body-div" th:fragment="_savedThemes">
+<div id="body-div">
     <div th:replace="~{fragments/header :: header}"></div>
     <div id="main-layout">
         <div th:replace="~{fragments/sidebar-left :: sidebar-left}"></div>
         <div th:replace="~{fragments/profile-saved-section.html :: saved-themes}"></div>
-        <div th:replace="~{fragments/sidebar-right :: sidebar-right}"></div>
-    </div>
-    <div th:replace="~{fragments/footer :: footer}"></div>
-</div>
-
-<div id="body-div" th:fragment="_savedBooks">
-    <div th:replace="~{fragments/header :: header}"></div>
-    <div id="main-layout">
-        <div th:replace="~{fragments/sidebar-left :: sidebar-left}"></div>
-        <div th:replace="~{fragments/profile-saved-section.html :: saved-books}"></div>
         <div th:replace="~{fragments/sidebar-right :: sidebar-right}"></div>
     </div>
     <div th:replace="~{fragments/footer :: footer}"></div>

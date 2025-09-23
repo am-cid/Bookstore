@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -19,70 +18,26 @@
     <div id="profile-div">
         <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading(${accountHeader}, 1, 33)}"></div>
         <div class="flex-column" id="profile">
-            <div th:replace="~{fragments/profile/account-details :: details}"></div>
-
-            <div class="profile-result-div flex-column">
-                <div class="flex-row space-between">
-                    <div th:replace="~{fragments/profile/profile-view-dropdown :: view-dropdown}"></div>
-                    <div th:replace="~{fragments/components/pagination :: pagination(${viewSavedThemesModel.themes}, '/profile/' + ${pathUsername} + '/saved-themes', null)}"></div>
-                </div>
-                <th:block th:if="${!viewSavedThemesModel.themes().hasContent()}">No results found...</th:block>
-                <div class="profile-result flex-row w-100P" th:each="theme, i : ${viewSavedThemesModel.themes()}">
-                    <div class="profile-theme-colors">
-                        <ul class="theme-colors-list">
-                            <li class="theme-color" th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
-                            <li class="theme-color" th:style="'background-color: #' + ${theme.base01} " th:title="'#' + ${theme.base01}"></li>
-                            <li class="theme-color" th:style="'background-color: #' + ${theme.base02} " th:title="'#' + ${theme.base02}"></li>
-                            <li class="theme-color" th:style="'background-color: #' + ${theme.base03} " th:title="'#' + ${theme.base03}"></li>
-                            <li class="theme-color" th:style="'background-color: #' + ${theme.base04} " th:title="'#' + ${theme.base04}"></li>
-                            <li class="theme-color" th:style="'background-color: #' + ${theme.base05} " th:title="'#' + ${theme.base05}"></li>
-                            <li class="theme-color" th:style="'background-color: #' + ${theme.base06} " th:title="'#' + ${theme.base06}"></li>
-                            <li class="theme-color" th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
-                        </ul>
-                    </div>
-                    <div class="flex-column w-100P">
-                        <div class="profile-result-content-title">
-                            <p class="margin-0">
-                                <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
-                                   th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
-                            </p>
-                        </div>
-                        <th:block th:if="${!#strings.isEmpty(theme.description) || user != null}">
-                            <div class="profile-result-content-details pad-0-15px">
-                                <th:block th:if="${!#strings.isEmpty(theme.description)}">
-                                    <strong>Description: </strong>
-                                    <p class="margin-0" th:text="${theme.description}"></p>
-                                </th:block>
-                                <th:block sec:authorize="isAuthenticated()">
-                                    <form action="#" class="apply-form" method="post" th:action="@{/profile/theme}">
-                                        <input name="themeId" th:value="${theme.id}" type="hidden" />
-                                        <button th:if="${viewSavedThemesModel.currentUserTheme() == null}" type="submit">Apply</button>
-                                        <th:block th:if="${viewSavedThemesModel.currentUserTheme() != null}">
-                                            <i th:if="${viewSavedThemesModel.currentUserTheme().id == theme.id}">In Use</i>
-                                            <button th:if="${viewSavedThemesModel.currentUserTheme().id != theme.id}" type="submit">Apply</button>
-                                        </th:block>
-                                    </form>
-                                    <form action="#" method="post"
-                                          th:action="@{/profile/saved-themes}"
-                                          th:if="${!#lists.contains(viewSavedThemesModel.currentUserSavedThemeIds(), theme.id)}">
-                                        <input name="themeId" th:value="${theme.id}" type="hidden" />
-                                        <button type="submit">Save</button>
-                                    </form>
-                                    <form action="#" method="post"
-                                          th:action="@{/profile/saved-themes}"
-                                          th:if="${#lists.contains(viewSavedThemesModel.currentUserSavedThemeIds(), theme.id)}">
-                                        <input name="_method" type="hidden" value="delete" />
-                                        <input name="themeId" th:value="${theme.id}" type="hidden" />
-                                        <button type="submit">Unsave</button>
-                                    </form>
-                                </th:block>
-                            </div>
-                        </th:block>
-                    </div>
-                </div>
-                <div th:replace="~{fragments/components/pagination :: pagination(${viewSavedThemesModel.themes}, '/profile/' + ${pathUsername} + '/saved-themes', null)}"></div>
+            <div th:replace="~{fragments/profile/account-details :: details-saved-themes}"></div>
+            <div class="saved-section">
+                <h2>Saved Themes</h2>
+                <nav th:replace="~{fragments/components/pagination :: pagination(${viewSavedThemesModel.themes}, '/profile/' + ${pathUsername} + '/saved-themes', null)}"></nav>
+                <div th:replace="~{fragments/components/themes-section :: themes(${viewSavedThemesModel})}"></div>
             </div>
+        </div>
+    </div>
+</div>
 
+<div id="main-content" th:fragment="saved-books">
+    <div id="profile-div">
+        <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading(${accountHeader}, 1, 33)}"></div>
+        <div class="flex-column" id="profile">
+            <div th:replace="~{fragments/profile/account-details :: details-saved-books}"></div>
+            <div class="saved-section">
+                <h2>Saved Books</h2>
+                <nav th:replace="~{fragments/components/pagination :: pagination(${viewSavedBooksModel.books}, '/profile/' + ${pathUsername} + '/saved-books', null)}"></nav>
+                <div th:replace="~{fragments/components/books-section:: books(${viewSavedBooksModel})}"></div>
+            </div>
         </div>
     </div>
 </div>

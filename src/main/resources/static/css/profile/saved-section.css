@@ -1,0 +1,23 @@
+.saved-section {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 10px;
+}
+
+.saved-section h2 {
+    text-align: center;
+    font-weight: bolder;
+    border-radius: 15px;
+    margin: 0 0 10px 0;
+    padding: 5px 20px;
+    background-color: var(--color-02, #F61590);
+    color: var(--color-06, #FFE2E7);
+    border: none;
+
+    grid-row: 1 / 1;
+}
+
+.saved-section > :nth-child(n+3) /* all children starting at 3 */
+{
+    grid-column: 1 / -1;
+}

@@ -15,7 +15,7 @@
 <!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
 
 <div class="flex-column gap-10px" th:fragment="details"
-    th:with="ownProfile=${user != null && user.username.equals(viewModel.profile.username)},
+     th:with="ownProfile=${user != null && user.username.equals(viewModel.profile.username)},
     profile=${viewModel.profile}">
     <div class="flex-row space-between">
         <p class="profile-content-header-title">
@@ -32,28 +32,72 @@
             </a>
         </div>
     </div>
-    <div class="gap-10px profile-details" id="profile-details">
-        <p class="profile-details-label">Username: </p>
-        <p class="profile-details-value" th:text="${profile.username}"></p>
+    <div th:replace="~{fragments/profile/account-details :: _profile-info}"></div>
+</div>
 
-        <p class="profile-details-label">Display Name: </p>
-        <p class="profile-details-value" th:text="${profile.displayName}"></p>
-
-        <th:block th:if="${ownProfile}">
-            <p class="profile-details-label">Visibility: </p>
-            <p class="profile-details-value"
-               th:text="${profile.isPublic ? 'Public' : 'Private'}"></p>
-        </th:block>
-
-        <div class="flex-row gap-10px" id="profile-details-account-buttons"
-             th:if="${ownProfile}">
-            <form th:action="@{/profile/{username}/edit(username=${pathUsername})}">
-                <button type="submit">Modify</button>
-            </form>
-            <form th:action="@{/profile/{username}/delete(username=${pathUsername})}">
-                <button type="submit">Delete Account</button>
-            </form>
+<div class="flex-column gap-10px" th:fragment="details-saved-themes"
+     th:with="ownProfile=${user != null && user.username.equals(viewModel.profile.username)},
+    profile=${viewModel.profile}">
+    <div class="flex-row space-between">
+        <p class="profile-content-header-title">
+            Account Details
+        </p>
+        <div class="flex-column" th:if="${ownProfile}">
+            <a class="profile-content-header-sub-title"
+               th:href="@{/profile/{username}/saved-books(username=${pathUsername})}">
+                SAVED BOOKS
+            </a>
+            <a class="profile-content-header-sub-title"
+               th:href="@{/profile/{username}(username=${pathUsername})}">
+                OVERVIEW
+            </a>
         </div>
+    </div>
+    <div th:replace="~{fragments/profile/account-details :: _profile-info}"></div>
+</div>
+
+<div class="flex-column gap-10px" th:fragment="details-saved-books"
+    th:with="ownProfile=${user != null && user.username.equals(viewModel.profile.username)},
+    profile=${viewModel.profile}">
+    <div class="flex-row space-between">
+        <p class="profile-content-header-title">
+            Account Details
+        </p>
+        <div class="flex-column" th:if="${ownProfile}">
+            <a class="profile-content-header-sub-title"
+               th:href="@{/profile/{username}(username=${pathUsername})}">
+                OVERVIEW
+            </a>
+            <a class="profile-content-header-sub-title"
+               th:href="@{/profile/{username}/saved-themes(username=${pathUsername})}">
+                SAVED THEMES
+            </a>
+        </div>
+    </div>
+    <div th:replace="~{fragments/profile/account-details :: _profile-info}"></div>
+</div>
+
+<div class="gap-10px profile-details" id="profile-details" th:fragment="_profile-info">
+    <p class="profile-details-label">Username: </p>
+    <p class="profile-details-value" th:text="${profile.username}"></p>
+
+    <p class="profile-details-label">Display Name: </p>
+    <p class="profile-details-value" th:text="${profile.displayName}"></p>
+
+    <th:block th:if="${ownProfile}">
+        <p class="profile-details-label">Visibility: </p>
+        <p class="profile-details-value"
+           th:text="${profile.isPublic ? 'Public' : 'Private'}"></p>
+    </th:block>
+
+    <div class="flex-row gap-10px" id="profile-details-account-buttons"
+         th:if="${ownProfile}">
+        <form th:action="@{/profile/{username}/edit(username=${pathUsername})}">
+            <button type="submit">Modify</button>
+        </form>
+        <form th:action="@{/profile/{username}/delete(username=${pathUsername})}">
+            <button type="submit">Delete Account</button>
+        </form>
     </div>
 </div>
 
