@@ -92,13 +92,52 @@ public class ProfileViewController {
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
         model.addAttribute("pathUsername", pathUsername);
-        model.addAttribute(
-                "accountHeader",
-                user != null && user.getUsername().equals(pathUsername)
-                        ? "My Account"
-                        : "Account"
-        );
+        model.addAttribute("accountHeader", accountHeader(user, pathUsername));
         return "profile";
+    }
+
+    @GetMapping("/{pathUsername}/saved-themes")
+    public String savedThemes(
+            @PathVariable String pathUsername,
+            @AuthenticationPrincipal User user,
+            Model model,
+            @PageableDefault Pageable pageable
+    ) {
+        Result<Pair<ProfileViewModel, ViewThemesModel>, String> viewResult = profileViewService
+                .buildProfileViewSavedThemes(user, pathUsername, pageable);
+        if (viewResult.isErr())
+            return viewResult.unwrapErr();
+
+        Pair<ProfileViewModel, ViewThemesModel> pairModels = viewResult.unwrap();
+        model.addAttribute("viewModel", pairModels.getFirst());
+        model.addAttribute("viewSavedThemesModel", pairModels.getSecond());
+
+        HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
+        model.addAttribute("pathUsername", pathUsername);
+        model.addAttribute("accountHeader", accountHeader(user, pathUsername));
+        return "profile-saved-themes";
+    }
+
+    @GetMapping("/{pathUsername}/saved-books")
+    public String savedBooks(
+            @PathVariable String pathUsername,
+            @AuthenticationPrincipal User user,
+            Model model,
+            @PageableDefault Pageable pageable
+    ) {
+        Result<Pair<ProfileViewModel, ProfileViewSavedBooksModel>, String> viewResult = profileViewService
+                .buildProfileViewSavedBooks(user, pathUsername, pageable);
+        if (viewResult.isErr())
+            return viewResult.unwrapErr();
+
+        Pair<ProfileViewModel, ProfileViewSavedBooksModel> pairModels = viewResult.unwrap();
+        model.addAttribute("viewModel", pairModels.getFirst());
+        model.addAttribute("viewSavedBooksModel", pairModels.getSecond());
+
+        HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
+        model.addAttribute("pathUsername", pathUsername);
+        model.addAttribute("accountHeader", accountHeader(user, pathUsername));
+        return "profile-saved-books";
     }
 
     @GetMapping("/{pathUsername}/edit")
@@ -373,5 +412,13 @@ public class ProfileViewController {
     ) {
         profileService.unsaveBook(bookId, user);
         return new RedirectView(referer);
+    }
+
+    // HELPERS
+    private String accountHeader(User user, String pathUsername) {
+        return user != null && user.getUsername().equals(pathUsername)
+                ? "My Account"
+                : "Account";
+
     }
 }

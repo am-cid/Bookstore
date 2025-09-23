@@ -1,5 +1,7 @@
 package com.simple.Bookstore.views.Profile;
 
+import com.simple.Bookstore.Book.BookSearchResultDTO;
+import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Comment.CommentProfileViewResponseDTO;
 import com.simple.Bookstore.Comment.CommentService;
 import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
@@ -31,6 +33,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
     private final ThemeService themeService;
     private final ReviewService reviewService;
     private final CommentService commentService;
+    private final BookService bookService;
 
     @Override
     public Result<Pair<ProfileViewModel, ViewThemesModel>, String> buildProfileViewThemes(
@@ -89,6 +92,41 @@ public class ProfileViewServiceImpl implements ProfileViewService {
         return new Result.Ok<>(Pair.of(
                 profileViewModel,
                 new ProfileViewCommentsModel(comments)
+        ));
+    }
+
+    @Override
+    public Result<Pair<ProfileViewModel, ViewThemesModel>, String> buildProfileViewSavedThemes(User currentUser, String pathUsername, Pageable pageable) {
+        Result<User, String> validUserOrRedirect = validateEditDeleteAccess(currentUser, pathUsername);
+        if (validUserOrRedirect.isErr())
+            return new Result.Err<>(validUserOrRedirect.unwrapErr());
+        User foundUser = validUserOrRedirect.unwrap();
+        ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
+        Page<ThemeResponseDTO> savedThemes = themeService.findSavedThemes(foundUser, pageable);
+        ThemeResponseDTO usedTheme = themeService.findUsedTheme(foundUser);
+        List<Long> savedThemeIds = themeService
+                .findSavedThemes(foundUser)
+                .stream()
+                .map(ThemeResponseDTO::id)
+                .toList();
+        return new Result.Ok<>(Pair.of(
+                new ProfileViewModel(foundUser, foundProfile),
+                new ViewThemesModel(savedThemes, usedTheme, savedThemeIds)
+        ));
+    }
+
+    @Override
+    public Result<Pair<ProfileViewModel, ProfileViewSavedBooksModel>, String> buildProfileViewSavedBooks(User currentUser, String pathUsername, Pageable pageable) {
+        Result<User, String> validUserOrRedirect = validateEditDeleteAccess(currentUser, pathUsername);
+        if (validUserOrRedirect.isErr())
+            return new Result.Err<>(validUserOrRedirect.unwrapErr());
+        User foundUser = validUserOrRedirect.unwrap();
+        ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
+        Page<BookSearchResultDTO> savedThemes = bookService.findSavedBooks(foundUser, pageable);
+        List<Long> savedBookIds = bookService.findSavedBookIds(foundUser);
+        return new Result.Ok<>(Pair.of(
+                new ProfileViewModel(foundUser, foundProfile),
+                new ProfileViewSavedBooksModel(savedThemes, savedBookIds)
         ));
     }
 

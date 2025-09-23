@@ -49,6 +49,30 @@ public interface ProfileViewService {
     /**
      * @param currentUser  currently authenticated user. null if anonymous
      * @param pathUsername username of profile being accessed
+     * @param pageable     ownedTheme paging
+     * @return view model if ok. return a "redirect:/some/path" or a "template-name" if any failed any checks
+     */
+    Result<Pair<ProfileViewModel, ViewThemesModel>, String> buildProfileViewSavedThemes(
+            User currentUser,
+            String pathUsername,
+            Pageable pageable
+    );
+
+    /**
+     * @param currentUser  currently authenticated user. null if anonymous
+     * @param pathUsername username of profile being accessed
+     * @param pageable     ownedTheme paging
+     * @return view model if ok. return a "redirect:/some/path" or a "template-name" if any failed any checks
+     */
+    Result<Pair<ProfileViewModel, ProfileViewSavedBooksModel>, String> buildProfileViewSavedBooks(
+            User currentUser,
+            String pathUsername,
+            Pageable pageable
+    );
+
+    /**
+     * @param currentUser  currently authenticated user. null if anonymous
+     * @param pathUsername username of profile being accessed
      * @param editRequest  edit request made by user
      * @return view model if ok. return a "redirect:/some/path" or a "template-name" if any failed any checks
      */

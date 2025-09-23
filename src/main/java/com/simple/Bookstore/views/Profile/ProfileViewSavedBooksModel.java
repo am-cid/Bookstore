@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public record ProfileViewSavedBooks(
-        Page<BookSearchResultDTO> savedBooks,
+public record ProfileViewSavedBooksModel(
+        Page<BookSearchResultDTO> books,
         List<Long> currentUserSavedBookIds
 ) {
 }
