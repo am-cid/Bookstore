@@ -25,8 +25,8 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
     @Query(value = """
             SELECT t from Theme t
-            WHERE t.published = true
-                or (t.published = false AND t.profile.user = :user)
+            WHERE (t.published = true AND t.profile.isPublic = true)
+                OR (:user IS NOT NULL AND t.profile.user = :user)
             """)
     Page<Theme> findByPublishedOrOwnedUnpublishedThemes(@Param("user") User user, Pageable pageable);
 
@@ -37,6 +37,22 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
             WHERE p.id = :profileId
             """)
     List<Long> findProfileSavedThemeIds(@Param("profileId") Long profileId);
+
+    @Query("""
+            SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
+                t.id, t.name, t.description, t.date, p.id, u.username, p.displayName,
+                t.base00, t.base01, t.base02, t.base03, t.base04, t.base05, t.base06, t.base07
+            )
+            FROM Theme t
+            LEFT JOIN t.profile p
+            LEFT JOIN p.user u
+            WHERE t.id = :themeId
+                AND ((t.published AND p.isPublic) OR (:profileId IS NOT NULL AND p.id = :profileId))
+            """)
+    Optional<ThemeResponseDTO> findPublishedOrOwnedThemeById(
+            @Param("themeId") Long themeId,
+            @Param("profileId") Long profileId
+    );
 
     @Query("""
             SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
@@ -65,7 +81,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
             WHERE (
                 (:query IS NULL OR :query = '' OR :query <% t.name OR :query <% u.username OR :query <% p.display_name)
                 AND (
-                    t.published = true
+                    (t.published = true AND p.is_public = true)
                     OR (:profileId IS NOT NULL AND t.profile_id = :profileId)
                 )
             )
@@ -88,7 +104,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
             WHERE (
                 (:query IS NULL OR :query = '' OR :query <% t.name OR :query <% u.username OR :query <% p.display_name)
                 AND (
-                    t.published = true
+                    (t.published = true AND p.is_public = true)
                     OR (:profileId IS NOT NULL AND t.profile_id = :profileId)
                 )
             )

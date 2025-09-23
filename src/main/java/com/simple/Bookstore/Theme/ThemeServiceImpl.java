@@ -3,7 +3,6 @@ package com.simple.Bookstore.Theme;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
-import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
 import com.simple.Bookstore.User.User;
@@ -72,11 +71,10 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeResponseDTO findThemeById(Long id) {
+    public Optional<ThemeResponseDTO> findPublishedOrOwnedThemeById(User user, Long themeId) {
+        Long profileId = user != null ? user.getProfile().getId() : null;
         return themeRepository
-                .findById(id)
-                .map(ThemeMapper::themeToResponseDTO)
-                .orElseThrow(() -> new ThemeNotFoundException(id));
+                .findPublishedOrOwnedThemeById(themeId, profileId);
     }
 
     @Override
@@ -221,16 +219,10 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public Page<ThemeResponseDTO> searchThemes(
             Optional<String> query,
-            Long userId,
+            User user,
             Pageable pageable
     ) throws ThemeNotFoundException {
-        Long profileId = userId == null
-                ? null
-                : userRepository
-                .findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId))
-                .getProfile()
-                .getId();
+        Long profileId = user != null ? user.getProfile().getId() : null;
         return themeRepository
                 .searchThemes(query.orElse(null), profileId, pageable)
                 .map(ThemeMapper::projectionToResponseDTO);

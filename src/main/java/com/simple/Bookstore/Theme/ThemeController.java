@@ -1,5 +1,6 @@
 package com.simple.Bookstore.Theme;
 
+import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserService;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +43,10 @@ public class ThemeController {
     }
 
     @GetMapping("/{id}")
-    public ThemeResponseDTO getTheme(@PathVariable Long id) {
-        return themeService.findThemeById(id);
+    public ThemeResponseDTO getTheme(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        return themeService
+                .findPublishedOrOwnedThemeById(user, id)
+                .orElseThrow(() -> new ThemeNotFoundException(id));
     }
 
     @PatchMapping("/{id}")
@@ -67,8 +70,7 @@ public class ThemeController {
             @AuthenticationPrincipal User user,
             @PageableDefault(size = 10, page = 0) Pageable pageable
     ) {
-        Long userId = (user != null) ? user.getId() : null;
-        Page<ThemeResponseDTO> response = themeService.searchThemes(query, userId, pageable);
+        Page<ThemeResponseDTO> response = themeService.searchThemes(query, user, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -18,7 +18,7 @@ public interface ThemeService {
 
     Page<ThemeResponseDTO> findThemesByUser(User user, Pageable pageable);
 
-    ThemeResponseDTO findThemeById(Long id);
+    Optional<ThemeResponseDTO> findPublishedOrOwnedThemeById(User user, Long themeId) throws ThemeNotFoundException;
 
     ThemeResponseDTO findPublishedThemeById(Long id);
 
@@ -55,7 +55,7 @@ public interface ThemeService {
 
     Page<ThemeResponseDTO> searchThemes(
             Optional<String> query,
-            Long userId,
+            User user,
             Pageable pageable
     ) throws ThemeNotFoundException;
 

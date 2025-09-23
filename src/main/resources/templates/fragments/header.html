@@ -23,7 +23,7 @@
                              xmlns="http://www.w3.org/2000/svg">
                             <th:block th:each="letter : ${logoLetters}">
                                 <g
-                                        th:attr="transform=${letter.rotate != 0}
+                                    th:attr="transform=${letter.rotate != 0}
                                     ? 'rotate(' + ${letter.rotate} + ',' + (${letter.x + 35}) + ',35)'
                                     : null">
                                     <ellipse
@@ -34,7 +34,7 @@
                             </th:block>
                             <th:block th:each="letter, i : ${logoLetters}">
                                 <g
-                                        th:attr="transform=${letter.rotate != 0}
+                                    th:attr="transform=${letter.rotate != 0}
                                     ? 'rotate(' + ${letter.rotate} + ',' + ${letter.x + 35} + ',35)'
                                     : null">
                                     <!-- text outline -->

@@ -87,7 +87,7 @@ public class SearchViewController {
                 );
             }
             case THEME -> {
-                Page<ThemeResponseDTO> results = themeService.searchThemes(query, (user != null) ? user.getId() : null, pageable);
+                Page<ThemeResponseDTO> results = themeService.searchThemes(query, user, pageable);
                 model.addAttribute("results", results);
                 model.addAttribute(
                         "viewThemesModel",
