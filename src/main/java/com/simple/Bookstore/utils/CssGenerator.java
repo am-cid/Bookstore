@@ -7,12 +7,13 @@ public class CssGenerator {
     /**
      * Returns the inline &lt;style&gt;...&lt;/style&gt; of the given base08 theme.
      *
-     * @param colors String / null: when not overriding default theme, this is null.
+     * @param colors   String / null: when not overriding default theme, this is null.
+     * @param selector target selector of the generated css
      * @return String / null: either the inline css as string to be used by Thymeleaf
      * in th:utext, or null, indicating there was an error parsing the hex code of
      * the colors given
      */
-    public static String toInlineCss(List<String> colors) {
+    public static String toInlineCss(List<String> colors, String selector) {
         if (colors == null || colors.isEmpty())
             return null;
 
@@ -39,7 +40,7 @@ public class CssGenerator {
         StringBuilder css = new StringBuilder()
                 .append("<!-- START GENERATED CSS -->")
                 .append("<style type=\"text/css\">\n")
-                .append(":root {\n");
+                .append("%s {\n".formatted(selector));
 
         if (!appendColors(css, "color", colors))
             return null;
@@ -79,6 +80,18 @@ public class CssGenerator {
                 .append("</style>\n")
                 .append("<!-- END GENERATED CSS -->\n")
                 .toString();
+    }
+
+    /**
+     * Returns the inline &lt;style&gt;...&lt;/style&gt; of the given base08 theme.
+     *
+     * @param colors String / null: when not overriding default theme, this is null.
+     * @return String / null: either the inline css as string to be used by Thymeleaf
+     * in th:utext, or null, indicating there was an error parsing the hex code of
+     * the colors given
+     */
+    public static String toInlineCss(List<String> colors) {
+        return toInlineCss(colors, ":root");
     }
 
     private static boolean appendColors(
