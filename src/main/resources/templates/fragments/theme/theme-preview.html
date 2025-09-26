@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore</title>
+    <script src="http://localhost:35729/livereload.js"></script>
+    <link href="/css/variables.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/shared/genres.css" rel="stylesheet">
+    <link href="/css/shared/main-content.css" rel="stylesheet">
+    <!-- START PAGE SPECIFIC CSS -->
+    <link href="/css/theme.css" rel="stylesheet">
+    <!-- END PAGE SPECIFIC CSS -->
+    <th:block th:if="${_overrideTheme != null}"
+              th:utext="${_overrideTheme}">
+    </th:block>
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Theme.ThemeViewModel"*/-->
+<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+<!--/*@thymesVar id="previewThemeStyle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="logoLetters" type="java.util.List<com.simple.Bookstore.views.SiteLogoLetter>"*/-->
+
+<div id="theme-preview-render" th:fragment="previewTheme(theme)"
+     th:style="
+             'background-color: #' + ${viewModel.theme.base03} + ';'
+             + 'border: 2px solid #' + ${viewModel.theme.base00} + ';'
+    ">
+    <th:block th:if="${previewThemeStyle != null}" th:utext="${previewThemeStyle}"></th:block>
+    <div th:replace="~{fragments/header.html :: header}"></div>
+    <div id="main-layout"
+         th:style="'border-top: 2px solid #' + ${theme.base04} + ';'
+                 + 'margin-top: 5px;'">
+        <div th:replace="~{fragments/theme/theme-preview :: _sidebarLeft}"></div>
+        <div class="flex-column gap-10px" id="main-content-preview">
+            <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading(HEADING, 1, 18, 4.5)}"></div>
+            <div th:replace="~{fragments/theme/theme-preview :: _bookEntry}"></div>
+            <div id="blur-strikethrough" th:insert="~{fragments/svg-fragments/heading-strikethrough-behind ::
+                svgHeading('Heading', 422, 24, 164)}">
+            </div>
+            <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading(Heading, 1, 33)}"></div>
+            <div th:replace="~{fragments/theme/theme-preview :: _bookSearchEntry}"></div>
+            <script th:src="@{/js/genre-expand.js}"></script>
+        </div>
+        <div th:replace="~{fragments/theme/theme-preview :: _sidebarRight(${theme})}"></div>
+    </div>
+</div>
+
+<div id="sidebar-left" th:fragment="_sidebarLeft">
+    <div class="sidebar-left-div">
+        <p class="sidebar-left-title">List</p>
+        <div class="sidebar-left-list" id="authors-list-preview">
+            <th:block th:each="i : ${#numbers.sequence(1, 10)}">
+                <a class="sidebar-left-list-item"
+                   href="#"
+                   th:classappend="${i >= 5 ? 'more-item' : ''}"
+                   th:text="'Item ' + ${i}"></a>
+            </th:block>
+            <div class="text-end">
+                <a class="sidebar-left-list-item show-more-link cursor-pointer italic"
+                   href="javascript:toggleVisibility('authors-list-preview', 'show-more-link', 'show-less-link')">
+                    More...
+                </a>
+                <a class="sidebar-left-list-item show-less-link cursor-pointer italic"
+                   href="javascript:toggleVisibility('authors-list-preview', 'show-more-link', 'show-less-link')"
+                   style="display: none">
+                    Less...
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-left-div">
+        <p class="sidebar-left-title">Fake Review</p>
+        <div class="sidebar-left-list">
+            <a class="sidebar-left-list-item" href="#">Book Title</a>
+            <svg th:replace="~{fragments/svg-fragments/rating-star ::
+                ratingStar(5, 106, 16, 5)}"></svg>
+            <p class="margin-0" title="Today">Today</p>
+            <div class="sidebar-left-list-item">
+                <p>Lorem ipsum or sum...</p>
+            </div>
+            <div class="text-end">
+                <p>- <a href="#">some user</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="sidebar-right" th:fragment="_sidebarRight(theme)">
+    <div class="sidebar-right-div" id="theme-div">
+        <div class="sidebar-right-heading" id="theme-heading">
+            <div th:replace="~{fragments/svg-fragments/heading-surrounded-by-circles :: svgHeading('THEME', 98, 19, 98)}"></div>
+        </div>
+        <!-- show used theme with swatch 8 colors -->
+        <div class="sidebar-right-content">
+            <div class="theme-div">
+                <ul class="theme-colors-list">
+                    <li class="theme-color" style="background-color: var(--color-00, #A40E60)"></li>
+                    <li class="theme-color" style="background-color: var(--color-01, #FF0000)"></li>
+                    <li class="theme-color" style="background-color: var(--color-02, #F61590)"></li>
+                    <li class="theme-color" style="background-color: var(--color-03, #F88B9E)"></li>
+                    <li class="theme-color" style="background-color: var(--color-04, #FFD376)"></li>
+                    <li class="theme-color" style="background-color: var(--color-05, #AAFFB1)"></li>
+                    <li class="theme-color" style="background-color: var(--color-06, #FFE2E7)"></li>
+                    <li class="theme-color" style="background-color: var(--color-07, #FFF2D3)"></li>
+                </ul>
+                <p class="theme-details">
+                    <strong th:text="${theme.name}"></strong> by
+                    <a th:href="@{/profile/{username}(username=${theme.username})}"
+                       th:text="${theme.userDisplayName}"></a>
+                </p>
+                <button type="submit">Unset Theme</button>
+            </div>
+            <!-- change theme link to change theme page -->
+            <a sec:authorize="isAnonymous()" th:href="@{/register?change_theme=true}">Change Theme</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/search(type='THEME')}">Change Theme</a>
+        </div>
+    </div>
+</div>
+
+<div class="enclosed-content-preview" th:fragment="_bookEntry">
+    <div class="flex-row gap-10px">
+        <a href="#">
+            <img alt="preview-book-image"
+                 src="https://placehold.co/100x140?text=Book Title\nBook Author" />
+        </a>
+        <div class="flex-column gap-10px w-100P"
+             th:with="genreSet=${T(java.util.Set).of(
+                        T(com.simple.Bookstore.Genre.Genre).SPACE_OPERA,
+                        T(com.simple.Bookstore.Genre.Genre).HOWDUNNITS,
+                        T(com.simple.Bookstore.Genre.Genre).EROTIC_ROMANCE
+                    )}">
+            <a href="#">Book Title</a>
+            <b class="rating-score">4.25 / 5</b>
+            <ul th:replace="~{fragments/components/genre-list :: genreList(${genreSet}, 5)}"></ul>
+        </div>
+    </div>
+</div>
+
+<div class="enclosed-search-content-preview" th:fragment="_bookSearchEntry">
+    <div class="search-content-preview flex-row">
+        <a href="#">
+            <img alt="preview-book-image"
+                 src="https://placehold.co/100x140?text=Book Title\nBook Author" />
+        </a>
+        <div class="flex-column gap-10px w-100P"
+             th:with="genreSet=${T(java.util.Set).of(
+                        T(com.simple.Bookstore.Genre.Genre).APOCALYPTIC_SCI_FI,
+                        T(com.simple.Bookstore.Genre.Genre).PARANORMAL_ROMANCE,
+                        T(com.simple.Bookstore.Genre.Genre).BODY_HORROR,
+                        T(com.simple.Bookstore.Genre.Genre).SATIRE,
+                        T(com.simple.Bookstore.Genre.Genre).RELIGION_SPIRITUALITY,
+                        T(com.simple.Bookstore.Genre.Genre).TRUE_CRIME,
+                        T(com.simple.Bookstore.Genre.Genre).LOCKED_ROOM_MYSTERY
+                    )}">
+            <a class="book-search-entry-title" href="#">Book Title</a>
+            <b class="rating-score">4.25 / 5</b>
+            <ul th:replace="~{fragments/components/genre-list :: genreList(${genreSet}, 3)}"></ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

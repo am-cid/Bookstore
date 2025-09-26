@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
+<!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Theme.ThemeViewModel"*/-->
+
+
+<div class="flex-column gap-10px" th:fragment="main-content">
+    <div id="main-content">
+        <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading('Theme Information', 285, 20, 6)}"></div>
+        <ul>
+            <li th:style="'background-color: #' + ${viewModel.theme.base00}" th:title="'#' + ${viewModel.theme.base00}"></li>
+            <li th:style="'background-color: #' + ${viewModel.theme.base01}" th:title="'#' + ${viewModel.theme.base01}"></li>
+            <li th:style="'background-color: #' + ${viewModel.theme.base02}" th:title="'#' + ${viewModel.theme.base02}"></li>
+            <li th:style="'background-color: #' + ${viewModel.theme.base03}" th:title="'#' + ${viewModel.theme.base03}"></li>
+            <li th:style="'background-color: #' + ${viewModel.theme.base04}" th:title="'#' + ${viewModel.theme.base04}"></li>
+            <li th:style="'background-color: #' + ${viewModel.theme.base05}" th:title="'#' + ${viewModel.theme.base05}"></li>
+            <li th:style="'background-color: #' + ${viewModel.theme.base06}" th:title="'#' + ${viewModel.theme.base06}"></li>
+            <li th:style="'background-color: #' + ${viewModel.theme.base07}" th:title="'#' + ${viewModel.theme.base07}"></li>
+        </ul>
+        <div id="theme-details"> <!-- grid -->
+            <h2 th:text="${viewModel.theme.name}"></h2>
+            <strong class="theme-details-label">Author:</strong>
+            <p class="theme-details-value">
+                <a th:href="@{/profile/{username}(username=${viewModel.theme.username})}"
+                   th:text="${viewModel.theme.userDisplayName()}"></a>
+            </p>
+            <strong class="theme-details-label">Uploaded:</strong>
+            <p class="theme-details-value" th:text="${#temporals.format(viewModel.theme.date, 'dd MMMM yyyy')}"></p>
+            <strong class="theme-details-label">Description:</strong>
+            <p class="theme-details-value" th:text="${viewModel.theme.description}"></p>
+            <th:block sec:authorize="isAuthenticated()">
+                <form action="#" class="theme-details-label" method="post" th:action="@{/profile/theme}">
+                    <input name="themeId" th:value="${viewModel.theme.id}" type="hidden" />
+                    <button th:if="${viewModel.usedTheme == null}" type="submit">Apply</button>
+                    <th:block th:if="${viewModel.usedTheme != null}">
+                        <i th:if="${viewModel.usedTheme.id == viewModel.theme.id}">In Use</i>
+                        <button th:if="${viewModel.usedTheme.id != viewModel.theme.id}" type="submit">Apply</button>
+                    </th:block>
+                </form>
+                <form action="#" class="theme-details-value" method="post"
+                      th:action="@{/profile/saved-themes}"
+                      th:if="${!#lists.contains(viewModel.savedThemeIds, viewModel.theme.id)}">
+                    <input name="themeId" th:value="${viewModel.theme.id}" type="hidden" />
+                    <button type="submit">Save</button>
+                </form>
+                <form action="#" class="theme-details-value" method="post"
+                      th:action="@{/profile/saved-themes}"
+                      th:if="${#lists.contains(viewModel.savedThemeIds, viewModel.theme.id)}">
+                    <input name="_method" type="hidden" value="delete" />
+                    <input name="themeId" th:value="${viewModel.theme.id}" type="hidden" />
+                    <button type="submit">Unsave</button>
+                </form>
+            </th:block>
+        </div>
+        <div id="theme-preview-header"
+             th:insert="~{fragments/svg-fragments/heading-strikethrough-behind :: svgHeading('Preview', 680, 24, 295)}">
+        </div>
+    </div>
+    <div th:replace="~{fragments/theme/theme-preview :: previewTheme(${viewModel.theme})}"></div>
+</div>
+
+</body>
+</html>
