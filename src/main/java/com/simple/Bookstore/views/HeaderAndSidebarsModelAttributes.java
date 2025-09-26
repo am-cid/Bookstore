@@ -60,7 +60,7 @@ public class HeaderAndSidebarsModelAttributes {
         // header data
         model.addAttribute(
                 "logoLetters",
-                SiteLogo.getLogoLettersModelAttributes("BOOKSTORE")
+                SiteLogoLetter.getLogoLettersModelAttributes("BOOKSTORE")
         );
 
         // left sidebar data
