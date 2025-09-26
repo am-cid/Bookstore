@@ -23,12 +23,12 @@
                    th:href="@{/search(query=${author}, type='BOOK')}"
                    th:text="${author}"></a>
             </th:block>
-            <div th:if="${#lists.size(authors) > 10}">
-                <a class="sidebar-left-list-item float-right show-more-link cursor-pointer italic"
+            <div class="text-end" th:if="${#lists.size(authors) > 10}">
+                <a class="sidebar-left-list-item show-more-link cursor-pointer italic"
                    href="javascript:toggleVisibility('authors-list', 'show-more-link', 'show-less-link')">
                     More...
                 </a>
-                <a class="sidebar-left-list-item float-right show-less-link cursor-pointer italic"
+                <a class="sidebar-left-list-item show-less-link cursor-pointer italic"
                    href="javascript:toggleVisibility('authors-list', 'show-more-link', 'show-less-link')"
                    style="display: none">
                     Less...
@@ -46,12 +46,12 @@
                    th:href="@{/search(genres=${genre.name}, type='BOOK')}"
                    th:text="${genre.displayName}"></a>
             </th:block>
-            <div th:if="${#lists.size(genres) > 10}">
-                <a class="sidebar-left-list-item float-right show-more-link cursor-pointer italic"
+            <div class="text-end" th:if="${#lists.size(genres) > 10}">
+                <a class="sidebar-left-list-item show-more-link cursor-pointer italic"
                    href="javascript:toggleVisibility('genres-list', 'show-more-link', 'show-less-link')">
                     More...
                 </a>
-                <a class="sidebar-left-list-item float-right show-less-link cursor-pointer italic"
+                <a class="sidebar-left-list-item show-less-link cursor-pointer italic"
                    href="javascript:toggleVisibility('genres-list', 'show-more-link', 'show-less-link')"
                    style="display: none">
                     Less...
@@ -85,8 +85,8 @@
                  th:if="${#strings.isEmpty(_latestReview.content)}">
                 <p class="gray-text">No content was provided for this review</p>
             </div>
-            <div>
-                <p class="float-right">
+            <div class="text-end">
+                <p>
                     - <a th:href="@{/profile/{username}(username=${_latestReview.username})}"
                         th:text="${_latestReview.userDisplayName}"></a>
                 </p>

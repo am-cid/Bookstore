@@ -5,7 +5,7 @@
     background-color: var(--color-07, #FFF2D3);
 }
 
-#main-content .svg-text-heading .text-outline-outer {
+.svg-text-heading .text-outline-outer {
     fill: none;
     paint-order: stroke;
     stroke: var(--color-02, #F61590);
@@ -13,7 +13,7 @@
     stroke-width: 8;
 }
 
-#main-content .svg-text-heading .text-outline-inner {
+.svg-text-heading .text-outline-inner {
     fill: none;
     paint-order: stroke;
     stroke: var(--color-07, #FFF2D3);
@@ -21,7 +21,7 @@
     stroke-width: 4;
 }
 
-#main-content .svg-text-heading .text-fill {
+.svg-text-heading .text-fill {
     fill: var(--color-02, #F61590);
 }
 
