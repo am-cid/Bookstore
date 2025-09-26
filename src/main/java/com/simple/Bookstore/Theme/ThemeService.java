@@ -16,7 +16,7 @@ public interface ThemeService {
 
     List<ThemeResponseDTO> findThemesByUser(User user);
 
-    Page<ThemeResponseDTO> findThemesByUser(User user, Pageable pageable);
+    Page<ThemeResponseDTO> findThemesByUser(User profileUser, User visitor, Pageable pageable);
 
     Optional<ThemeResponseDTO> findPublishedOrOwnedThemeById(User user, Long themeId) throws ThemeNotFoundException;
 

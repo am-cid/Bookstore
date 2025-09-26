@@ -1,6 +1,7 @@
 package com.simple.Bookstore.Theme;
 
 import com.simple.Bookstore.User.User;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,8 +15,6 @@ import java.util.Optional;
 @Repository
 public interface ThemeRepository extends JpaRepository<Theme, Long> {
     List<Theme> findByProfileUserOrderByName(User user);
-
-    Page<Theme> findByProfileUserOrderByName(User user, Pageable pageable);
 
     Page<Theme> findByPublishedIsTrue(Pageable pageable);
 
@@ -53,6 +52,25 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
             @Param("themeId") Long themeId,
             @Param("profileId") Long profileId
     );
+
+
+    @Query("""
+            SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
+                t.id, t.name, t.description, t.date, p.id, u.username, p.displayName,
+                t.base00, t.base01, t.base02, t.base03, t.base04, t.base05, t.base06, t.base07
+            )
+            FROM Theme t
+            LEFT JOIN t.profile p
+            LEFT JOIN p.user u
+            WHERE p.id = :profileId
+                AND ((t.published AND p.isPublic) OR (:visitorProfileId IS NOT NULL AND p.id = :visitorProfileId))
+            """)
+    Page<ThemeResponseDTO> findPublishedOrOwnedThemeByProfileId(
+            @NonNull @Param("profileId") Long profileId,
+            @Param("visitorProfileId") Long visitorProfileId,
+            Pageable pageable
+    );
+
 
     @Query("""
             SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(

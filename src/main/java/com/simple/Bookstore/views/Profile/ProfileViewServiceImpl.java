@@ -46,7 +46,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             return new Result.Err<>(accessResult.unwrapErr());
         ProfileViewModel profileViewModel = accessResult.unwrap();
 
-        Page<ThemeResponseDTO> ownedThemes = themeService.findThemesByUser(profileViewModel.user(), pageable);
+        Page<ThemeResponseDTO> ownedThemes = themeService.findThemesByUser(profileViewModel.user(), currentUser, pageable);
         ThemeResponseDTO usedTheme = themeService.findUsedTheme(currentUser);
         List<Long> savedThemeIds = themeService
                 .findSavedThemes(currentUser)

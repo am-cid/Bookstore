@@ -10,6 +10,7 @@ import com.simple.Bookstore.User.UserRepository;
 import com.simple.Bookstore.utils.ColorUtils;
 import com.simple.Bookstore.utils.ThemeMapper;
 import jakarta.annotation.Nullable;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -64,10 +65,11 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Page<ThemeResponseDTO> findThemesByUser(User user, Pageable pageable) {
+    public Page<ThemeResponseDTO> findThemesByUser(@NonNull User profileUser, User visitor, Pageable pageable) {
+        Long profileId = profileUser.getProfile().getId();
+        Long visitorProfileId = visitor != null ? visitor.getProfile().getId() : null;
         return themeRepository
-                .findByProfileUserOrderByName(user, pageable)
-                .map(ThemeMapper::themeToResponseDTO);
+                .findPublishedOrOwnedThemeByProfileId(profileId, visitorProfileId, pageable);
     }
 
     @Override
