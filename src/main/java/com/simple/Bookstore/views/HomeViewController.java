@@ -31,8 +31,7 @@ public class HomeViewController {
         List<BookPreviewDTO> latestBooks = bookService.findLatestNBooks(10);
         model.addAttribute("bannerBooks", latestBooks.subList(0, Math.min(6, latestBooks.size())));
 
-        // TODO: format below as "2 days ago. <username> just posted <book-title>. <description: 50 char cutoff>"
-        // TODO: model.addAttribute("hotNewsBooks", latestBooks.subList(0, Math.min(2, latestBooks.size())));
+        // TODO: latest themes with format "2 days ago. <username> just created <theme-name>.\n<description: 50 char cutoff>"
 
         model.addAttribute("latestUploads", latestBooks.subList(0, Math.min(4, latestBooks.size())));
         model.addAttribute("availableBooks", bookService.findRelevantBooks(12));

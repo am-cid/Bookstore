@@ -6,6 +6,7 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
+<!--/*@thymesVar id="logoLetters" type="java.util.List<com.simple.Bookstore.views.SiteLogoLetter>"*/-->
 
 <header th:fragment="header">
     <div id="header">
@@ -21,30 +22,30 @@
                              style="overflow:visible; height:1em;"
                              viewBox="0 0 340 60"
                              xmlns="http://www.w3.org/2000/svg">
-                            <th:block th:each="letter : ${logoLetters}">
+                            <th:block th:each="letter, i : ${logoLetters}">
                                 <g
-                                    th:attr="transform=${letter.rotate != 0}
-                                    ? 'rotate(' + ${letter.rotate} + ',' + (${letter.x + 35}) + ',35)'
+                                        th:attr="transform=${letter.rotate != 0}
+                                    ? 'rotate(' + ${letter.rotate} + ',' + (${letter.xOffset + 35}) + ',35)'
                                     : null">
                                     <ellipse
                                             class="letter-oval"
                                             rx="24" ry="28"
-                                            th:attr="cx=${letter.x + 18}, cy=${letter.y + 35}" />
+                                            th:attr="cx=${letter.xOffset + 18}, cy=${letter.yOffset + 35}" />
                                 </g>
                             </th:block>
                             <th:block th:each="letter, i : ${logoLetters}">
                                 <g
-                                    th:attr="transform=${letter.rotate != 0}
-                                    ? 'rotate(' + ${letter.rotate} + ',' + ${letter.x + 35} + ',35)'
+                                        th:attr="transform=${letter.rotate != 0}
+                                    ? 'rotate(' + ${letter.rotate} + ',' + ${letter.xOffset + 35} + ',35)'
                                     : null">
                                     <!-- text outline -->
                                     <text class="logo-letter-outline"
-                                          th:attr="x=${letter.x}, y=${letter.y}"
-                                          th:text="${letter.char}"/>
+                                          th:attr="x=${letter.xOffset}, y=${letter.yOffset}"
+                                          th:text="${letter.letter}"/>
                                     <!-- text fill -->
-                                    <text th:attr="x=${letter.x}, y=${letter.y}"
-                                          th:id="${letter.id}"
-                                          th:text="${letter.char}" />
+                                    <text th:attr="x=${letter.xOffset}, y=${letter.yOffset}"
+                                          th:id="${letter.htmlId}"
+                                          th:text="${letter.letter}" />
                                 </g>
                             </th:block>
                         </svg>

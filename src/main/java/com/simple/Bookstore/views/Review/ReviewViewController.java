@@ -102,8 +102,11 @@ public class ReviewViewController {
             return viewResult.unwrapErr();
 
         if (result.hasErrors()) {
-            // TODO: need to maintain pageable so i need to handle the href of form by passing the pageable in the model
-            // TODO: decide if want to maintain page when failing a comment creation request.
+            /* TODO(UNLIKELY): need to maintain pageable so i need to handle the href of form by passing the pageable in the model.
+                decide if want to maintain page when failing a comment creation request.
+                cannot really test right now. form is unlikely to fail since its just one field with html validation.
+                get to this when there are more fields to add comment (UNLIKELY)
+            */
             HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
             model.addAttribute("viewModel", viewResult.unwrap());
             return "book-review";

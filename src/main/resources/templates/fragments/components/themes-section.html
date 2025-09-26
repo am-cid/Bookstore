@@ -24,7 +24,7 @@
             <li th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
         </ul>
         <p class="theme-title">
-            <a th:href="@{/api/v1/themes/{id}(id=${theme.id})}"
+            <a th:href="@{/themes/{id}(id=${theme.id})}"
                th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a>
         </p>
         <th:block th:if="${!#strings.isEmpty(theme.description)}">
