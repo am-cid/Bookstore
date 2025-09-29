@@ -6,9 +6,17 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-<!--/*@thymesVar id="page" type="org.springframework.data.domain.Page<com.simple.Bookstore.Theme.ThemeResponseDTO>"*/-->
+<!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
 <!--/*@thymesVar id="baseUrl" type="java.lang.String"*/-->
 <!--/*@thymesVar id="pathParams" type="java.lang.String"*/-->
+
+<!-- NOTE:  frontend is 1-indexed
+            page.number is 0-indexed since it comes from the backend
+
+page.number = previous page
+page.number + 1 = current page
+page.number + 2 = next page
+-->
 
 <nav class="pagination-nav"
      th:fragment="pagination(page, baseUrl, pathParams)"
@@ -16,59 +24,59 @@
     <p class="pagination-title">Page: </p>
 
     <ul class="pagination-list" th:if="${hasContent}">
-        <li class="page-item">
+        <li class="page-item" th:with="to=${page.number}">
             <th:block th:if="${page.first}">
                 <strong class="active"><</strong>
             </th:block>
             <th:block th:if="${!page.first}">
                 <a class="page-relative-link"
                    tabindex="-1"
-                   th:href="@{${baseUrl}(page=${page.number - 1})}"
+                   th:href="@{${baseUrl}(page=${to})}"
                    th:if="${#strings.isEmpty(pathParams)}">
                     <
                 </a>
                 <a class="page-relative-link"
                    tabindex="-1"
-                   th:href="${baseUrl} + '?page=' + ${page.number - 1} + '&' + ${pathParams}"
+                   th:href="${baseUrl} + '?page=' + ${to} + '&' + ${pathParams}"
                    th:if="${!#strings.isEmpty(pathParams)}">
                     <
                 </a>
             </th:block>
         </li>
 
-        <th:block th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}">
-            <!-- to prevent negative indices when there are 0 pages -->
-            <li class="page-item" th:if="${i >= 0}">
-                <th:block th:if="${i == page.number}">
-                    <strong class="active" th:text="${i + 1}"></strong>
+        <th:block th:each="i, stat : ${#numbers.sequence(1, page.totalPages)}">
+            <li class="page-item" th:if="${i >= 1}"
+                th:with="isCurrentPage=${page.number + 1 == i}">
+                <th:block th:if="${isCurrentPage}">
+                    <strong class="active" th:text="${i}"></strong>
                 </th:block>
-                <th:block th:if="${i != page.number}">
+                <th:block th:if="${!isCurrentPage}">
                     <a class="page-link"
                        th:href="@{${baseUrl}(page=${i})}"
                        th:if="${#strings.isEmpty(pathParams)}">
-                        <span th:text="${i + 1}"></span>
+                        <span th:text="${i}"></span>
                     </a>
                     <a class="page-link"
                        th:href="${baseUrl} + '?page=' + ${i} + '&' + ${pathParams}"
                        th:if="${!#strings.isEmpty(pathParams)}">
-                        <span th:text="${i + 1}"></span>
+                        <span th:text="${i}"></span>
                     </a>
                 </th:block>
             </li>
         </th:block>
 
-        <li class="page-item">
+        <li class="page-item" th:with="to=${page.number + 2}">
             <th:block th:if="${page.last}">
                 <strong class="active">></strong>
             </th:block>
             <th:block th:if="${!page.last}">
                 <a class="page-relative-link"
-                   th:href="@{${baseUrl}(page=${page.number + 1})}"
+                   th:href="@{${baseUrl}(page=${to})}"
                    th:if="${#strings.isEmpty(pathParams)}">
                     >
                 </a>
                 <a class="page-relative-link"
-                   th:href="${baseUrl} + '?page=' + ${page.number + 1} + '&' + ${pathParams}"
+                   th:href="${baseUrl} + '?page=' + ${to} + '&' + ${pathParams}"
                    th:if="${!#strings.isEmpty(pathParams)}">
                     >
                 </a>

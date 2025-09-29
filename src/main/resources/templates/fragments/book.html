@@ -119,7 +119,7 @@
         <div class="flex-column" id="book-reviews-div">
             <div class="flex-row space-between">
                 <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Reviews', 1, 33)}"></div>
-                <div th:replace="~{fragments/components/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
+                <div th:replace="~{fragments/components/pagination :: pagination(${reviews}, '/books/' + ${book.id}, '#book-reviews-div')}"></div>
             </div>
             <div class="flex-column gap-10px" id="book-reviews">
                 <p class="margin-0" th:if="${!reviews.hasContent()}">No reviews found...</p>
@@ -163,7 +163,7 @@
                     </div>
                 </div>
             </div>
-            <div th:replace="~{fragments/components/pagination :: pagination(${reviews}, '/books/' + ${book.id}, null)}"></div>
+            <div th:replace="~{fragments/components/pagination :: pagination(${reviews}, '/books/' + ${book.id}, '#book-reviews-div')}"></div>
         </div>
 
         <div class="flex-column" id="create-review-div" sec:authorize="isAuthenticated()" th:if="!${alreadyReviewed}">
