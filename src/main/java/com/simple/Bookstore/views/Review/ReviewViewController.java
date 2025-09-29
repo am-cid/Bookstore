@@ -117,7 +117,7 @@ public class ReviewViewController {
                 commentService.countAllPublicOrOwnedCommentsByReviewId(reviewId, user),
                 pageable.getPageSize()
         );
-        int lastPage = totalPages > 0 ? totalPages - 1 : 0; // 0-indexed TODO: change to 1-indexed
+        int lastPage = totalPages > 0 ? totalPages : 1; // 1-indexed
         return "redirect:/books/%d/reviews/%d?page=%d".formatted(bookId, reviewId, lastPage);
     }
 
