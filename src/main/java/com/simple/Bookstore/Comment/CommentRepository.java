@@ -19,8 +19,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
                 u_r.username as reviewerUsername, p_r.display_name reviewerDisplayName,
                 b.id as bookId,
                 u.username as username, p.display_name as userDisplayName,
-                ( -- TODO: change to 1-indexed
-                    SELECT FLOOR(COUNT(c2.id) / :pageSize)
+                ( -- 1-indexed
+                    SELECT FLOOR(COUNT(c2.id) / :pageSize) + 1
                     FROM comment c2
                     LEFT JOIN profile p2 ON c2.profile_id = p2.id
                     WHERE c2.review_id = c.review_id

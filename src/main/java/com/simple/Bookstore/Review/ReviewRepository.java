@@ -32,8 +32,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
                 b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
                 u.username as username, p.display_name as userDisplayName,
-                ( -- TODO: change to 1-indexed
-                    SELECT FLOOR(COUNT(r2.id) / :pageSize)
+                ( -- 1-indexed
+                    SELECT FLOOR(COUNT(r2.id) / :pageSize) + 1
                     FROM review r2
                     LEFT JOIN profile p2 ON r2.profile_id = p2.id
                     WHERE r2.book_id = r.book_id
@@ -58,8 +58,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
                 b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
                 u.username as username, p.display_name as userDisplayName,
-                ( -- TODO: change to 1-indexed
-                    SELECT FLOOR(COUNT(r2.id) / :pageSize)
+                ( -- 1-indexed
+                    SELECT FLOOR(COUNT(r2.id) / :pageSize) + 1
                     FROM review r2
                     LEFT JOIN profile p2 ON r2.profile_id = p2.id
                     WHERE r2.book_id = r.book_id
@@ -89,8 +89,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             SELECT r.id, r.title, r.content, r.rating, r.date, r.edited,
                 b.id as bookId , b.title as bookTitle, b.author as bookAuthor, b.front_image as bookFrontImage,
                 u.username as username, p.display_name as userDisplayName,
-                ( -- TODO: change to 1-indexed
-                    SELECT FLOOR(COUNT(r2.id) / :pageSize)
+                ( -- 1-indexed
+                    SELECT FLOOR(COUNT(r2.id) / :pageSize) + 1
                     FROM review r2
                     LEFT JOIN profile p2 ON r2.profile_id = p2.id
                     WHERE r2.book_id = r.book_id
