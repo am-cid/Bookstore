@@ -7,11 +7,10 @@ import java.util.Random;
 
 public class ErrorMascotFactory {
     private final static List<ErrorMascot> error401 = List.of(
-            new ErrorMascot("┬┴┬┴┤( ͡° ͜ʖ├┬┴┬┴", 200),
-            new ErrorMascot("┬┴┬┴┤ヾ(･ω├┬┴┬┴", 200),
-            new ErrorMascot("┬┴┬┴┤ʘ‿ʘ)╯", 200),
+            new ErrorMascot("┬┴┬┴┤ヾ(･ω├┬┴┬┴", 378),
+            new ErrorMascot("┬┴┬┴┤( ͡° ͜ʖ├┬┴┬┴", 359),
             new ErrorMascot("┬┴┬┴┤･ω･)ﾉ", 118),
-            new ErrorMascot("┬┴┬┴┤_・)", 200)
+            new ErrorMascot("┬┴┬┴┤_・)", 204)
     );
 
     private final static List<ErrorMascot> error404 = List.of(
