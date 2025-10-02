@@ -1,0 +1,78 @@
+#main-content > .svg-text-heading-div .svg-text-heading {
+    font-size: 32px;
+    padding: 0 0 0 10px;
+    margin: 10px 10px -18px;
+}
+
+#error-details {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    grid-template-areas:
+            'title mascot'
+            'message mascot'
+            'button button';
+    grid-gap: 10px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--color-02, #F61590);
+    border-top: 7px solid var(--color-02, #F61590);
+    border-bottom: 7px solid var(--color-02, #F61590);
+    background-color: var(--color-06, #FFE2E7);
+}
+
+#error-details > .svg-text-heading-div {
+    grid-area: mascot;
+    align-self: center;
+    text-align: center;
+}
+
+#error-details > .svg-text-heading-div .svg-text-heading {
+    font-size: 40px;
+}
+
+#error-details h2 {
+    grid-area: title;
+    text-align: center;
+    font-weight: bolder;
+    border-radius: 15px;
+    padding: 5px 20px;
+    margin: 0;
+    background-color: var(--color-02, #F61590);
+    color: var(--color-06, #FFE2E7);
+    border: none;
+}
+
+#error-details p {
+    grid-area: message;
+    margin: 0;
+    border: 2px solid var(--color-00, #A40E60);
+    padding: 10px;
+}
+
+#error-details form {
+    grid-area: button;
+    justify-self: center;
+    margin-top: 50px;
+}
+
+#go-home-button {
+    font-size: 24px;
+    text-align: center;
+
+    .text-outline-outer {
+        stroke: none;
+    }
+
+    .text-outline-inner {
+        fill: none;
+        paint-order: stroke;
+        stroke: var(--color-02, #F61590);
+        stroke-linejoin: round;
+        stroke-width: 3;
+    }
+
+    .text-fill {
+        fill: var(--color-06, #FFE2E7);
+    }
+}
