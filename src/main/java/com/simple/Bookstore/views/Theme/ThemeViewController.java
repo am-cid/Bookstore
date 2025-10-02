@@ -5,7 +5,6 @@ import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.utils.CssGenerator;
-import com.simple.Bookstore.utils.Result;
 import com.simple.Bookstore.views.HeaderAndSidebarsModelAttributes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,10 +32,7 @@ public class ThemeViewController {
             Model model
     ) {
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
-        Result<ThemeViewModel, String> viewResult = themeViewService.validatePageAccess(user, themeId);
-        if (viewResult.isErr())
-            return viewResult.unwrapErr();
-        var viewModel = viewResult.unwrap();
+        ThemeViewModel viewModel = themeViewService.validatePageAccess(user, themeId);
         model.addAttribute("viewModel", viewModel);
         model.addAttribute(
                 "previewThemeStyle",

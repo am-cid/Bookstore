@@ -2,6 +2,7 @@ package com.simple.Bookstore.views;
 
 import com.simple.Bookstore.Book.BookSearchResultDTO;
 import com.simple.Bookstore.Book.BookService;
+import com.simple.Bookstore.Exceptions.BookNotFoundException;
 import com.simple.Bookstore.Profile.ProfileService;
 import com.simple.Bookstore.Review.ReviewBookViewResponseDTO;
 import com.simple.Bookstore.Review.ReviewRequestDTO;
@@ -41,8 +42,8 @@ public class BookViewController {
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
         Optional<BookSearchResultDTO> bookResult = bookService.findBookById(bookId);
         if (bookResult.isEmpty())
-            // TODO: redirect to unknown book page
-            return "redirect:/";
+            throw new BookNotFoundException(bookId);
+
         Page<ReviewBookViewResponseDTO> reviews = reviewService.findAllPublicOrOwnedReviewsByBookIdAsPage(
                 bookId,
                 user != null ? user.getProfile().getId() : null,

@@ -4,7 +4,9 @@ import com.simple.Bookstore.Book.BookSearchResultDTO;
 import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Comment.CommentReviewViewResponseDTO;
 import com.simple.Bookstore.Comment.CommentService;
+import com.simple.Bookstore.Exceptions.BookNotFoundException;
 import com.simple.Bookstore.Exceptions.ReviewNotFoundException;
+import com.simple.Bookstore.Exceptions.UnauthorizedException;
 import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Review.ReviewViewResponseDTO;
 import com.simple.Bookstore.User.User;
@@ -29,7 +31,7 @@ public class ReviewViewServiceImpl implements ReviewViewService {
             Long bookId,
             Long reviewId,
             Pageable pageable
-    ) throws ReviewNotFoundException {
+    ) throws BookNotFoundException, ReviewNotFoundException {
         ReviewViewResponseDTO review = reviewService.findReviewViewById(reviewId);
         Result<Void, String> redirectResult = validateAccess(user, bookId, reviewId, review);
         if (redirectResult.isErr())
@@ -43,7 +45,12 @@ public class ReviewViewServiceImpl implements ReviewViewService {
     }
 
     @Override
-    public Result<ReviewViewModel, String> validateCommentCreationAccess(User user, Long bookId, Long reviewId, Pageable pageable) {
+    public Result<ReviewViewModel, String> validateCommentCreationAccess(
+            User user,
+            Long bookId,
+            Long reviewId,
+            Pageable pageable
+    ) throws BookNotFoundException, ReviewNotFoundException, UnauthorizedException {
         ReviewViewResponseDTO review = reviewService.findReviewViewById(reviewId);
         Result<Void, String> redirectResult = validatePostAccess(user, bookId, reviewId, review);
         if (redirectResult.isErr())
@@ -75,11 +82,10 @@ public class ReviewViewServiceImpl implements ReviewViewService {
             Long bookId,
             Long reviewId,
             ReviewViewResponseDTO review
-    ) {
+    ) throws BookNotFoundException, ReviewNotFoundException {
         Optional<BookSearchResultDTO> bookResult = bookService.findBookById(bookId);
         if (bookResult.isEmpty())
-            // TODO: redirect to unknown book page
-            return new Result.Err<>("redirect:/");
+            throw new BookNotFoundException(bookId);
         else if (!review.bookId().equals(bookId))
             return new Result.Err<>(
                     "redirect:/books/%d/reviews/%d?error=%s&context=%s".formatted(
@@ -90,10 +96,10 @@ public class ReviewViewServiceImpl implements ReviewViewService {
                     )
             );
         boolean isReviewOwner = user != null && user.getUsername().equals(review.username());
-        if (review.isPublic() || isReviewOwner)
-            return new Result.Ok<>(null);
-        // TODO: redirect to unknown review page
-        return new Result.Err<>("redirect:/books/%d".formatted(bookId));
+        if (!review.isPublic() && !isReviewOwner)
+            throw new ReviewNotFoundException(reviewId);
+
+        return new Result.Ok<>(null);
     }
 
     /**
@@ -110,9 +116,14 @@ public class ReviewViewServiceImpl implements ReviewViewService {
      *     <li>is private but not the owner (aka owner can access its own reviews even if private)</li>
      * </ul>
      */
-    private Result<Void, String> validatePostAccess(User user, Long bookId, Long reviewId, ReviewViewResponseDTO review) {
+    private Result<Void, String> validatePostAccess(
+            User user,
+            Long bookId,
+            Long reviewId,
+            ReviewViewResponseDTO review
+    ) throws BookNotFoundException, ReviewNotFoundException, UnauthorizedException {
         if (user == null) // cannot comment if anon
-            return new Result.Err<>("redirect:/books/%d".formatted(bookId));
+            throw new UnauthorizedException("Need to login to be able to comment.");
         return validateAccess(user, bookId, reviewId, review);
     }
 }
