@@ -183,6 +183,10 @@
     fill: var(--color-02, #F61590);
 }
 
+#theme-preview-render #mascot .svg-text-heading-div .svg-text-heading {
+    font-size: 42px;
+}
+
 #theme-preview-render #sidebar-right {
     max-width: 125px;
     min-width: 125px;

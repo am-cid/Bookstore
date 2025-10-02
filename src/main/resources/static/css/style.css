@@ -213,6 +213,36 @@ body {
 #header-right-div {
     display: grid;
     grid-template-rows: 15% 45% 20% 10%;
+    position: relative;
+}
+
+#header-right-div > #mascot {
+    position: absolute;
+    place-self: center;
+    text-align: center;
+    padding-bottom: 25px;
+}
+
+#header-right-div > #mascot > .svg-text-heading-div {
+    z-index: -9999 !important;
+}
+
+#header-right-div > #mascot .svg-text-heading-div .svg-text-heading {
+    font-size: 62px;
+}
+
+#header-right-div #mascot .svg-text-heading-div:first-child {
+    .text-outline-outer {
+        stroke: var(--color-05, #AAFFB1);
+    }
+
+    .text-outline-inner {
+        stroke: var(--color-02, #F61590);
+    }
+
+    .text-fill {
+        fill: var(--color-05, #AAFFB1);
+    }
 }
 
 #header-top-right-div {

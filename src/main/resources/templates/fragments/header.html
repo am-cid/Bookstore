@@ -6,7 +6,8 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-<!--/*@thymesVar id="logoLetters" type="java.util.List<com.simple.Bookstore.views.SiteLogoLetter>"*/-->
+<!--/*@thymesVar id="logoLetters" type="java.util.List<com.simple.Bookstore.utils.presentation.SiteLogoLetter>"*/-->
+<!--/*@thymesVar id="siteMascot" type="com.simple.Bookstore.utils.presentation.Kaomoji.SiteMascot"*/-->
 
 <header th:fragment="header">
     <div id="header">
@@ -71,6 +72,13 @@
             </ul>
         </div>
         <div id="header-right-div">
+            <div class="flex-row" id="mascot">
+                <div th:replace="~{fragments/svg-fragments/heading-plain
+                    :: svgHeading(${siteMascot.part1()}, ${siteMascot.widthX1()}, ${siteMascot.height})}"></div>
+                <div th:replace="~{fragments/svg-fragments/heading-plain
+                    :: svgHeading(${siteMascot.part2()}, ${siteMascot.widthX2()}, ${siteMascot.height()})}"></div>
+            </div>
+
             <div id="header-top-right-div">
                 <a class="header-top-right-button" href="/support" id="header-support">
                     SUPPORT
