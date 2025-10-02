@@ -9,6 +9,8 @@ import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.utils.CssGenerator;
 import com.simple.Bookstore.utils.PostedDateFormatter;
+import com.simple.Bookstore.utils.presentation.Kaomoji.SiteMascotFactory;
+import com.simple.Bookstore.utils.presentation.SiteLogoFactory;
 import org.springframework.ui.Model;
 
 import java.util.Arrays;
@@ -60,7 +62,7 @@ public class HeaderAndSidebarsModelAttributes {
         // header data
         model.addAttribute(
                 "logoLetters",
-                SiteLogoLetter.getLogoLettersModelAttributes("BOOKSTORE")
+                SiteLogoFactory.withModelAttributes("BOOKSTORE")
         );
 
         // left sidebar data
@@ -79,6 +81,7 @@ public class HeaderAndSidebarsModelAttributes {
         }
 
         // right sidebar data
+        model.addAttribute("siteMascot", SiteMascotFactory.randomMascot());
         model.addAttribute("top5Books", bookService.findTopNRatedBooks(5)); // A new service method
     }
 }

@@ -1,16 +1,16 @@
-package com.simple.Bookstore.views;
+package com.simple.Bookstore.utils.presentation;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
-public record SiteLogoLetter(
-        String letter,
-        String htmlId,
-        Integer rotate,
-        Integer xOffset,
-        Integer yOffset
-) {
-    public static List<SiteLogoLetter> getLogoLettersModelAttributes(String siteName) {
+public class SiteLogoFactory {
+    /**
+     * Adds model attributes for logo letters based on the passed in site name string
+     *
+     * @param siteName name of website
+     * @return list of site logo letters with model attributes
+     */
+    public static List<SiteLogoLetter> withModelAttributes(String siteName) {
         return IntStream
                 .range(0, siteName.length())
                 .mapToObj(i -> {
