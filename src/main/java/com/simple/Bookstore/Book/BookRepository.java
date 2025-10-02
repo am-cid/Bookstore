@@ -24,7 +24,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             FROM book b
             LEFT JOIN review r ON b.id = r.book_id
             LEFT JOIN book_genres bg ON b.id = bg.book_id
-            LEFT JOIN book_content_images bci ON b.id = bci_agg.book_id
+            LEFT JOIN book_content_images bci ON b.id = bci.book_id
             WHERE b.id = :id
             GROUP BY b.id, b.title, b.author, b.description, b.date, b.front_image, b.back_image, b.spine_image
             """)

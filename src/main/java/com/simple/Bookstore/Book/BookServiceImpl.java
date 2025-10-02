@@ -170,7 +170,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<BookSearchResultDTO> findBookById(Long id) {
-        return bookRepo.findById(id).map(BookMapper::bookToSearchResultDTO);
+        return bookRepo
+                .findBookById(id)
+                .map(BookMapper::searchResultProjectionToDTO);
     }
 
     @Override
