@@ -4,6 +4,8 @@ import com.simple.Bookstore.Book.BookSearchResultDTO;
 import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Comment.CommentProfileViewResponseDTO;
 import com.simple.Bookstore.Comment.CommentService;
+import com.simple.Bookstore.Exceptions.UnauthorizedException;
+import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
 import com.simple.Bookstore.Profile.ProfileResponseDTO;
 import com.simple.Bookstore.Review.ReviewProfileViewResponseDTO;
@@ -24,7 +26,6 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,16 +37,12 @@ public class ProfileViewServiceImpl implements ProfileViewService {
     private final BookService bookService;
 
     @Override
-    public Result<Pair<ProfileViewModel, ViewThemesModel>, String> buildProfileViewThemes(
+    public Pair<ProfileViewModel, ViewThemesModel> buildProfileViewThemes(
             User currentUser,
             String pathUsername,
             Pageable pageable
-    ) {
-        Result<ProfileViewModel, String> accessResult = validateProfileAccess(currentUser, pathUsername);
-        if (accessResult.isErr())
-            return new Result.Err<>(accessResult.unwrapErr());
-        ProfileViewModel profileViewModel = accessResult.unwrap();
-
+    ) throws UnauthorizedException, UserNotFoundException {
+        ProfileViewModel profileViewModel = validateProfileAccess(currentUser, pathUsername);
         Page<ThemeResponseDTO> ownedThemes = themeService.findThemesByUser(profileViewModel.user(), currentUser, pageable);
         ThemeResponseDTO usedTheme = themeService.findUsedTheme(currentUser);
         List<Long> savedThemeIds = themeService
@@ -53,54 +50,47 @@ public class ProfileViewServiceImpl implements ProfileViewService {
                 .stream()
                 .map(ThemeResponseDTO::id)
                 .toList();
-        return new Result.Ok<>(Pair.of(
+        return Pair.of(
                 profileViewModel,
                 new ViewThemesModel(ownedThemes, usedTheme, savedThemeIds)
-        ));
+        );
     }
 
     @Override
-    public Result<Pair<ProfileViewModel, ProfileViewReviewsModel>, String> buildProfileViewReviews(
+    public Pair<ProfileViewModel, ProfileViewReviewsModel> buildProfileViewReviews(
             User currentUser,
             String pathUsername,
             Pageable pageable
-    ) {
-        Result<ProfileViewModel, String> accessResult = validateProfileAccess(currentUser, pathUsername);
-        if (accessResult.isErr())
-            return new Result.Err<>(accessResult.unwrapErr());
-        ProfileViewModel profileViewModel = accessResult.unwrap();
-
+    ) throws UnauthorizedException, UserNotFoundException {
+        ProfileViewModel profileViewModel = validateProfileAccess(currentUser, pathUsername);
         Page<ReviewProfileViewResponseDTO> reviews = reviewService.findAllReviewsByUser(profileViewModel.user(), pageable);
-        return new Result.Ok<>(Pair.of(
+        return Pair.of(
                 profileViewModel,
                 new ProfileViewReviewsModel(reviews)
-        ));
+        );
     }
 
     @Override
-    public Result<Pair<ProfileViewModel, ProfileViewCommentsModel>, String> buildProfileViewComments(
+    public Pair<ProfileViewModel, ProfileViewCommentsModel> buildProfileViewComments(
             User currentUser,
             String pathUsername,
             Pageable pageable
-    ) {
-        Result<ProfileViewModel, String> accessResult = validateProfileAccess(currentUser, pathUsername);
-        if (accessResult.isErr())
-            return new Result.Err<>(accessResult.unwrapErr());
-        ProfileViewModel profileViewModel = accessResult.unwrap();
-
+    ) throws UnauthorizedException, UserNotFoundException {
+        ProfileViewModel profileViewModel = validateProfileAccess(currentUser, pathUsername);
         Page<CommentProfileViewResponseDTO> comments = commentService.findAllCommentsByUser(profileViewModel.user(), pageable);
-        return new Result.Ok<>(Pair.of(
+        return Pair.of(
                 profileViewModel,
                 new ProfileViewCommentsModel(comments)
-        ));
+        );
     }
 
     @Override
-    public Result<Pair<ProfileViewModel, ViewThemesModel>, String> buildProfileViewSavedThemes(User currentUser, String pathUsername, Pageable pageable) {
-        Result<User, String> validUserOrRedirect = validateEditDeleteAccess(currentUser, pathUsername);
-        if (validUserOrRedirect.isErr())
-            return new Result.Err<>(validUserOrRedirect.unwrapErr());
-        User foundUser = validUserOrRedirect.unwrap();
+    public Pair<ProfileViewModel, ViewThemesModel> buildProfileViewSavedThemes(
+            User currentUser,
+            String pathUsername,
+            Pageable pageable
+    ) throws UnauthorizedException, UserNotFoundException {
+        User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
         Page<ThemeResponseDTO> savedThemes = themeService.findSavedThemes(foundUser, pageable);
         ThemeResponseDTO usedTheme = themeService.findUsedTheme(foundUser);
@@ -109,67 +99,60 @@ public class ProfileViewServiceImpl implements ProfileViewService {
                 .stream()
                 .map(ThemeResponseDTO::id)
                 .toList();
-        return new Result.Ok<>(Pair.of(
+        return Pair.of(
                 new ProfileViewModel(foundUser, foundProfile),
                 new ViewThemesModel(savedThemes, usedTheme, savedThemeIds)
-        ));
+        );
     }
 
     @Override
-    public Result<Pair<ProfileViewModel, ProfileViewSavedBooksModel>, String> buildProfileViewSavedBooks(User currentUser, String pathUsername, Pageable pageable) {
-        Result<User, String> validUserOrRedirect = validateEditDeleteAccess(currentUser, pathUsername);
-        if (validUserOrRedirect.isErr())
-            return new Result.Err<>(validUserOrRedirect.unwrapErr());
-        User foundUser = validUserOrRedirect.unwrap();
+    public Pair<ProfileViewModel, ProfileViewSavedBooksModel> buildProfileViewSavedBooks(
+            User currentUser,
+            String pathUsername,
+            Pageable pageable
+    ) throws UnauthorizedException, UserNotFoundException {
+        User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
         Page<BookSearchResultDTO> savedThemes = bookService.findSavedBooks(foundUser, pageable);
         List<Long> savedBookIds = bookService.findSavedBookIds(foundUser);
-        return new Result.Ok<>(Pair.of(
+        return Pair.of(
                 new ProfileViewModel(foundUser, foundProfile),
                 new ProfileViewSavedBooksModel(savedThemes, savedBookIds)
-        ));
+        );
     }
 
     @Override
-    public Result<ProfileEditModel, String> buildProfileEditView(
+    public ProfileEditModel buildProfileEditView(
             User currentUser,
             String pathUsername,
             ProfileEditRequestDTO editRequest
-    ) {
-        Result<User, String> validUserOrRedirect = validateEditDeleteAccess(currentUser, pathUsername);
-        if (validUserOrRedirect.isErr())
-            return new Result.Err<>(validUserOrRedirect.unwrapErr());
-
-        User foundUser = validUserOrRedirect.unwrap();
+    ) throws UnauthorizedException, UserNotFoundException {
+        User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
         ProfileEditRequestDTO profileEditRequestDTO =
                 isUninitialized(editRequest)
                         ? ProfileMapper.profileResponseDtoToFreshEditRequestDTO(foundProfile)
                         : editRequest;
-        return new Result.Ok<>(new ProfileEditModel(
+        return new ProfileEditModel(
                 foundUser,
                 foundProfile,
                 profileEditRequestDTO
-        ));
+        );
     }
 
     @Override
-    public Result<ProfileEditModel, String> validateEditAccess(
+    public ProfileEditModel validateEditAccess(
             User currentUser,
             String pathUsername,
             ProfileEditRequestDTO editRequest
-    ) {
-        Result<User, String> validUserOrRedirect = validateEditDeleteAccess(currentUser, pathUsername);
-        if (validUserOrRedirect.isErr())
-            return new Result.Err<>(validUserOrRedirect.unwrapErr());
-
-        User foundUser = validUserOrRedirect.unwrap();
+    ) throws UnauthorizedException, UserNotFoundException {
+        User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
-        return new Result.Ok<>(new ProfileEditModel(
+        return new ProfileEditModel(
                 foundUser,
                 foundProfile,
                 editRequest
-        ));
+        );
     }
 
     @Override
@@ -177,7 +160,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             User currentUser,
             String pathUsername,
             ProfileEditRequestDTO editRequest
-    ) throws IllegalStateException {
+    ) throws IllegalStateException, UnauthorizedException, UserNotFoundException {
         Result<User, String> validUserOrRedirect = validateEditDeleteAccessAndRequest(
                 currentUser,
                 pathUsername,
@@ -197,22 +180,18 @@ public class ProfileViewServiceImpl implements ProfileViewService {
     }
 
     @Override
-    public Result<ProfileDeleteModel, String> validateDeleteAccess(
+    public ProfileDeleteModel validateDeleteAccess(
             User currentUser,
             String pathUsername,
             UserDeleteRequestDTO deleteRequest
-    ) {
-        Result<User, String> validUserOrRedirect = validateEditDeleteAccess(currentUser, pathUsername);
-        if (validUserOrRedirect.isErr())
-            return new Result.Err<>(validUserOrRedirect.unwrapErr());
-
-        User foundUser = validUserOrRedirect.unwrap();
+    ) throws UnauthorizedException, UserNotFoundException {
+        User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
-        return new Result.Ok<>(new ProfileDeleteModel(
+        return new ProfileDeleteModel(
                 foundUser,
                 foundProfile,
                 deleteRequest
-        ));
+        );
     }
 
     @Override
@@ -220,7 +199,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             User currentUser,
             String pathUsername,
             UserDeleteRequestDTO deleteRequest
-    ) throws IllegalStateException {
+    ) throws IllegalStateException, UnauthorizedException, UserNotFoundException {
         Result<User, String> validUserOrRedirect = validateEditDeleteAccessAndRequest(
                 currentUser,
                 pathUsername,
@@ -256,34 +235,28 @@ public class ProfileViewServiceImpl implements ProfileViewService {
      * @return A {@link ProfileViewModel} if the user can access the profile. Returns a {@link String}
      * containing a redirect URL string if access is denied.
      */
-    private Result<ProfileViewModel, String> validateProfileAccess(
+    private ProfileViewModel validateProfileAccess(
             User currentUser,
             String pathUsername
-    ) {
+    ) throws UnauthorizedException, UserNotFoundException {
         if (currentUser == null && pathUsername.equals("me"))
-            // TODO: redirect to needs authentication
-            return new Result.Err<>("redirect:/");
+            throw new UnauthorizedException("Need to login to able to access /profile/me");
 
-        Optional<User> optionalUser = pathUsername.equals("me")
-                ? Optional.of(currentUser)
+        User foundUser = pathUsername.equals("me")
+                ? currentUser
                 : userService
-                .findByUsername(pathUsername);
-        if (optionalUser.isEmpty())
-            // TODO: redirect to unknown user page
-            return new Result.Err<>("redirect:/");
-        User foundUser = optionalUser.get();
+                .findByUsername(pathUsername)
+                .orElseThrow(() -> new UserNotFoundException(pathUsername));
 
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
 
         if (pathUsername.equals("me")
                 || foundProfile.isPublic()
                 || currentUser != null && currentUser.getProfile().getId().equals(foundProfile.id())
-        ) {
-            return new Result.Ok<>(new ProfileViewModel(foundUser, foundProfile));
-        } else {
-            // TODO: redirect to unknown user page
-            return new Result.Err<>("redirect:/");
-        }
+        )
+            return new ProfileViewModel(foundUser, foundProfile);
+        else
+            throw new UserNotFoundException(pathUsername);
     }
 
     /**
@@ -300,23 +273,27 @@ public class ProfileViewServiceImpl implements ProfileViewService {
      * or the user is unauthorized.
      * @if a user specified by {@code pathUsername} (not "me") does not exist.
      */
-    private Result<User, String> validateEditDeleteAccess(
+    private User validateEditDeleteAccess(
             User currentUser,
             String pathUsername
-    ) {
+    ) throws UnauthorizedException, UserNotFoundException {
+        User foundUser = pathUsername.equals("me")
+                ? currentUser
+                : userService
+                .findPublicUserOrSelfByUsername(currentUser, pathUsername);
+
         // anon /userA/action -> no
         // anon no request /userA/action -> no
         if (currentUser == null && !pathUsername.equals("me"))
-            return new Result.Err<>("redirect:/profile/" + pathUsername);
+            throw new UnauthorizedException("You cannot modify %s's profile".formatted(pathUsername));
         // anon /me/action -> no
         // anon no request /me/action -> no
         if (currentUser == null)
-            // TODO: redirect to needs authentication
-            return new Result.Err<>("redirect:/");
+            throw new UnauthorizedException("Need to login to able to access /profile/me");
         // userB /userA/action -> no
         // userB no request /userA/action -> no
         if (!pathUsername.equals("me") && !currentUser.getUsername().equals(pathUsername))
-            return new Result.Err<>("redirect:/profile/" + pathUsername);
+            throw new UnauthorizedException("You cannot modify %s's profile".formatted(pathUsername));
         // userA /userA/action -> ok
         // userA no request /userA/action -> ok
         // userA /me/action -> ok
@@ -324,14 +301,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
         // userA no request /me/action -> ok
         // userB no request /me/action -> ok
 
-        Optional<User> optionalUser = pathUsername.equals("me")
-                ? Optional.of(currentUser)
-                : userService
-                .findByUsername(pathUsername);
-        if (optionalUser.isEmpty())
-            // TODO: redirect to unknown user page
-            return new Result.Err<>("redirect:/");
-        return new Result.Ok<>(optionalUser.get());
+        return foundUser;
     }
 
     /**
@@ -354,7 +324,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             String pathUsername,
             FormRequest formRequest,
             String action
-    ) throws IllegalStateException {
+    ) throws IllegalStateException, UnauthorizedException, UserNotFoundException {
         switch (action) {
             case "/edit":
             case "/delete":
@@ -363,9 +333,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
                 throw new IllegalStateException("Invalid action: " + action);
         }
 
-        Result<User, String> initialResult = validateEditDeleteAccess(currentUser, pathUsername);
-        if (initialResult.isErr())
-            return initialResult;
+        User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
 
         // userA /userA/edit -> ok
         // userA /me/edit -> ok
@@ -376,14 +344,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
         if (isUninitialized(formRequest))
             return new Result.Err<>("redirect:/profile/" + pathUsername + action);
 
-        Optional<User> optionalUser = pathUsername.equals("me")
-                ? Optional.of(currentUser)
-                : userService
-                .findByUsername(pathUsername);
-        if (optionalUser.isEmpty())
-            // TODO: redirect to unknown user page
-            return new Result.Err<>("redirect:/");
-        return new Result.Ok<>(optionalUser.get());
+        return new Result.Ok<>(foundUser);
     }
 
     /**

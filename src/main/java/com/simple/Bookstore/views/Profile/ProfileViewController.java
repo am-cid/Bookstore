@@ -56,35 +56,20 @@ public class ProfileViewController {
         model.addAttribute("viewType", actualView);
         switch (actualView) {
             case THEMES:
-                Result<Pair<ProfileViewModel, ViewThemesModel>, String>
-                        pairThemesResult = profileViewService
+                Pair<ProfileViewModel, ViewThemesModel> pairThemes = profileViewService
                         .buildProfileViewThemes(user, pathUsername, pageable);
-                if (pairThemesResult.isErr())
-                    return pairThemesResult.unwrapErr();
-                Pair<ProfileViewModel, ViewThemesModel>
-                        pairThemes = pairThemesResult.unwrap();
                 model.addAttribute("viewModel", pairThemes.getFirst());
                 model.addAttribute("viewThemesModel", pairThemes.getSecond());
                 break;
             case REVIEWS:
-                Result<Pair<ProfileViewModel, ProfileViewReviewsModel>, String>
-                        pairReviewResult = profileViewService
+                Pair<ProfileViewModel, ProfileViewReviewsModel> pairReviews = profileViewService
                         .buildProfileViewReviews(user, pathUsername, pageable);
-                if (pairReviewResult.isErr())
-                    return pairReviewResult.unwrapErr();
-                Pair<ProfileViewModel, ProfileViewReviewsModel>
-                        pairReviews = pairReviewResult.unwrap();
                 model.addAttribute("viewModel", pairReviews.getFirst());
                 model.addAttribute("viewReviewsModel", pairReviews.getSecond());
                 break;
             case COMMENTS:
-                Result<Pair<ProfileViewModel, ProfileViewCommentsModel>, String>
-                        pairCommentsResult = profileViewService
+                Pair<ProfileViewModel, ProfileViewCommentsModel> pairComments = profileViewService
                         .buildProfileViewComments(user, pathUsername, pageable);
-                if (pairCommentsResult.isErr())
-                    return pairCommentsResult.unwrapErr();
-                Pair<ProfileViewModel, ProfileViewCommentsModel>
-                        pairComments = pairCommentsResult.unwrap();
                 model.addAttribute("viewModel", pairComments.getFirst());
                 model.addAttribute("viewCommentsModel", pairComments.getSecond());
                 break;
@@ -103,12 +88,8 @@ public class ProfileViewController {
             Model model,
             @PageableDefault Pageable pageable
     ) {
-        Result<Pair<ProfileViewModel, ViewThemesModel>, String> viewResult = profileViewService
+        Pair<ProfileViewModel, ViewThemesModel> pairModels = profileViewService
                 .buildProfileViewSavedThemes(user, pathUsername, pageable);
-        if (viewResult.isErr())
-            return viewResult.unwrapErr();
-
-        Pair<ProfileViewModel, ViewThemesModel> pairModels = viewResult.unwrap();
         model.addAttribute("viewModel", pairModels.getFirst());
         model.addAttribute("viewSavedThemesModel", pairModels.getSecond());
 
@@ -125,12 +106,8 @@ public class ProfileViewController {
             Model model,
             @PageableDefault Pageable pageable
     ) {
-        Result<Pair<ProfileViewModel, ProfileViewSavedBooksModel>, String> viewResult = profileViewService
+        Pair<ProfileViewModel, ProfileViewSavedBooksModel> pairModels = profileViewService
                 .buildProfileViewSavedBooks(user, pathUsername, pageable);
-        if (viewResult.isErr())
-            return viewResult.unwrapErr();
-
-        Pair<ProfileViewModel, ProfileViewSavedBooksModel> pairModels = viewResult.unwrap();
         model.addAttribute("viewModel", pairModels.getFirst());
         model.addAttribute("viewSavedBooksModel", pairModels.getSecond());
 
@@ -147,13 +124,10 @@ public class ProfileViewController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        Result<ProfileEditModel, String> viewResult = profileViewService
+        ProfileEditModel viewModel = profileViewService
                 .buildProfileEditView(user, pathUsername, editRequest);
-        if (viewResult.isErr())
-            return viewResult.unwrapErr();
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
-        ProfileEditModel viewModel = viewResult.unwrap();
         model.addAttribute("pathUsername", pathUsername);
         model.addAttribute("viewModel", viewModel);
         model.addAttribute("profileEditRequestDTO", viewModel.editRequest());
@@ -169,13 +143,10 @@ public class ProfileViewController {
             Model model,
             RedirectAttributes redirectAttributes
     ) throws UnauthorizedException {
-        Result<ProfileEditModel, String> viewResult = profileViewService
+        ProfileEditModel viewModel = profileViewService
                 .validateEditAccess(user, pathUsername, editRequest);
-        if (viewResult.isErr())
-            return viewResult.unwrapErr();
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
-        ProfileEditModel viewModel = viewResult.unwrap();
         model.addAttribute("viewModel", viewModel);
         model.addAttribute("pathUsername", pathUsername);
         model.addAttribute("profileEditRequestDTO", viewModel.editRequest());
@@ -207,7 +178,7 @@ public class ProfileViewController {
         if (hasErrors)
             return "profile-edit";
 
-        redirectAttributes.addFlashAttribute("profileEditRequestDTO", viewResult.unwrap().editRequest());
+        redirectAttributes.addFlashAttribute("profileEditRequestDTO", viewModel.editRequest());
         return "redirect:/profile/{pathUsername}/edit/confirm";
     }
 
@@ -293,13 +264,10 @@ public class ProfileViewController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        Result<ProfileDeleteModel, String> viewResult = profileViewService
+        ProfileDeleteModel viewModel = profileViewService
                 .validateDeleteAccess(user, pathUsername, UserDeleteRequestDTO.empty());
-        if (viewResult.isErr())
-            return viewResult.unwrapErr();
 
         HeaderAndSidebarsModelAttributes.defaults(user, model, bookService, reviewService, themeService);
-        ProfileDeleteModel viewModel = viewResult.unwrap();
         model.addAttribute("pathUsername", pathUsername);
         model.addAttribute("viewModel", viewModel);
         model.addAttribute("userDeleteRequestDTO", viewModel.deleteRequest());
@@ -419,6 +387,5 @@ public class ProfileViewController {
         return user != null && user.getUsername().equals(pathUsername)
                 ? "My Account"
                 : "Account";
-
     }
 }

@@ -1,6 +1,7 @@
 package com.simple.Bookstore.User;
 
 import com.simple.Bookstore.Auth.RegisterRequestDTO;
+import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Exceptions.UsernameAlreadyTakenException;
 import com.simple.Bookstore.Profile.Profile;
 import com.simple.Bookstore.Profile.ProfileRepository;
@@ -34,6 +35,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User findPublicUserOrSelfByUsername(User user, String username) throws UserNotFoundException {
+        User foundUser = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+        if (foundUser.getProfile().isPublic()
+                || (user != null && foundUser.getId().equals(user.getId())))
+            return foundUser;
+        throw new UserNotFoundException(username);
     }
 
     @Override
