@@ -2,6 +2,7 @@ package com.simple.Bookstore.config;
 
 import com.simple.Bookstore.Auth.AuthFailureHandler;
 import com.simple.Bookstore.Auth.AuthSuccessHandler;
+import com.simple.Bookstore.Auth.CustomAuthenticationEntryPoint;
 import com.simple.Bookstore.Auth.CustomLogoutSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,7 +101,7 @@ public class SecurityConfig {
                         .logoutUrl("/api/v1/auth/logout")
                         .logoutSuccessHandler(new CustomLogoutSuccessHandler())
                         .permitAll()
-                )
+                ).exceptionHandling(exception -> exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
         ;
         return http.build();
     }
