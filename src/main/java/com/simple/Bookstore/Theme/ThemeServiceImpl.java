@@ -246,8 +246,9 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-        return List.of();
     public List<ThemeResponseDTO> findLatestNPublishedOrOwnedThemes(User user, int n) {
+        return themeRepository
+                .findLatestNPublishedOrOwnedThemes(user, n);
     }
 
     @Override

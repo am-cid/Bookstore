@@ -36,6 +36,23 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
     List<Theme> findByProfileUserOrderByName(User user);
 
+    @Query("""
+            SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
+                t.id, t.name, t.description, t.date, p.id, u.username, p.displayName,
+                t.base00, t.base01, t.base02, t.base03, t.base04, t.base05, t.base06, t.base07
+            )
+            FROM Theme t
+            LEFT JOIN t.profile p
+            LEFT JOIN p.user u
+            WHERE (t.published = true AND t.profile.isPublic = true)
+                OR (:user IS NOT NULL AND t.profile.user = :user)
+            ORDER BY t.date DESC, t.id DESC
+            LIMIT :n
+            """)
+    List<ThemeResponseDTO> findLatestNPublishedOrOwnedThemes(
+            @Param("user") User user,
+            @Param("n") int n
+    );
 
     @Query("""
             SELECT t.id
