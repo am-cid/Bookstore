@@ -1,6 +1,7 @@
 package com.simple.Bookstore.Review;
 
 import com.simple.Bookstore.Exceptions.BookNotFoundException;
+import com.simple.Bookstore.Exceptions.ForbiddenException;
 import com.simple.Bookstore.Exceptions.ReviewNotFoundException;
 import com.simple.Bookstore.User.User;
 import org.springframework.data.domain.Page;
@@ -19,9 +20,10 @@ public interface ReviewService {
     ReviewResponseDTO createReview(User user, Long bookId, ReviewRequestDTO request)
             throws IllegalStateException, BookNotFoundException;
 
-    ReviewResponseDTO updateReview(User user, Long id, ReviewRequestDTO request);
+    ReviewResponseDTO updateReview(User user, Long id, ReviewRequestDTO request)
+            throws ForbiddenException, ReviewNotFoundException;
 
-    void deleteReview(User user, Long id);
+    void deleteReview(User user, Long id) throws ForbiddenException, ReviewNotFoundException;
 
     List<ReviewProfileViewResponseDTO> findLatestNReviews(int n, User user);
 

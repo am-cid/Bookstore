@@ -1,5 +1,6 @@
 package com.simple.Bookstore.views.Profile;
 
+import com.simple.Bookstore.Exceptions.ForbiddenException;
 import com.simple.Bookstore.Exceptions.UnauthorizedException;
 import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
@@ -65,7 +66,7 @@ public interface ProfileViewService {
             User currentUser,
             String pathUsername,
             Pageable pageable
-    );
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException;
 
     /**
      * @param currentUser  currently authenticated user. null if anonymous
@@ -79,7 +80,7 @@ public interface ProfileViewService {
             User currentUser,
             String pathUsername,
             Pageable pageable
-    );
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException;
 
     /**
      * @param currentUser  currently authenticated user. null if anonymous
@@ -93,7 +94,7 @@ public interface ProfileViewService {
             User currentUser,
             String pathUsername,
             ProfileEditRequestDTO editRequest
-    ) throws UnauthorizedException, UserNotFoundException;
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException;
 
     /**
      * @param currentUser  currently authenticated user. null if anonymous
@@ -107,7 +108,7 @@ public interface ProfileViewService {
             User currentUser,
             String pathUsername,
             ProfileEditRequestDTO editRequest
-    ) throws UnauthorizedException, UserNotFoundException;
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException;
 
     /**
      * validates request that came from /profile/me/edit -> /profile/me/edit/confirm
@@ -124,7 +125,7 @@ public interface ProfileViewService {
             User currentUser,
             String pathUsername,
             ProfileEditRequestDTO editRequest
-    ) throws IllegalStateException, UnauthorizedException, UserNotFoundException;
+    ) throws ForbiddenException, IllegalStateException, UnauthorizedException, UserNotFoundException;
 
     /**
      * @param currentUser   currently authenticated user. null if anonymous
@@ -138,7 +139,7 @@ public interface ProfileViewService {
             User currentUser,
             String pathUsername,
             UserDeleteRequestDTO deleteRequest
-    ) throws UnauthorizedException, UserNotFoundException;
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException;
 
 
     /**
@@ -154,5 +155,5 @@ public interface ProfileViewService {
             User currentUser,
             String pathUsername,
             UserDeleteRequestDTO deleteRequest
-    ) throws IllegalStateException, UnauthorizedException, UserNotFoundException;
+    ) throws ForbiddenException, IllegalStateException, UnauthorizedException, UserNotFoundException;
 }

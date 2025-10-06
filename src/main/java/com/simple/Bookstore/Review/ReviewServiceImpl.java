@@ -3,8 +3,8 @@ package com.simple.Bookstore.Review;
 import com.simple.Bookstore.Book.Book;
 import com.simple.Bookstore.Book.BookRepository;
 import com.simple.Bookstore.Exceptions.BookNotFoundException;
+import com.simple.Bookstore.Exceptions.ForbiddenException;
 import com.simple.Bookstore.Exceptions.ReviewNotFoundException;
-import com.simple.Bookstore.Exceptions.UnauthorizedException;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.config.constants.PagingConstants;
 import com.simple.Bookstore.utils.ReviewMapper;
@@ -77,12 +77,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewResponseDTO updateReview(User user, Long id, ReviewRequestDTO request) {
+    public ReviewResponseDTO updateReview(
+            User user,
+            Long id,
+            ReviewRequestDTO request
+    ) throws ForbiddenException, ReviewNotFoundException {
         Review review = reviewRepository
                 .findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
         if (!review.getProfile().getUser().getId().equals(user.getId()))
-            throw new UnauthorizedException("You are not authorized to edit this review");
+            throw new ForbiddenException("You are not allowed to edit this review");
 
         review.setContent(request.content());
         review.setRating(request.rating());
@@ -92,12 +96,15 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void deleteReview(User user, Long id) {
+    public void deleteReview(
+            User user,
+            Long id
+    ) throws ForbiddenException, ReviewNotFoundException {
         Review review = reviewRepository
                 .findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
         if (!review.getProfile().getUser().getId().equals(user.getId()))
-            throw new UnauthorizedException("You are not authorized to delete this review");
+            throw new ForbiddenException("You are not allowed to delete this review");
 
         reviewRepository.deleteById(id);
     }

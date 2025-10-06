@@ -1,8 +1,8 @@
 package com.simple.Bookstore.Comment;
 
 import com.simple.Bookstore.Exceptions.CommentNotFoundException;
+import com.simple.Bookstore.Exceptions.ForbiddenException;
 import com.simple.Bookstore.Exceptions.ReviewNotFoundException;
-import com.simple.Bookstore.Exceptions.UnauthorizedException;
 import com.simple.Bookstore.Review.Review;
 import com.simple.Bookstore.Review.ReviewRepository;
 import com.simple.Bookstore.User.User;
@@ -48,12 +48,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponseDTO updateComment(User user, Long id, CommentRequestDTO request) {
+    public CommentResponseDTO updateComment(
+            User user,
+            Long id,
+            CommentRequestDTO request
+    ) throws CommentNotFoundException, ForbiddenException {
         Comment comment = commentRepository
                 .findById(id)
                 .orElseThrow(() -> new CommentNotFoundException(id));
         if (!comment.getProfile().getUser().getId().equals(user.getId()))
-            throw new UnauthorizedException("You are not authorized to edit this comment");
+            throw new ForbiddenException("You are not allowed to edit this comment");
 
         comment.setContent(request.content());
         comment.setEdited(true);
@@ -62,12 +66,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(User user, Long id) {
+    public void deleteComment(User user, Long id) throws CommentNotFoundException, ForbiddenException {
         Comment comment = commentRepository
                 .findById(id)
                 .orElseThrow(() -> new CommentNotFoundException(id));
         if (!comment.getProfile().getUser().getId().equals(user.getId()))
-            throw new UnauthorizedException("You are not authorized to edit this comment");
+            throw new ForbiddenException("You are not allowed to edit this comment");
 
         commentRepository.deleteById(id);
     }

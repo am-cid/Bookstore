@@ -4,6 +4,7 @@ import com.simple.Bookstore.Book.BookSearchResultDTO;
 import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Comment.CommentProfileViewResponseDTO;
 import com.simple.Bookstore.Comment.CommentService;
+import com.simple.Bookstore.Exceptions.ForbiddenException;
 import com.simple.Bookstore.Exceptions.UnauthorizedException;
 import com.simple.Bookstore.Exceptions.UserNotFoundException;
 import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
@@ -89,7 +90,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             User currentUser,
             String pathUsername,
             Pageable pageable
-    ) throws UnauthorizedException, UserNotFoundException {
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException {
         User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
         Page<ThemeResponseDTO> savedThemes = themeService.findSavedThemes(foundUser, pageable);
@@ -110,7 +111,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             User currentUser,
             String pathUsername,
             Pageable pageable
-    ) throws UnauthorizedException, UserNotFoundException {
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException {
         User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
         Page<BookSearchResultDTO> savedThemes = bookService.findSavedBooks(foundUser, pageable);
@@ -126,7 +127,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             User currentUser,
             String pathUsername,
             ProfileEditRequestDTO editRequest
-    ) throws UnauthorizedException, UserNotFoundException {
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException {
         User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
         ProfileEditRequestDTO profileEditRequestDTO =
@@ -145,7 +146,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             User currentUser,
             String pathUsername,
             ProfileEditRequestDTO editRequest
-    ) throws UnauthorizedException, UserNotFoundException {
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException {
         User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
         return new ProfileEditModel(
@@ -160,7 +161,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             User currentUser,
             String pathUsername,
             ProfileEditRequestDTO editRequest
-    ) throws IllegalStateException, UnauthorizedException, UserNotFoundException {
+    ) throws ForbiddenException, IllegalStateException, UnauthorizedException, UserNotFoundException {
         Result<User, String> validUserOrRedirect = validateEditDeleteAccessAndRequest(
                 currentUser,
                 pathUsername,
@@ -184,7 +185,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             User currentUser,
             String pathUsername,
             UserDeleteRequestDTO deleteRequest
-    ) throws UnauthorizedException, UserNotFoundException {
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException {
         User foundUser = validateEditDeleteAccess(currentUser, pathUsername);
         ProfileResponseDTO foundProfile = ProfileMapper.profileToResponseDTO(foundUser.getProfile());
         return new ProfileDeleteModel(
@@ -199,7 +200,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             User currentUser,
             String pathUsername,
             UserDeleteRequestDTO deleteRequest
-    ) throws IllegalStateException, UnauthorizedException, UserNotFoundException {
+    ) throws ForbiddenException, IllegalStateException, UnauthorizedException, UserNotFoundException {
         Result<User, String> validUserOrRedirect = validateEditDeleteAccessAndRequest(
                 currentUser,
                 pathUsername,
@@ -276,7 +277,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
     private User validateEditDeleteAccess(
             User currentUser,
             String pathUsername
-    ) throws UnauthorizedException, UserNotFoundException {
+    ) throws ForbiddenException, UnauthorizedException, UserNotFoundException {
         User foundUser = pathUsername.equals("me")
                 ? currentUser
                 : userService
@@ -285,7 +286,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
         // anon /userA/action -> no
         // anon no request /userA/action -> no
         if (currentUser == null && !pathUsername.equals("me"))
-            throw new UnauthorizedException("You cannot modify %s's profile".formatted(pathUsername));
+            throw new ForbiddenException("You cannot modify %s's profile".formatted(pathUsername));
         // anon /me/action -> no
         // anon no request /me/action -> no
         if (currentUser == null)
@@ -293,7 +294,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
         // userB /userA/action -> no
         // userB no request /userA/action -> no
         if (!pathUsername.equals("me") && !currentUser.getUsername().equals(pathUsername))
-            throw new UnauthorizedException("You cannot modify %s's profile".formatted(pathUsername));
+            throw new ForbiddenException("You cannot modify %s's profile".formatted(pathUsername));
         // userA /userA/action -> ok
         // userA no request /userA/action -> ok
         // userA /me/action -> ok

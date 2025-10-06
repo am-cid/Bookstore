@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CommentNotFoundException.class)
     public String handleCommentNotFoundException(
-            BookNotFoundException ex,
+            CommentNotFoundException ex,
             HttpServletRequest request,
             HttpServletResponse response
     ) {
@@ -31,9 +31,21 @@ public class GlobalExceptionHandler {
         return "forward:/error";
     }
 
+    @ExceptionHandler(ForbiddenException.class)
+    public String handleForbiddenException(
+            ForbiddenException ex,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        request.setAttribute(CUSTOM_ERROR_TITLE_ATTRIBUTE, "Forbidden");
+        request.setAttribute(CUSTOM_ERROR_MESSAGE_ATTRIBUTE, ex.getMessage());
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        return "forward:/error";
+    }
+
     @ExceptionHandler(ReviewNotFoundException.class)
     public String handleReviewNotFoundException(
-            BookNotFoundException ex,
+            ReviewNotFoundException ex,
             HttpServletRequest request,
             HttpServletResponse response
     ) {

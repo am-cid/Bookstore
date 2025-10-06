@@ -13,6 +13,13 @@ public class ErrorMascotFactory {
             new ErrorMascot("┬┴┬┴┤_・)", 204)
     );
 
+    private final static List<ErrorMascot> error403 = List.of(
+            new ErrorMascot("▓▒░(°◡°)░▒▓", 275),
+            new ErrorMascot("..・ヾ(。＞＜)シ", 204),
+            new ErrorMascot("＼(º □ º l|l)/", 203),
+            new ErrorMascot("〣( ºΔº )〣", 195)
+    );
+
     private final static List<ErrorMascot> error404 = List.of(
             new ErrorMascot("(￣_￣)・・・", 200),
             new ErrorMascot("(-_-;)・・・", 172),
@@ -50,6 +57,8 @@ public class ErrorMascotFactory {
         return getRandom(switch (statusCode) {
             case UNAUTHORIZED ->
                     error401;
+            case FORBIDDEN ->
+                    error403;
             case NOT_FOUND ->
                     error404;
             case CONFLICT ->

@@ -49,7 +49,9 @@ public class CustomErrorController implements ErrorController {
                         ? customMessageAttr.toString()
                         : (switch (httpStatus) {
                     case UNAUTHORIZED -> // 401
-                            "You are not authorized to perform this action";
+                            "You need to login to perform this action";
+                    case FORBIDDEN -> // 401
+                            "You are not allowed to perform this action";
                     case NOT_FOUND -> // 404
                             "Page not found. Check if the URL is correct.";
                     default ->
