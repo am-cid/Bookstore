@@ -48,6 +48,8 @@ public class CustomErrorController implements ErrorController {
                 customMessageAttr != null
                         ? customMessageAttr.toString()
                         : (switch (httpStatus) {
+                    case OK -> // 200 (when /error is manually visited)
+                            "Well, that's embarrassing. You aren't supposed to visit this page manually!!";
                     case UNAUTHORIZED -> // 401
                             "You need to login to perform this action";
                     case FORBIDDEN -> // 401

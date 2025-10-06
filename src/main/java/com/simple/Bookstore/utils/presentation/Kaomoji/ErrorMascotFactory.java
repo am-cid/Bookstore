@@ -6,6 +6,15 @@ import java.util.List;
 import java.util.Random;
 
 public class ErrorMascotFactory {
+    private final static List<ErrorMascot> ok200 = List.of(
+            new ErrorMascot("(⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)", 308),
+            new ErrorMascot("(⁄ ⁄•⁄ω⁄•⁄ ⁄)", 273),
+            new ErrorMascot("(„ಡωಡ„)", 191),
+            new ErrorMascot("(*/▽＼*)", 150),
+            new ErrorMascot("(*ﾉωﾉ)", 128),
+            new ErrorMascot("(*/ω＼)", 127)
+    );
+
     private final static List<ErrorMascot> error401 = List.of(
             new ErrorMascot("┬┴┬┴┤ヾ(･ω├┬┴┬┴", 378),
             new ErrorMascot("┬┴┬┴┤( ͡° ͜ʖ├┬┴┬┴", 359),
@@ -55,6 +64,8 @@ public class ErrorMascotFactory {
      */
     public static ErrorMascot random(HttpStatus statusCode) {
         return getRandom(switch (statusCode) {
+            case OK ->
+                    ok200;
             case UNAUTHORIZED ->
                     error401;
             case FORBIDDEN ->
