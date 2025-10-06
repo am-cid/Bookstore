@@ -71,7 +71,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/books/**", "/api/v1/comments/**",
                                 "/api/v1/reviews/**",
-                                "/", "/search", "/register/**", "/profile/**"
+                                "/", "/search", "/error/**", "/register/**",
+                                "/profile/**", "/books/**", "/themes/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/auth/**", "/register/**",
@@ -101,7 +102,10 @@ public class SecurityConfig {
                         .logoutUrl("/api/v1/auth/logout")
                         .logoutSuccessHandler(new CustomLogoutSuccessHandler())
                         .permitAll()
-                ).exceptionHandling(exception -> exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                )
         ;
         return http.build();
     }
