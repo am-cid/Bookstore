@@ -3,11 +3,7 @@
     gap: 2em;
 }
 
-#register-form-outer-div text {
-    font-size: 33px;
-}
-
-#register-form-outer-div .svg-text-heading {
+#register-form-outer-div > .svg-text-heading-div .svg-text-heading {
     font-size: 33px;
     padding-left: 10px;
     margin-bottom: -38px;

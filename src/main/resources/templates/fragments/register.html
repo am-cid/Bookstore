@@ -10,13 +10,12 @@
 
 <div class="flex-column" id="main-content" th:fragment="main-content">
     <div class="flex-column" id="register-form-outer-div">
-        <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('My Account', 1, 33)}"></div>
         <!--  block to check for query param -->
-        <div th:if="${param.error != null}" class="error-message">
-            <p th:switch="${param.error[0]}">
-                <span th:case="'need_auth'">You must be authenticated to do this action</span>
-            </p>
-        </div>
+        <th:block th:if="${param.error != null}" th:switch="${param.error[0]}">
+            <th:block th:case="'need_auth'"
+                      th:insert="~{fragments/components/flash-error :: flashError('You must be authenticated to do this action')}"></th:block>
+        </th:block>
+        <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('My Account', 1, 33)}"></div>
         <div th:replace="~{fragments/register/register-form :: register-form}"></div>
     </div>
 </div>
