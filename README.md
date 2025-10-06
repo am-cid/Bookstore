@@ -111,3 +111,8 @@ documentation at: `/swagger-ui.html`
     - `spring.liquibase.enabled=true`
     - Seeding is disabled. The application expects the database to be managed
     via Liquibase.
+
+---
+
+## Credits
+* [Kaomoji by SmileX](https://kaomoji.ru/en/): mascots of the website. download the [app](https://play.google.com/store/apps/details?id=ru.kaomoji.kaomojiapp)! ([paid version](https://play.google.com/store/apps/details?id=ru.kaomoji.kaomojiplus))
