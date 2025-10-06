@@ -14,28 +14,9 @@ import java.util.Optional;
 
 @Repository
 public interface ThemeRepository extends JpaRepository<Theme, Long> {
-    List<Theme> findByProfileUserOrderByName(User user);
-
-    Page<Theme> findByPublishedIsTrue(Pageable pageable);
-
     Optional<Theme> findByIdAndPublishedIsTrue(Long id);
 
     Optional<Theme> findByName(String name);
-
-    @Query(value = """
-            SELECT t from Theme t
-            WHERE (t.published = true AND t.profile.isPublic = true)
-                OR (:user IS NOT NULL AND t.profile.user = :user)
-            """)
-    Page<Theme> findByPublishedOrOwnedUnpublishedThemes(@Param("user") User user, Pageable pageable);
-
-    @Query("""
-            SELECT t.id
-            FROM Theme t
-            LEFT JOIN t.savedByProfiles p
-            WHERE p.id = :profileId
-            """)
-    List<Long> findProfileSavedThemeIds(@Param("profileId") Long profileId);
 
     @Query("""
             SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
@@ -53,6 +34,25 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
             @Param("profileId") Long profileId
     );
 
+    List<Theme> findByProfileUserOrderByName(User user);
+
+
+    @Query("""
+            SELECT t.id
+            FROM Theme t
+            LEFT JOIN t.savedByProfiles p
+            WHERE p.id = :profileId
+            """)
+    List<Long> findProfileSavedThemeIds(@Param("profileId") Long profileId);
+
+    Page<Theme> findByPublishedIsTrue(Pageable pageable);
+
+    @Query(value = """
+            SELECT t from Theme t
+            WHERE (t.published = true AND t.profile.isPublic = true)
+                OR (:user IS NOT NULL AND t.profile.user = :user)
+            """)
+    Page<Theme> findByPublishedOrOwnedUnpublishedThemes(@Param("user") User user, Pageable pageable);
 
     @Query("""
             SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(

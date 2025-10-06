@@ -43,33 +43,50 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Page<ThemeResponseDTO> findPublishedOrOwnedUnpublishedThemes(User user, Pageable pageable) {
-        if (user == null) {
-            return themeRepository
-                    .findByPublishedIsTrue(pageable)
-                    .map(ThemeMapper::themeToResponseDTO);
-        } else {
-            return themeRepository
-                    .findByPublishedOrOwnedUnpublishedThemes(user, pageable)
-                    .map(ThemeMapper::themeToResponseDTO);
+    public String getThemeAsInlineCss(Long id, User user, int steps) throws ThemeNotFoundException {
+        Theme theme = themeRepository
+                .findById(id)
+                .orElseThrow(() -> new ThemeNotFoundException(id));
+        if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
+            throw new ThemeNotFoundException(id);
         }
-    }
 
-    @Override
-    public List<ThemeResponseDTO> findThemesByUser(User user) {
-        return themeRepository
-                .findByProfileUserOrderByName(user)
-                .stream()
-                .map(ThemeMapper::themeToResponseDTO)
-                .toList();
-    }
+        StringBuilder css = new StringBuilder(":root {\n");
+        // base colors from base08 config
+        for (int i = 0; i <= 7; i++) {
+            String hex = theme.getColorByIndex(i);
+            css.append(String.format("  --color-%02d: #%s;%n", i, hex));
+        }
 
-    @Override
-    public Page<ThemeResponseDTO> findThemesByUser(@NonNull User profileUser, User visitor, Pageable pageable) {
-        Long profileId = profileUser.getProfile().getId();
-        Long visitorProfileId = visitor != null ? visitor.getProfile().getId() : null;
-        return themeRepository
-                .findPublishedOrOwnedThemeByProfileId(profileId, visitorProfileId, pageable);
+        // interpolated colors for circles after heading
+        Color start = Color.decode("#" + theme.getBase03());
+        Color end = Color.decode("#" + theme.getBase04());
+        List<String> interpolated = ColorUtils.getInterpolatedColors(start, end, 27)
+                .subList(1, 26); // exclude original endpoints
+        IntStream.range(0, interpolated.size())
+                .forEach(i -> css.append(String.format("  --interpolated-color-%02d: %s;%n", i, interpolated.get(i))));
+
+        // genre text color (must be darker than base05 which is genre bg)
+        List<String> genreTextColors = ColorUtils.getGenreTextColors(
+                Color.decode("#" + theme.getBase03()),
+                Color.decode("#" + theme.getBase04()),
+                Color.decode("#" + theme.getBase05())
+        );
+        IntStream.range(0, genreTextColors.size())
+                .forEach(i -> css.append(
+                        String.format("  --genre-text-color-%02d: %s;%n", i, genreTextColors.get(i))
+                ));
+
+        // font colors
+        boolean isDarkTheme = ColorUtils.isDarkTheme(
+                Color.decode("#" + theme.getBase00()),
+                Color.decode("#" + theme.getBase07())
+        );
+        css.append(String.format("  --font-color: %s;%n", isDarkTheme ? "white" : "black"));
+        css.append(String.format("  --link-color: %s;%n", isDarkTheme ? "lightblue" : "blue"));
+
+        css.append("}");
+        return css.toString();
     }
 
     @Override
@@ -77,6 +94,27 @@ public class ThemeServiceImpl implements ThemeService {
         Long profileId = user != null ? user.getProfile().getId() : null;
         return themeRepository
                 .findPublishedOrOwnedThemeById(themeId, profileId);
+    }
+
+    @Override
+    public ThemeResponseDTO findUsedTheme(User user) {
+        if (user == null || user.getProfile().getUsedTheme() == null)
+            return null;
+
+        return ThemeMapper.themeToResponseDTO(
+                user.getProfile().getUsedTheme()
+        );
+    }
+
+    @Override
+    public ThemeRequestDTO loadThemeFromYaml(
+            File yamlFile,
+            boolean published,
+            @Nullable String customName,
+            @Nullable String customDescription
+    ) throws IOException {
+        ThemeFromBase16Yaml yamlScheme = yamlMapper.readValue(yamlFile, ThemeFromBase16Yaml.class);
+        return ThemeMapper.base16YamlToRequestDTO(yamlScheme, published, customName, customDescription);
     }
 
     @Override
@@ -117,20 +155,6 @@ public class ThemeServiceImpl implements ThemeService {
         theme.setBase07(request.base07());
         Theme savedTheme = themeRepository.save(theme);
         return ThemeMapper.themeToResponseDTO(savedTheme);
-    }
-
-    @Override
-    public void deleteTheme(Long id, User user)
-            throws ThemeNotFoundException {
-        Theme theme = themeRepository
-                .findById(id)
-                .orElseThrow(() -> new ThemeNotFoundException(id));
-        if (!user.getId().equals(theme.getProfile().getUser().getId())) {
-            throw new ThemeNotFoundException(id);
-        }
-        theme.getSavedByProfiles().forEach(profile -> profile.getSavedThemes().remove(theme));
-        theme.getUsedByProfiles().forEach(profile -> profile.setUsedTheme(null));
-        themeRepository.delete(theme);
     }
 
     @Override
@@ -188,6 +212,20 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
+    public void deleteTheme(Long id, User user)
+            throws ThemeNotFoundException {
+        Theme theme = themeRepository
+                .findById(id)
+                .orElseThrow(() -> new ThemeNotFoundException(id));
+        if (!user.getId().equals(theme.getProfile().getUser().getId())) {
+            throw new ThemeNotFoundException(id);
+        }
+        theme.getSavedByProfiles().forEach(profile -> profile.getSavedThemes().remove(theme));
+        theme.getUsedByProfiles().forEach(profile -> profile.setUsedTheme(null));
+        themeRepository.delete(theme);
+    }
+
+    @Override
     @Transactional
     public void deleteThemeFromSavedThemes(Long id, User user) throws ThemeNotFoundException {
         Theme theme = themeRepository
@@ -208,83 +246,17 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeRequestDTO loadThemeFromYaml(
-            File yamlFile,
-            boolean published,
-            @Nullable String customName,
-            @Nullable String customDescription
-    ) throws IOException {
-        ThemeFromBase16Yaml yamlScheme = yamlMapper.readValue(yamlFile, ThemeFromBase16Yaml.class);
-        return ThemeMapper.base16YamlToRequestDTO(yamlScheme, published, customName, customDescription);
+        return List.of();
+    public List<ThemeResponseDTO> findLatestNPublishedOrOwnedThemes(User user, int n) {
     }
 
     @Override
-    public Page<ThemeResponseDTO> searchThemes(
-            Optional<String> query,
-            User user,
-            Pageable pageable
-    ) throws ThemeNotFoundException {
-        Long profileId = user != null ? user.getProfile().getId() : null;
+    public List<ThemeResponseDTO> findThemesByUser(User user) {
         return themeRepository
-                .searchThemes(query.orElse(null), profileId, pageable)
-                .map(ThemeMapper::projectionToResponseDTO);
-    }
-
-    @Override
-    public String getThemeAsCss(Long id, User user, int steps) throws ThemeNotFoundException {
-        Theme theme = themeRepository
-                .findById(id)
-                .orElseThrow(() -> new ThemeNotFoundException(id));
-        if (!theme.isPublished() && !user.getId().equals(theme.getProfile().getUser().getId())) {
-            throw new ThemeNotFoundException(id);
-        }
-
-        StringBuilder css = new StringBuilder(":root {\n");
-        // base colors from base08 config
-        for (int i = 0; i <= 7; i++) {
-            String hex = theme.getColorByIndex(i);
-            css.append(String.format("  --color-%02d: #%s;%n", i, hex));
-        }
-
-        // interpolated colors for circles after heading
-        Color start = Color.decode("#" + theme.getBase03());
-        Color end = Color.decode("#" + theme.getBase04());
-        List<String> interpolated = ColorUtils.getInterpolatedColors(start, end, 27)
-                .subList(1, 26); // exclude original endpoints
-        IntStream.range(0, interpolated.size())
-                .forEach(i -> css.append(String.format("  --interpolated-color-%02d: %s;%n", i, interpolated.get(i))));
-
-        // genre text color (must be darker than base05 which is genre bg)
-        List<String> genreTextColors = ColorUtils.getGenreTextColors(
-                Color.decode("#" + theme.getBase03()),
-                Color.decode("#" + theme.getBase04()),
-                Color.decode("#" + theme.getBase05())
-        );
-        IntStream.range(0, genreTextColors.size())
-                .forEach(i -> css.append(
-                        String.format("  --genre-text-color-%02d: %s;%n", i, genreTextColors.get(i))
-                ));
-
-        // font colors
-        boolean isDarkTheme = ColorUtils.isDarkTheme(
-                Color.decode("#" + theme.getBase00()),
-                Color.decode("#" + theme.getBase07())
-        );
-        css.append(String.format("  --font-color: %s;%n", isDarkTheme ? "white" : "black"));
-        css.append(String.format("  --link-color: %s;%n", isDarkTheme ? "lightblue" : "blue"));
-
-        css.append("}");
-        return css.toString();
-    }
-
-    @Override
-    public ThemeResponseDTO findUsedTheme(User user) {
-        if (user == null || user.getProfile().getUsedTheme() == null)
-            return null;
-
-        return ThemeMapper.themeToResponseDTO(
-                user.getProfile().getUsedTheme()
-        );
+                .findByProfileUserOrderByName(user)
+                .stream()
+                .map(ThemeMapper::themeToResponseDTO)
+                .toList();
     }
 
     @Override
@@ -315,6 +287,39 @@ public class ThemeServiceImpl implements ThemeService {
         User managedUser = userRepository.findById(user.getId()).get();
         return themeRepository
                 .findProfileSavedThemeIds(managedUser.getProfile().getId());
+    }
+
+    @Override
+    public Page<ThemeResponseDTO> findPublishedOrOwnedUnpublishedThemes(User user, Pageable pageable) {
+        if (user == null) {
+            return themeRepository
+                    .findByPublishedIsTrue(pageable)
+                    .map(ThemeMapper::themeToResponseDTO);
+        } else {
+            return themeRepository
+                    .findByPublishedOrOwnedUnpublishedThemes(user, pageable)
+                    .map(ThemeMapper::themeToResponseDTO);
+        }
+    }
+
+    @Override
+    public Page<ThemeResponseDTO> findThemesByUser(@NonNull User profileUser, User visitor, Pageable pageable) {
+        Long profileId = profileUser.getProfile().getId();
+        Long visitorProfileId = visitor != null ? visitor.getProfile().getId() : null;
+        return themeRepository
+                .findPublishedOrOwnedThemeByProfileId(profileId, visitorProfileId, pageable);
+    }
+
+    @Override
+    public Page<ThemeResponseDTO> searchThemes(
+            Optional<String> query,
+            User user,
+            Pageable pageable
+    ) throws ThemeNotFoundException {
+        Long profileId = user != null ? user.getProfile().getId() : null;
+        return themeRepository
+                .searchThemes(query.orElse(null), profileId, pageable)
+                .map(ThemeMapper::projectionToResponseDTO);
     }
 
     @Override
