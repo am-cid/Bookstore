@@ -4,7 +4,8 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Bookstore</title>
+    <title th:text="${'Bookstore - ' + book.title
+        + ' by ' + book.author}">Bookstore</title>
     <script src="http://localhost:35729/livereload.js"></script>
     <link href="/css/variables.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">

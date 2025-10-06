@@ -4,7 +4,10 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Bookstore</title>
+    <title th:text="${'Bookstore - Search ' + #strings.toLowerCase(param.type[0])
+        + (param.query != null
+            ? ' ' + param.query[0]
+            : '' )}">Bookstore</title>
     <script src="http://localhost:35729/livereload.js"></script>
     <link href="/css/variables.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">

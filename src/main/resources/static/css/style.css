@@ -250,7 +250,7 @@ body {
     justify-self: end;
 }
 
-.header-top-right-button {
+#header-top-right-div .header-top-right-button {
     font-size: 16px;
     background-color: var(--color-02, #F61590);
     border: 1px solid var(--color-06, #FFE2E7);
@@ -273,7 +273,7 @@ body {
     grid-gap: 5px;
 }
 
-#header-support {
+#header-top-right-div #header-support {
     padding-left: 25px;
     border-bottom-left-radius: 50px;
 }

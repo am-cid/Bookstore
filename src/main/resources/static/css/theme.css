@@ -87,10 +87,10 @@
     grid-area: render;
     z-index: 0;
     color: var(--font-color, black);
+}
 
-    a {
-        color: var(--link-color, blue);
-    }
+#theme-preview-render a:not(.genre-oval, .header-top-right-button) {
+    color: var(--link-color, blue);
 }
 
 #theme-preview-render #header-navbar {
