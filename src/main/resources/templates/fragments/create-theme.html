@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="themeRequestDTO" type="com.simple.Bookstore.Theme.ThemeRequestDTO"*/-->
+<!--/*@thymesVar id="_overrideThemeUsed" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+
+<div class="flex-column gap-10px" th:fragment="main-content">
+    <div class="flex-column" id="main-content">
+        <div class="flex-column" id="create-theme-form-outer-div">
+            <!--  block to check for query param -->
+            <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Create Theme', 1, 33)}"></div>
+            <div th:replace="~{fragments/create-theme.html :: create-theme-form}"></div>
+            <div id="theme-preview-header"
+                 th:insert="~{fragments/svg-fragments/heading-strikethrough-behind :: svgHeading('Preview', 680, 24, 295)}">
+            </div>
+        </div>
+    </div>
+    <th:block th:with="themeArg=${_overrideThemeUsed != null
+            ? _overrideThemeUsed
+            : T(com.simple.Bookstore.Theme.ThemeResponseDTO).Default()}">
+        <div th:replace="~{fragments/components/theme-preview :: previewTheme(${themeArg})}"></div>
+    </th:block>
+    <script th:src="@{/js/sync-input-fields-with-css-var.js}"></script>
+</div>
+
+<div id="create-theme-form-div" th:fragment="create-theme-form">
+    <form class="profile-details" method="post" th:action="@{/create-theme}" th:object="${themeRequestDTO}">
+        <label th:for="${#ids.next('username')}" title="required">Theme Name<span class="required">*</span>:</label>
+        <input maxlength="100" minlength="3"
+               required th:field="*{name}"
+               title="Theme name must be between 3 and 100 characters"
+               type="text">
+        <span class="profile-details-error" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></span>
+
+        <label th:for="${#ids.next('description')}">Description:</label>
+        <input maxlength="2000"
+               th:field="*{description}"
+               title="Max of 2000 characters (optional)"
+               type="text">
+        <span class="profile-details-error" th:errors="*{description}" th:if="${#fields.hasErrors('description')}"></span>
+
+        <label th:for="${#ids.next('published')}">Publish Theme:</label>
+        <input class="profile-details-checkbox"
+               th:field="*{published}"
+               title="Make this theme public and searchable by others"
+               type="checkbox">
+
+        <label th:for="${#ids.next('base00')}" title="required">Color 0<span class="required">*</span>:</label>
+        <input required
+               th:id="base00" th:name="base00"
+               th:value="${_overrideThemeUsed != null} ? '#' + ${_overrideThemeUsed.base00} : '#A40E60'"
+               title="Theme must have color 0"
+               type="color" >
+        <span class="profile-details-error" th:errors="*{base00}" th:if="${#fields.hasErrors('base00')}"></span>
+
+        <label th:for="${#ids.next('base01')}" title="required">Color 1<span class="required">*</span>:</label>
+        <input required
+               th:id="base01" th:name="base01"
+               th:value="${_overrideThemeUsed != null} ? '#' + ${_overrideThemeUsed.base01} : '#FF0000'"
+               title="Theme must have color 1"
+               type="color" >
+        <span class="profile-details-error" th:errors="*{base01}" th:if="${#fields.hasErrors('base01')}"></span>
+
+        <label th:for="${#ids.next('base02')}" title="required">Color 2<span class="required">*</span>:</label>
+        <input required
+               th:id="base02" th:name="base02"
+               th:value="${_overrideThemeUsed != null} ? '#' + ${_overrideThemeUsed.base02} : '#F61590'"
+               title="Theme must have color 2"
+               type="color" >
+        <span class="profile-details-error" th:errors="*{base02}" th:if="${#fields.hasErrors('base02')}"></span>
+
+        <label th:for="${#ids.next('base03')}" title="required">Color 3<span class="required">*</span>:</label>
+        <input required
+               th:id="base03" th:name="base03"
+               th:value="${_overrideThemeUsed != null} ? '#' + ${_overrideThemeUsed.base03} : '#F88B9E'"
+               title="Theme must have color 3"
+               type="color" >
+        <span class="profile-details-error" th:errors="*{base03}" th:if="${#fields.hasErrors('base03')}"></span>
+
+        <label th:for="${#ids.next('base04')}" title="required">Color 4<span class="required">*</span>:</label>
+        <input required
+               th:id="base04" th:name="base04"
+               th:value="${_overrideThemeUsed != null} ? '#' + ${_overrideThemeUsed.base04} : '#FFD376'"
+               title="Theme must have color 4"
+               type="color" >
+        <span class="profile-details-error" th:errors="*{base04}" th:if="${#fields.hasErrors('base04')}"></span>
+
+        <label th:for="${#ids.next('base05')}" title="required">Color 5<span class="required">*</span>:</label>
+        <input required
+               th:id="base05" th:name="base05"
+               th:value="${_overrideThemeUsed != null} ? '#' + ${_overrideThemeUsed.base05} : '#AAFFB1'"
+               title="Theme must have color 5"
+               type="color" >
+        <span class="profile-details-error" th:errors="*{base05}" th:if="${#fields.hasErrors('base05')}"></span>
+
+        <label th:for="${#ids.next('base06')}" title="required">Color 6<span class="required">*</span>:</label>
+        <input required
+               th:id="base06" th:name="base06"
+               th:value="${_overrideThemeUsed != null} ? '#' + ${_overrideThemeUsed.base06} : '#FFE2E7'"
+               title="Theme must have color 6"
+               type="color" >
+        <span class="profile-details-error" th:errors="*{base06}" th:if="${#fields.hasErrors('base06')}"></span>
+
+        <label th:for="${#ids.next('base07')}" title="required">Color 7<span class="required">*</span>:</label>
+        <input required
+               th:id="base07" th:name="base07"
+               th:value="${_overrideThemeUsed != null} ? '#' + ${_overrideThemeUsed.base07} : '#FFF2D3'"
+               title="Theme must have color 7"
+               type="color" >
+        <span class="profile-details-error" th:errors="*{base07}" th:if="${#fields.hasErrors('base07')}"></span>
+
+        <button class="grid-col-start-1-span-2 justify-self-center"
+                title="Theme will be previewed in the next page."
+                type="submit">Create Theme</button>
+    </form>
+</div>
+
+</body>
+</html>

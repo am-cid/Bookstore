@@ -81,8 +81,13 @@
                 </strong>
             </div>
             <!-- change theme link to change theme page -->
-            <a sec:authorize="isAnonymous()" th:href="@{/register?change_theme=true}">Change Theme</a>
-            <a sec:authorize="isAuthenticated()" th:href="@{/search(type='THEME')}">Change Theme</a>
+            <th:block sec:authorize="isAnonymous()">
+                <a th:href="@{/register(error=change_theme)}">Change Theme</a>
+            </th:block>
+            <th:block sec:authorize="isAuthenticated()">
+                <a th:href="@{/search(type='THEME')}">Change Theme</a>
+                <a th:href="@{/create-theme}">Create Theme</a>
+            </th:block>
         </div>
     </div>
 </div>

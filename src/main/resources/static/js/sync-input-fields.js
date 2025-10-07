@@ -10,7 +10,7 @@ function syncInputFields(watchFieldId, syncFieldId) {
         return;
     }
     const syncField = document.getElementById(syncFieldId);
-    if (!watchField) {
+    if (!syncField) {
         console.error(`Input field with ID "${syncFieldId}" not found.`);
         return;
     }
