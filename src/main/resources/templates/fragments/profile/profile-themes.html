@@ -11,17 +11,17 @@
 <!--/*@thymesVar id="pathUsername" type="java.lang.String"*/-->
 <!--/*@thymesVar id="viewType" type="com.simple.Bookstore.views.Profile.ProfileViewType"*/-->
 <!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Profile.ProfileViewModel"*/-->
-<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.SharedModels.ViewThemesAsPageModel"*/-->
+<!--/*@thymesVar id="viewThemesAsPageModel" type="com.simple.Bookstore.views.SharedModels.ViewThemesAsPageModel"*/-->
 <!--/*@thymesVar id="viewReviewsModel" type="com.simple.Bookstore.views.Profile.ProfileViewReviewsModel"*/-->
 <!--/*@thymesVar id="viewCommentsModel" type="com.simple.Bookstore.views.Profile.ProfileViewCommentsModel"*/-->
 
 <div class="profile-result-div flex-column" th:fragment="themes">
     <div class="flex-row space-between">
         <div th:replace="~{fragments/profile/profile-view-dropdown :: view-dropdown}"></div>
-        <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesModel.themes}, '/profile/' + ${pathUsername}, null)}"></div>
+        <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesAsPageModel.themes}, '/profile/' + ${pathUsername}, null)}"></div>
     </div>
-    <th:block th:replace="~{fragments/components/themes-section :: themesPage(${viewThemesModel})}"></th:block>
-    <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesModel.themes}, '/profile/' + ${pathUsername}, null)}"></div>
+    <th:block th:replace="~{fragments/components/themes-section :: themesPage(${viewThemesAsPageModel})}"></th:block>
+    <div th:replace="~{fragments/components/pagination :: pagination(${viewThemesAsPageModel.themes}, '/profile/' + ${pathUsername}, null)}"></div>
 </div>
 
 </body>
