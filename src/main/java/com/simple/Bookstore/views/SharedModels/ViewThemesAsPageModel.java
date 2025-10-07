@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public record ViewThemesModel(
+public record ViewThemesAsPageModel(
         Page<ThemeResponseDTO> themes,
         ThemeResponseDTO currentUserTheme,
         List<Long> currentUserSavedThemeIds

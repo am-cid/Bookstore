@@ -12,7 +12,7 @@ import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.views.SharedModels.ViewBooksModel;
 import com.simple.Bookstore.views.SharedModels.ViewProfilesModel;
-import com.simple.Bookstore.views.SharedModels.ViewThemesModel;
+import com.simple.Bookstore.views.SharedModels.ViewThemesAsPageModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -91,7 +91,7 @@ public class SearchViewController {
                 model.addAttribute("results", results);
                 model.addAttribute(
                         "viewThemesModel",
-                        new ViewThemesModel(
+                        new ViewThemesAsPageModel(
                                 results,
                                 themeService.findUsedTheme(user),
                                 themeService.findSavedThemeIds(user)

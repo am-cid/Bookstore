@@ -19,7 +19,7 @@ import com.simple.Bookstore.User.UserService;
 import com.simple.Bookstore.utils.FormRequest;
 import com.simple.Bookstore.utils.ProfileMapper;
 import com.simple.Bookstore.utils.Result;
-import com.simple.Bookstore.views.SharedModels.ViewThemesModel;
+import com.simple.Bookstore.views.SharedModels.ViewThemesAsPageModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +38,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
     private final BookService bookService;
 
     @Override
-    public Pair<ProfileViewModel, ViewThemesModel> buildProfileViewThemes(
+    public Pair<ProfileViewModel, ViewThemesAsPageModel> buildProfileViewThemes(
             User currentUser,
             String pathUsername,
             Pageable pageable
@@ -53,7 +53,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
                 .toList();
         return Pair.of(
                 profileViewModel,
-                new ViewThemesModel(ownedThemes, usedTheme, savedThemeIds)
+                new ViewThemesAsPageModel(ownedThemes, usedTheme, savedThemeIds)
         );
     }
 
@@ -86,7 +86,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
     }
 
     @Override
-    public Pair<ProfileViewModel, ViewThemesModel> buildProfileViewSavedThemes(
+    public Pair<ProfileViewModel, ViewThemesAsPageModel> buildProfileViewSavedThemes(
             User currentUser,
             String pathUsername,
             Pageable pageable
@@ -102,7 +102,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
                 .toList();
         return Pair.of(
                 new ProfileViewModel(foundUser, foundProfile),
-                new ViewThemesModel(savedThemes, usedTheme, savedThemeIds)
+                new ViewThemesAsPageModel(savedThemes, usedTheme, savedThemeIds)
         );
     }
 

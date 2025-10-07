@@ -5,6 +5,7 @@ import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.views.SharedModels.ViewThemesAsListModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,13 @@ public class HomeViewController {
         List<BookPreviewDTO> latestBooks = bookService.findLatestNBooks(10);
         model.addAttribute("bannerBooks", latestBooks.subList(0, Math.min(6, latestBooks.size())));
 
-        // TODO: latest themes with format "2 days ago. <username> just created <theme-name>.\n<description: 50 char cutoff>"
+        model.addAttribute(
+                "viewThemesListModel",
+                new ViewThemesAsListModel(
+                        themeService.findLatestNPublishedOrOwnedThemes(user, 5),
+                        themeService.findUsedTheme(user),
+                        themeService.findSavedThemeIds(user)
+                ));
 
         model.addAttribute("latestUploads", latestBooks.subList(0, Math.min(4, latestBooks.size())));
         model.addAttribute("availableBooks", bookService.findRelevantBooks(12));

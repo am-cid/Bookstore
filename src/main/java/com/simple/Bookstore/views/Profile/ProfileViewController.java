@@ -12,7 +12,7 @@ import com.simple.Bookstore.User.UserService;
 import com.simple.Bookstore.User.UserUpdateRequestDTO;
 import com.simple.Bookstore.utils.Result;
 import com.simple.Bookstore.views.HeaderAndSidebarsModelAttributes;
-import com.simple.Bookstore.views.SharedModels.ViewThemesModel;
+import com.simple.Bookstore.views.SharedModels.ViewThemesAsPageModel;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -56,7 +56,7 @@ public class ProfileViewController {
         model.addAttribute("viewType", actualView);
         switch (actualView) {
             case THEMES:
-                Pair<ProfileViewModel, ViewThemesModel> pairThemes = profileViewService
+                Pair<ProfileViewModel, ViewThemesAsPageModel> pairThemes = profileViewService
                         .buildProfileViewThemes(user, pathUsername, pageable);
                 model.addAttribute("viewModel", pairThemes.getFirst());
                 model.addAttribute("viewThemesModel", pairThemes.getSecond());
@@ -88,7 +88,7 @@ public class ProfileViewController {
             Model model,
             @PageableDefault Pageable pageable
     ) {
-        Pair<ProfileViewModel, ViewThemesModel> pairModels = profileViewService
+        Pair<ProfileViewModel, ViewThemesAsPageModel> pairModels = profileViewService
                 .buildProfileViewSavedThemes(user, pathUsername, pageable);
         model.addAttribute("viewModel", pairModels.getFirst());
         model.addAttribute("viewSavedThemesModel", pairModels.getSecond());

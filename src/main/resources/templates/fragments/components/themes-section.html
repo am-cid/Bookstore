@@ -8,7 +8,7 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.SharedModels.ViewThemesModel"*/-->
+<!--/*@thymesVar id="viewThemesModel" type="com.simple.Bookstore.views.SharedModels.ViewThemesAsPageModel"*/-->
 
 <th:block th:fragment="themes(viewThemesModel)">
     <th:block th:if="${!viewThemesModel.themes().hasContent()}">No results found...</th:block>

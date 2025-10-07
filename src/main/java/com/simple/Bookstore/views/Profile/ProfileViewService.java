@@ -7,7 +7,7 @@ import com.simple.Bookstore.Profile.ProfileEditRequestDTO;
 import com.simple.Bookstore.User.User;
 import com.simple.Bookstore.User.UserDeleteRequestDTO;
 import com.simple.Bookstore.utils.Result;
-import com.simple.Bookstore.views.SharedModels.ViewThemesModel;
+import com.simple.Bookstore.views.SharedModels.ViewThemesAsPageModel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 
@@ -20,7 +20,7 @@ public interface ProfileViewService {
      * @throws UnauthorizedException when you need to log in to access /profile/me
      * @throws UserNotFoundException when user with username is not found
      */
-    Pair<ProfileViewModel, ViewThemesModel> buildProfileViewThemes(
+    Pair<ProfileViewModel, ViewThemesAsPageModel> buildProfileViewThemes(
             User currentUser,
             String pathUsername,
             Pageable pageable
@@ -62,7 +62,7 @@ public interface ProfileViewService {
      * @throws UnauthorizedException when you need to log in to access /profile/me
      * @throws UserNotFoundException when user with username is not found
      */
-    Pair<ProfileViewModel, ViewThemesModel> buildProfileViewSavedThemes(
+    Pair<ProfileViewModel, ViewThemesAsPageModel> buildProfileViewSavedThemes(
             User currentUser,
             String pathUsername,
             Pageable pageable
