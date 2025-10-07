@@ -38,13 +38,13 @@ public class ThemeSeeder implements CommandLineRunner {
         if (!activeProfile.equals("dev"))
             return;
 
-        log.info("Seeding builtin themes...");
-        seedBuiltinThemes();
-
         log.info("Seeding themes...");
         seedThemesForUser(adminUsername);
         seedThemesForUser("user1");
         seedThemesForUser("user2");
+
+        log.info("Seeding builtin themes...");
+        seedBuiltinThemes();
     }
 
     private void seedBuiltinThemes() throws IOException {

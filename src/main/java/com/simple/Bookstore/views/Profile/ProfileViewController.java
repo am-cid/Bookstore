@@ -59,7 +59,7 @@ public class ProfileViewController {
                 Pair<ProfileViewModel, ViewThemesAsPageModel> pairThemes = profileViewService
                         .buildProfileViewThemes(user, pathUsername, pageable);
                 model.addAttribute("viewModel", pairThemes.getFirst());
-                model.addAttribute("viewThemesModel", pairThemes.getSecond());
+                model.addAttribute("viewThemesAsPageModel", pairThemes.getSecond());
                 break;
             case REVIEWS:
                 Pair<ProfileViewModel, ProfileViewReviewsModel> pairReviews = profileViewService

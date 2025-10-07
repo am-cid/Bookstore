@@ -90,7 +90,7 @@ public class SearchViewController {
                 Page<ThemeResponseDTO> results = themeService.searchThemes(query, user, pageable);
                 model.addAttribute("results", results);
                 model.addAttribute(
-                        "viewThemesModel",
+                        "viewThemesAsPageModel",
                         new ViewThemesAsPageModel(
                                 results,
                                 themeService.findUsedTheme(user),

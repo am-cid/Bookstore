@@ -22,7 +22,7 @@
             <div class="saved-section">
                 <h2>Saved Themes</h2>
                 <nav th:replace="~{fragments/components/pagination :: pagination(${viewSavedThemesModel.themes}, '/profile/' + ${pathUsername} + '/saved-themes', null)}"></nav>
-                <div th:replace="~{fragments/components/themes-section :: themes(${viewSavedThemesModel})}"></div>
+                <div th:replace="~{fragments/components/themes-section :: themesPage(${viewSavedThemesModel})}"></div>
             </div>
         </div>
     </div>

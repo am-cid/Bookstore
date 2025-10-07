@@ -6,16 +6,45 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
+<!--/*@thymesVar id="viewThemesAsListModel" type="com.simple.Bookstore.views.SharedModels.ViewThemesAsListModel"*/-->
 
 <div class="flex-column w-704px gap-10px" th:fragment="main-content">
     <!-- SLIDING BANNER -->
     <div th:replace="~{fragments/sliding-banner :: sliding-banner}"></div>
+    <!-- LATEST THEMES -->
+    <div th:replace="~{fragments/main-content.html :: latest-themes}"></div>
     <div id="main-content">
         <!-- LATEST UPLOADS -->
         <div th:replace="~{fragments/two-column-book-list :: twoColBookList(${latestUploads}, 'LATEST UPLOADS')}"></div>
         <!-- AVAILABLE BOOKS -->
         <div th:replace="~{fragments/two-column-book-list :: twoColBookList(${availableBooks}, 'AVAILABLE BOOKS')}"></div>
         <script th:src="@{/js/genre-expand.js}"></script>
+    </div>
+</div>
+
+<div id="latest-themes" th:fragment="latest-themes">
+    <div th:replace="~{fragments/header.html :: siteLogo(340, 60)}"></div>
+    <div th:replace="~{fragments/svg-fragments/heading-plain ::
+                    svgHeading('github.com/am-cid/bookstore', 82, 6)}"></div>
+    <h4>HOT THEMES</h4>
+    <div id="latest-themes-list" >
+        <th:block th:if="${viewThemesAsListModel.themes.isEmpty()}">No results found...</th:block>
+        <div class="latest-theme" th:each="theme, i : ${viewThemesAsListModel.themes}">
+            <ul th:replace="~{fragments/components/themes-section.html :: _themePreview(${theme})}"></ul>
+            <strong th:text="${#temporals.format(theme.date, 'dd MMMM yyyy')}"></strong>
+            <p><a th:href="@{/themes/{id}(id=${theme.id})}"
+               th:text="${#strings.isEmpty(theme.name) ? 'Theme ' + theme.id : theme.name}"></a></p>
+            <p th:text="${#strings.abbreviate(theme.description, 85)}"></p>
+            <th:block th:replace="~{fragments/components/themes-section.html
+                    :: _themeApplyAndSaveButtons(
+                        ${theme},
+                        ${viewThemesAsListModel.currentUserTheme},
+                        ${viewThemesAsListModel.currentUserSavedThemeIds},
+                        'latest-theme-apply',
+                        'latest-theme-save'
+                    )}">
+            </th:block>
+        </div>
     </div>
 </div>
 

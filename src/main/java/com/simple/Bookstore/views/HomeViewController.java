@@ -33,7 +33,7 @@ public class HomeViewController {
         model.addAttribute("bannerBooks", latestBooks.subList(0, Math.min(6, latestBooks.size())));
 
         model.addAttribute(
-                "viewThemesListModel",
+                "viewThemesAsListModel",
                 new ViewThemesAsListModel(
                         themeService.findLatestNPublishedOrOwnedThemes(user, 5),
                         themeService.findUsedTheme(user),
