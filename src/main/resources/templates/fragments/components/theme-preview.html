@@ -19,33 +19,26 @@
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
-<!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.Theme.ThemeViewModel"*/-->
 <!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
 <!--/*@thymesVar id="previewThemeStyle" type="java.lang.String"*/-->
 <!--/*@thymesVar id="logoLetters" type="java.util.List<com.simple.Bookstore.utils.presentation.SiteLogoLetter>"*/-->
 
-<div id="theme-preview-render" th:fragment="previewTheme(theme)"
-     th:style="
-             'background-color: #' + ${viewModel.theme.base03} + ';'
-             + 'border: 2px solid #' + ${viewModel.theme.base00} + ';'
-    ">
+<div id="theme-preview-render" th:fragment="previewTheme(theme)">
     <th:block th:if="${previewThemeStyle != null}" th:utext="${previewThemeStyle}"></th:block>
     <div th:replace="~{fragments/header.html :: header}"></div>
-    <div id="main-layout"
-         th:style="'border-top: 2px solid #' + ${theme.base04} + ';'
-                 + 'margin-top: 5px;'">
-        <div th:replace="~{fragments/theme/theme-preview :: _sidebarLeft}"></div>
+    <div id="main-layout">
+        <div th:replace="~{fragments/components/theme-preview :: _sidebarLeft}"></div>
         <div class="flex-column gap-10px" id="main-content-preview">
             <div th:replace="~{fragments/svg-fragments/heading-followed-by-circles :: svgHeading(HEADING, 1, 18, 4.5)}"></div>
-            <div th:replace="~{fragments/theme/theme-preview :: _bookEntry}"></div>
+            <div th:replace="~{fragments/components/theme-preview :: _bookEntry}"></div>
             <div id="blur-strikethrough" th:insert="~{fragments/svg-fragments/heading-strikethrough-behind ::
                 svgHeading('Heading', 422, 24, 164)}">
             </div>
             <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading(Heading, 1, 33)}"></div>
-            <div th:replace="~{fragments/theme/theme-preview :: _bookSearchEntry}"></div>
+            <div th:replace="~{fragments/components/theme-preview :: _bookSearchEntry}"></div>
             <script th:src="@{/js/genre-expand.js}"></script>
         </div>
-        <div th:replace="~{fragments/theme/theme-preview :: _sidebarRight(${theme})}"></div>
+        <div th:replace="~{fragments/components/theme-preview :: _sidebarRight(${theme})}"></div>
     </div>
 </div>
 

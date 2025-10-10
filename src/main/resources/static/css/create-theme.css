@@ -1,0 +1,51 @@
+#create-theme-form-outer-div {
+    margin: 10px;
+    gap: 2em;
+}
+
+#create-theme-form-outer-div > .svg-text-heading-div .svg-text-heading {
+    font-size: 33px;
+    padding-left: 10px;
+    margin-bottom: -38px;
+}
+
+#create-theme-form-div {
+    display: flex;
+    justify-content: center;
+    background-color: var(--color-06, #FFE2E7);
+    width: 656px;
+    border: 2px solid var(--color-02, #F61590);
+    border-top: 7px solid var(--color-02, #F61590);
+    border-bottom: 7px solid var(--color-02, #F61590);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#theme-preview-header .svg-text-heading {
+    font-size: 24px;
+    text-align: center;
+}
+
+#theme-preview-header .svg-text-heading .text-underline-outline {
+    stroke: var(--color-02, #F61590);
+    stroke-width: 8;
+    filter: blur(2px);
+}
+
+#theme-preview-header .svg-text-heading .text-underline {
+    stroke: var(--color-02, #F61590);
+    stroke-width: 4;
+    filter: blur(1px);
+}
+
+#theme-preview-header .svg-text-heading .text-outline {
+    fill: none;
+    paint-order: stroke;
+    stroke: var(--color-06, #FFE2E7);
+    stroke-linejoin: round;
+    stroke-width: 4;
+}
+
+#theme-preview-header .svg-text-heading .text-fill {
+    fill: var(--color-02, #F61590);
+}
