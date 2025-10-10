@@ -3,9 +3,11 @@ package com.simple.Bookstore.views;
 import com.simple.Bookstore.Book.BookSearchResultDTO;
 import com.simple.Bookstore.Book.BookService;
 import com.simple.Bookstore.Exceptions.BookNotFoundException;
+import com.simple.Bookstore.Exceptions.ReviewNotFoundException;
 import com.simple.Bookstore.Profile.ProfileService;
 import com.simple.Bookstore.Review.ReviewBookViewResponseDTO;
 import com.simple.Bookstore.Review.ReviewRequestDTO;
+import com.simple.Bookstore.Review.ReviewResponseDTO;
 import com.simple.Bookstore.Review.ReviewService;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
@@ -44,6 +46,52 @@ public class BookViewController {
         if (bookResult.isEmpty())
             throw new BookNotFoundException(bookId);
 
+        Page<ReviewBookViewResponseDTO> reviews = reviewService.findAllPublicOrOwnedReviewsByBookIdAsPage(
+                bookId,
+                user != null ? user.getProfile().getId() : null,
+                pageable
+        );
+        Long reviewCount = reviewService.countByBookId(bookId);
+        List<Long> savedBookIds = bookService.findSavedBooks(user)
+                .stream()
+                .map(BookSearchResultDTO::id)
+                .toList();
+        boolean alreadyReviewed = reviewService.isAlreadyReviewedByUser(bookId, user);
+
+        model.addAttribute("book", bookResult.get());
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("reviewCount", reviewCount);
+        model.addAttribute("savedBookIds", savedBookIds);
+        model.addAttribute("alreadyReviewed", alreadyReviewed);
+        model.addAttribute(
+                "reviewRequestDTO",
+                reviewRequest.isEmpty()
+                        ? ReviewRequestDTO.empty()
+                        : reviewRequest
+        );
+        return "book";
+    }
+
+    //    http://localhost:8080/books/2/reviews/24/delete
+    @GetMapping("/books/{bookId}/reviews/{reviewId}/delete")
+    public String deleteReview(Model model, @PathVariable("bookId") Long bookId, @PathVariable("reviewId") Long reviewId, @ModelAttribute("reviewRequestDTO") ReviewRequestDTO reviewRequest,
+            @AuthenticationPrincipal User user,
+            @PageableDefault Pageable pageable ) {
+        System.out.println("method executed");
+        HeaderAndSidebarsModelAttributes.defaults( user,model,bookService,reviewService,themeService );
+        // null checks
+        Optional<BookSearchResultDTO> bookResult = bookService.findBookById(bookId);
+
+        if (bookResult.isEmpty()){
+            throw new BookNotFoundException(bookId);
+        }
+        ReviewResponseDTO existingReviewDTO = reviewService.findReviewById( reviewId );
+        if( existingReviewDTO == null ){
+            throw new ReviewNotFoundException(reviewId);
+        }
+        // deleting review
+        reviewService.deleteReview( user, reviewId );
+        // getting all remaining reviews
         Page<ReviewBookViewResponseDTO> reviews = reviewService.findAllPublicOrOwnedReviewsByBookIdAsPage(
                 bookId,
                 user != null ? user.getProfile().getId() : null,
