@@ -18,7 +18,7 @@ public class ErrorMascotFactory {
     private final static List<ErrorMascot> error401 = List.of(
             new ErrorMascot("┬┴┬┴┤ヾ(･ω├┬┴┬┴", 378),
             new ErrorMascot("┬┴┬┴┤( ͡° ͜ʖ├┬┴┬┴", 359),
-            new ErrorMascot("┬┴┬┴┤･ω･)ﾉ", 118),
+            new ErrorMascot("┬┴┬┴┤･ω･)ﾉ", 253),
             new ErrorMascot("┬┴┬┴┤_・)", 204)
     );
 

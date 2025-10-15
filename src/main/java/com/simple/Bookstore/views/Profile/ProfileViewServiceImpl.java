@@ -241,7 +241,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
             String pathUsername
     ) throws UnauthorizedException, UserNotFoundException {
         if (currentUser == null && pathUsername.equals("me"))
-            throw new UnauthorizedException("Need to login to able to access /profile/me");
+            throw new UnauthorizedException("Need to login to able to access /profile/me.");
 
         User foundUser = pathUsername.equals("me")
                 ? currentUser
@@ -290,7 +290,7 @@ public class ProfileViewServiceImpl implements ProfileViewService {
         // anon /me/action -> no
         // anon no request /me/action -> no
         if (currentUser == null)
-            throw new UnauthorizedException("Need to login to able to access /profile/me");
+            throw new UnauthorizedException("Need to login to able to access /profile/me.");
         // userB /userA/action -> no
         // userB no request /userA/action -> no
         if (!pathUsername.equals("me") && !currentUser.getUsername().equals(pathUsername))

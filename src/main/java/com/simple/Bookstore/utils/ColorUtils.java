@@ -173,4 +173,10 @@ public class ColorUtils {
             return pow(((colorChannel + 0.055) / 1.055), 2.4);
         }
     }
+
+    public static String cleanHexColor(String hex) {
+        return hex != null && hex.length() == 7 && hex.startsWith("#")
+                ? hex.substring(1)
+                : hex;
+    }
 }

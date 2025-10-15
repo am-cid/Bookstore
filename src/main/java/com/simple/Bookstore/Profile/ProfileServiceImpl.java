@@ -30,7 +30,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileResponseDTO findOwn(User user) throws UnauthorizedException {
         if (user == null) {
-            throw new UnauthorizedException("You are not logged in");
+            throw new UnauthorizedException();
         }
         return ProfileMapper.profileToResponseDTO(user.getProfile());
     }
@@ -54,7 +54,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public ProfileResponseDTO setTheme(Long id, User user) throws UnauthorizedException, ThemeNotFoundException {
         if (user == null) {
-            throw new UnauthorizedException("You are not logged in");
+            throw new UnauthorizedException();
         }
         Theme theme = themeRepository
                 .findById(id)
@@ -76,7 +76,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public void unsetThemeAndUseDefaultTheme(User user) throws UnauthorizedException {
         if (user == null) {
-            throw new UnauthorizedException("You are not logged in");
+            throw new UnauthorizedException();
         }
         Profile profile = user.getProfile();
         Theme usedTheme = profile.getUsedTheme();
