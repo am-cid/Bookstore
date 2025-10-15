@@ -30,7 +30,7 @@
             </div>
         </div>
     </div>
-    <div th:replace="~{fragments/components/theme-preview :: previewTheme(${viewModel.previewThemeCss})}"></div>
+    <div th:replace="~{fragments/components/theme-preview :: previewTheme(${viewModel.createdTheme}, ${viewModel.currentUserTheme}, ${viewModel.previewThemeCss})}"></div>
 </div>
 
 <th:block sec:authorize="isAuthenticated()"

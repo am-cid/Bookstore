@@ -18,11 +18,12 @@
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
-<!--/*@thymesVar id="previewThemeStyle" type="java.lang.String"*/-->
 <!--/*@thymesVar id="logoLetters" type="java.util.List<com.simple.Bookstore.utils.presentation.SiteLogoLetter>"*/-->
 <!--/*@thymesVar id="_overrideThemeUsed" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
 
-<div id="theme-preview-render" th:fragment="previewTheme(previewThemeStyle)">
+<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+<!--/*@thymesVar id="previewThemeStyle" type="java.lang.String"*/-->
+<div id="theme-preview-render" th:fragment="previewTheme(theme, usedTheme, previewThemeStyle)">
     <th:block th:if="${previewThemeStyle != null}" th:utext="${previewThemeStyle}"></th:block>
     <div th:replace="~{fragments/header.html :: header}"></div>
     <div id="main-layout">
@@ -37,7 +38,7 @@
             <div th:replace="~{fragments/components/theme-preview :: _bookSearchEntry}"></div>
             <script th:src="@{/js/genre-expand.js}"></script>
         </div>
-        <div th:replace="~{fragments/components/theme-preview :: _sidebarRight}"></div>
+        <div th:replace="~{fragments/components/theme-preview :: _sidebarRight(${theme}, ${usedTheme})}"></div>
     </div>
 </div>
 
@@ -82,8 +83,9 @@
     </div>
 </div>
 
-<div id="sidebar-right" th:fragment="_sidebarRight"
-     th:insert="~{fragments/sidebar-right.html :: _sidebarRightUsedTheme}">
+<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+<div id="sidebar-right" th:fragment="_sidebarRight(theme, usedTheme)"
+     th:insert="~{fragments/sidebar-right.html :: _sidebarRightUsedTheme(${theme}, ${usedTheme})}">
 </div>
 
 <div class="enclosed-content-preview" th:fragment="_bookEntry">

@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-    <div th:replace="~{fragments/components/theme-preview :: previewTheme(${previewThemeCss})}"></div>
+    <div th:replace="~{fragments/components/theme-preview :: previewTheme(${_overrideThemeUsed}, ${_overrideThemeUsed}, ${previewThemeCss})}"></div>
     <script th:src="@{/js/sync-input-fields-with-css-var.js}"></script>
 </div>
 

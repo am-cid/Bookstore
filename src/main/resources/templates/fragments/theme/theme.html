@@ -64,7 +64,7 @@
              th:insert="~{fragments/svg-fragments/heading-strikethrough-behind :: svgHeading('Preview', 680, 24, 295)}">
         </div>
     </div>
-    <div th:replace="~{fragments/components/theme-preview :: previewTheme(${viewModel.previewThemeStyle})}"></div>
+    <div th:replace="~{fragments/components/theme-preview :: previewTheme(${viewModel.theme}, ${viewModel.usedTheme}, ${viewModel.previewThemeStyle})}"></div>
 </div>
 
 </body>
