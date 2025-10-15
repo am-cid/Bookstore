@@ -74,6 +74,22 @@ public class ThemeMapper {
         );
     }
 
+    public static ThemeRequestDTO responseToRequestDTO(ThemeResponseDTO response) {
+        return new ThemeRequestDTO(
+                response.name(),
+                response.description(),
+                response.published(),
+                response.base00(),
+                response.base01(),
+                response.base02(),
+                response.base03(),
+                response.base04(),
+                response.base05(),
+                response.base06(),
+                response.base07()
+        );
+    }
+
     /**
      * @param user
      * @param yamlScheme

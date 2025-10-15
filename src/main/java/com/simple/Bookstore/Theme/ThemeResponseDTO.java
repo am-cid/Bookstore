@@ -20,23 +20,4 @@ public record ThemeResponseDTO(
         String base06,
         String base07
 ) {
-    public static ThemeResponseDTO Default() {
-        return new ThemeResponseDTO(
-                (long) -1,
-                "Default Mangagagamer Theme",
-                "default theme",
-                LocalDateTime.now(),
-                (long) -1,
-                "admin",
-                "admin",
-                "A40E60",
-                "FF0000",
-                "F61590",
-                "F88B9E",
-                "FFD376",
-                "AAFFB1",
-                "FFE2E7",
-                "FFF2D3"
-        );
-    }
 }

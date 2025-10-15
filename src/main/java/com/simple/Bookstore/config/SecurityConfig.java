@@ -72,7 +72,8 @@ public class SecurityConfig {
                                 "/api/v1/books/**", "/api/v1/comments/**",
                                 "/api/v1/reviews/**",
                                 "/", "/search", "/error/**", "/register/**",
-                                "/profile/**", "/books/**", "/themes/**"
+                                "/profile/**", "/books/**", "/themes/**",
+                                "/create-theme/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/auth/**", "/register/**",

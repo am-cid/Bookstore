@@ -1,5 +1,6 @@
 package com.simple.Bookstore.Theme;
 
+import com.simple.Bookstore.utils.ColorUtils;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -41,6 +42,46 @@ public record ThemeRequestDTO(
         return new ThemeRequestDTO(
                 null, null, false,
                 null, null, null, null, null, null, null, null
+        );
+    }
+
+    public static ThemeRequestDTO defaultTheme() {
+        return new ThemeRequestDTO(
+                null,
+                null,
+                true,
+                "A40E60",
+                "FF0000",
+                "F61590",
+                "F88B9E",
+                "FFD376",
+                "AAFFB1",
+                "FFE2E7",
+                "FFF2D3"
+        );
+    }
+
+    /**
+     * Hex colors from the form has <code>#</code> prepended. Internal theme
+     * representation only has the 6 character hex. This will create a
+     * <p>
+     * It will not touch colors that are already clean.
+     *
+     * @return ThemeRequestDTO with clean colors.
+     */
+    public ThemeRequestDTO withCleanHexColors() {
+        return new ThemeRequestDTO(
+                name,
+                description,
+                published,
+                ColorUtils.cleanHexColor(base00),
+                ColorUtils.cleanHexColor(base01),
+                ColorUtils.cleanHexColor(base02),
+                ColorUtils.cleanHexColor(base03),
+                ColorUtils.cleanHexColor(base04),
+                ColorUtils.cleanHexColor(base05),
+                ColorUtils.cleanHexColor(base06),
+                ColorUtils.cleanHexColor(base07)
         );
     }
 
