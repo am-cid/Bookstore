@@ -4,9 +4,11 @@ import com.simple.Bookstore.Exceptions.ThemeNotFoundException;
 import com.simple.Bookstore.Theme.ThemeResponseDTO;
 import com.simple.Bookstore.Theme.ThemeService;
 import com.simple.Bookstore.User.User;
+import com.simple.Bookstore.utils.CssGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,7 +22,20 @@ public class ThemeViewServiceImpl implements ThemeViewService {
         return new ThemeViewModel(
                 theme,
                 themeService.findUsedTheme(user),
-                themeService.findSavedThemeIds(user)
+                themeService.findSavedThemeIds(user),
+                CssGenerator.toInlineCss(
+                        List.of(
+                                theme.base00(),
+                                theme.base01(),
+                                theme.base02(),
+                                theme.base03(),
+                                theme.base04(),
+                                theme.base05(),
+                                theme.base06(),
+                                theme.base07()
+                        ),
+                        "#theme-preview-render"
+                )
         );
     }
 

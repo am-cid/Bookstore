@@ -7,6 +7,7 @@ import java.util.List;
 public record ThemeViewModel(
         ThemeResponseDTO theme,
         ThemeResponseDTO usedTheme,
-        List<Long> savedThemeIds
+        List<Long> savedThemeIds,
+        String previewThemeStyle
 ) {
 }
