@@ -20,7 +20,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
     @Query("""
             SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
-                t.id, t.name, t.description, t.date, p.id, u.username, p.displayName,
+                t.id, t.name, t.description, t.published, t.date, p.id, u.username, p.displayName,
                 t.base00, t.base01, t.base02, t.base03, t.base04, t.base05, t.base06, t.base07
             )
             FROM Theme t
@@ -38,7 +38,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
     @Query("""
             SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
-                t.id, t.name, t.description, t.date, p.id, u.username, p.displayName,
+                t.id, t.name, t.description, t.published, t.date, p.id, u.username, p.displayName,
                 t.base00, t.base01, t.base02, t.base03, t.base04, t.base05, t.base06, t.base07
             )
             FROM Theme t
@@ -73,7 +73,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
     @Query("""
             SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
-                t.id, t.name, t.description, t.date, p.id, u.username, p.displayName,
+                t.id, t.name, t.description, t.published, t.date, p.id, u.username, p.displayName,
                 t.base00, t.base01, t.base02, t.base03, t.base04, t.base05, t.base06, t.base07
             )
             FROM Theme t
@@ -91,7 +91,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
     @Query("""
             SELECT new com.simple.Bookstore.Theme.ThemeResponseDTO(
-                t.id, t.name, t.description, t.date, p.id, u.username, p.displayName,
+                t.id, t.name, t.description, t.published, t.date, p.id, u.username, p.displayName,
                 t.base00, t.base01, t.base02, t.base03, t.base04, t.base05, t.base06, t.base07
             )
             FROM Theme t
@@ -105,7 +105,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
     );
 
     @Query(value = """
-            SELECT t.id, t.name, t.description, t.date,
+            SELECT t.id, t.name, t.description, t.published, t.date,
                    t.profile_id AS profileId,
                    u.username AS username,
                    p.display_name AS userDisplayName,

@@ -34,28 +34,20 @@ public class Theme {
 
     @Column(nullable = false)
     private boolean published = false;
-
     @Column(length = 6, nullable = false)
     private String base00;
-
     @Column(length = 6, nullable = false)
     private String base01;
-
     @Column(length = 6, nullable = false)
     private String base02;
-
     @Column(length = 6, nullable = false)
     private String base03;
-
     @Column(length = 6, nullable = false)
     private String base04;
-
     @Column(length = 6, nullable = false)
     private String base05;
-
     @Column(length = 6, nullable = false)
     private String base06;
-
     @Column(length = 6, nullable = false)
     private String base07;
 

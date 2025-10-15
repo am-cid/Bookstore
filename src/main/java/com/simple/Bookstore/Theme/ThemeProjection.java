@@ -9,6 +9,8 @@ public interface ThemeProjection {
 
     String getDescription();
 
+    Boolean getPublished();
+
     LocalDateTime getDate();
 
     Long getUserId();

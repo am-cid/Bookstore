@@ -6,6 +6,7 @@ public record ThemeResponseDTO(
         Long id,
         String name,
         String description,
+        Boolean published,
         LocalDateTime date,
         Long profileId,
         String username,
