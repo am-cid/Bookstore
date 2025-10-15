@@ -44,7 +44,7 @@
     </th:block>
 </div>
 
-<!--/*@thymesVar id="themes" type="com.simple.Bookstore.Theme.Theme"*/-->
+<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.Theme"*/-->
 <!--/*@thymesVar id="ulClass" type="java.lang.String"*/-->
 <ul th:fragment="_themePreview(theme)">
     <li th:style="'background-color: #' + ${theme.base00} " th:title="'#' + ${theme.base00}"></li>
@@ -57,7 +57,7 @@
     <li th:style="'background-color: #' + ${theme.base07} " th:title="'#' + ${theme.base07}"></li>
 </ul>
 
-<!--/*@thymesVar id="themes" type="com.simple.Bookstore.Theme.Theme"*/-->
+<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.Theme"*/-->
 <!--/*@thymesVar id="currentUserTheme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
 <!--/*@thymesVar id="currentUserSavedThemeIds" type="java.util.List<java.lang.Long>"*/-->
 <th:block sec:authorize="isAuthenticated()"
@@ -77,13 +77,15 @@
     </form>
     <form action="#" method="post" th:action="@{/profile/saved-themes}"
           th:class="${saveClass != null ? saveClass : ''}"
-          th:if="${!#lists.contains(currentUserSavedThemeIds, theme.id)}">
+          th:if="${currentUserSavedThemeIds == null
+              || !#lists.contains(currentUserSavedThemeIds, theme.id)}">
         <input name="themeId" th:value="${theme.id}" type="hidden" />
         <button type="submit">Save</button>
     </form>
     <form action="#" method="post" th:action="@{/profile/saved-themes}"
           th:class="${saveClass != null ? saveClass : ''}"
-          th:if="${#lists.contains(currentUserSavedThemeIds, theme.id)}">
+          th:if="${currentUserSavedThemeIds != null
+              && #lists.contains(currentUserSavedThemeIds, theme.id)}">
         <input name="_method" type="hidden" value="delete" />
         <input name="themeId" th:value="${theme.id}" type="hidden" />
         <button type="submit">Unsave</button>

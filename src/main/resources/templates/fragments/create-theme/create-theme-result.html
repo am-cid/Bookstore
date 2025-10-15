@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="themeRequestDTO" type="com.simple.Bookstore.Theme.ThemeRequestDTO"*/-->
+<!--/*@thymesVar id="viewModel" type="com.simple.Bookstore.views.CreateTheme.CreatedThemeViewModel"*/-->
+<!--/*@thymesVar id="_overrideThemeUsed" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+
+<div class="flex-column gap-10px" th:fragment="main-content">
+    <div class="flex-column" id="main-content">
+        <div class="flex-column" id="create-theme-form-outer-div">
+            <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Create Theme', 1, 33)}"></div>
+            <div class="flex-column text-center" id="create-theme-form-div">
+                <p>Theme Created. <a th:href="@{/}">Return to top page</a></p>
+                <div class="flex-row gap-10px justify-content-center" th:insert="~{fragments/create-theme/create-theme-result.html :: _themeApplyAndSaveButtons(
+                ${viewModel.createdTheme()},
+                ${viewModel.currentUserTheme()},
+                ${viewModel.currentUserSavedThemeIds()}
+            )}">
+                </div>
+            </div>
+            <div id="theme-preview-header"
+                 th:insert="~{fragments/svg-fragments/heading-strikethrough-behind :: svgHeading('Preview', 680, 24, 295)}">
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{fragments/components/theme-preview :: previewTheme(${viewModel.previewThemeCss})}"></div>
+</div>
+
+<th:block sec:authorize="isAuthenticated()"
+          th:fragment="_themeApplyAndSaveButtons(
+              theme,
+              currentUserTheme,
+              currentUserSavedThemeIds
+)">
+    <form action="#" method="post" th:action="@{/create-theme/result/apply}">
+        <input name="themeId" th:value="${theme.id}" type="hidden" />
+        <input th:replace="~{fragments/create-theme/create-theme-form.html :: _themeRequestHiddenFields}"/>
+        <button th:if="${currentUserTheme == null}" type="submit">Apply</button>
+        <th:block th:if="${currentUserTheme != null}">
+            <i th:if="${currentUserTheme.id == theme.id}">In Use</i>
+            <button th:if="${currentUserTheme.id != theme.id}" type="submit">Apply</button>
+        </th:block>
+    </form>
+    <form action="#" method="post" th:action="@{/create-theme/result/save}"
+          th:if="${currentUserSavedThemeIds == null
+              || !#lists.contains(currentUserSavedThemeIds, theme.id)}">
+        <input name="themeId" th:value="${theme.id}" type="hidden" />
+        <input th:replace="~{fragments/create-theme/create-theme-form.html :: _themeRequestHiddenFields}"/>
+        <button type="submit">Save</button>
+    </form>
+    <form action="#" method="post" th:action="@{/create-theme/result/unsave}"
+          th:if="${currentUserSavedThemeIds != null
+              && #lists.contains(currentUserSavedThemeIds, theme.id)}">
+        <input name="themeId" th:value="${theme.id}" type="hidden" />
+        <input th:replace="~{fragments/create-theme/create-theme-form.html :: _themeRequestHiddenFields}"/>
+        <button type="submit">Unsave</button>
+    </form>
+</th:block>
+
+</body>
+</html>

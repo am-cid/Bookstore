@@ -48,47 +48,47 @@
             <button type="submit">Logout</button>
         </form>
     </div>
-    <div class="sidebar-right-div" id="theme-div">
-        <div class="sidebar-right-heading" id="theme-heading">
-            <div th:replace="~{fragments/svg-fragments/heading-surrounded-by-circles :: svgHeading('THEME', 98, 19, 98)}"></div>
-        </div>
-        <!-- show used theme with swatch 8 colors -->
-        <div class="sidebar-right-content">
-            <div class="theme-div">
-                <ul class="theme-colors-list">
-                    <li class="theme-color" style="background-color: var(--color-00, #A40E60)"></li>
-                    <li class="theme-color" style="background-color: var(--color-01, #FF0000)"></li>
-                    <li class="theme-color" style="background-color: var(--color-02, #F61590)"></li>
-                    <li class="theme-color" style="background-color: var(--color-03, #F88B9E)"></li>
-                    <li class="theme-color" style="background-color: var(--color-04, #FFD376)"></li>
-                    <li class="theme-color" style="background-color: var(--color-05, #AAFFB1)"></li>
-                    <li class="theme-color" style="background-color: var(--color-06, #FFE2E7)"></li>
-                    <li class="theme-color" style="background-color: var(--color-07, #FFF2D3)"></li>
-                </ul>
-                <th:block th:if="${_overrideThemeUsed != null}">
-                    <p class="theme-details">
-                        <strong th:text="${_overrideThemeUsed.name()}"></strong> by
-                        <a th:href="@{/profile/{username}(username=${_overrideThemeUsed.username()})}"
-                           th:text="${_overrideThemeUsed.userDisplayName()}"></a>
-                    </p>
-                    <form action="#" method="post" th:action="@{/profile/theme}">
-                        <input name="_method" type="hidden" value="delete" />
-                        <button type="submit">Unset Theme</button>
-                    </form>
-                </th:block>
-                <strong th:if="${_overrideThemeUsed == null}">
-                    Default Mangagamer Theme
-                </strong>
-            </div>
-            <!-- change theme link to change theme page -->
-            <th:block sec:authorize="isAnonymous()">
-                <a th:href="@{/register(error=change_theme)}">Change Theme</a>
+    <div th:replace="~{fragments/sidebar-right.html :: _sidebarRightUsedTheme}"></div>
+</div>
+
+<div class="sidebar-right-div" id="theme-div" th:fragment="_sidebarRightUsedTheme">
+    <div class="sidebar-right-heading" id="theme-heading">
+        <div th:replace="~{fragments/svg-fragments/heading-surrounded-by-circles :: svgHeading('THEME', 98, 19, 98)}"></div>
+    </div>
+    <!-- show used theme with swatch 8 colors -->
+    <div class="sidebar-right-content">
+        <div class="theme-div">
+            <ul class="theme-colors-list">
+                <li class="theme-color" style="background-color: var(--color-00, #A40E60)"></li>
+                <li class="theme-color" style="background-color: var(--color-01, #FF0000)"></li>
+                <li class="theme-color" style="background-color: var(--color-02, #F61590)"></li>
+                <li class="theme-color" style="background-color: var(--color-03, #F88B9E)"></li>
+                <li class="theme-color" style="background-color: var(--color-04, #FFD376)"></li>
+                <li class="theme-color" style="background-color: var(--color-05, #AAFFB1)"></li>
+                <li class="theme-color" style="background-color: var(--color-06, #FFE2E7)"></li>
+                <li class="theme-color" style="background-color: var(--color-07, #FFF2D3)"></li>
+            </ul>
+            <th:block th:if="${_overrideThemeUsed != null}">
+                <p class="theme-details">
+                    <strong th:text="${_overrideThemeUsed.name()}"></strong> by
+                    <a th:href="@{/profile/{username}(username=${_overrideThemeUsed.username()})}"
+                       th:text="${_overrideThemeUsed.userDisplayName()}"></a>
+                </p>
+                <form action="#" method="post" th:action="@{/profile/theme}">
+                    <input name="_method" type="hidden" value="delete" />
+                    <button type="submit">Unset Theme</button>
+                </form>
             </th:block>
-            <th:block sec:authorize="isAuthenticated()">
-                <a th:href="@{/search(type='THEME')}">Change Theme</a>
-                <a th:href="@{/create-theme}">Create Theme</a>
-            </th:block>
+            <strong th:if="${_overrideThemeUsed == null}">
+                Default Mangagamer Theme
+            </strong>
         </div>
+        <!-- change theme link to change theme page -->
+        <a sec:authorize="isAnonymous()" th:href="@{/register(error=change_theme)}">Change Theme</a>
+        <th:block sec:authorize="isAuthenticated()">
+            <a th:href="@{/search(type='THEME')}">Change Theme</a>
+            <a th:href="@{/create-theme}">Create Theme</a>
+        </th:block>
     </div>
 </div>
 

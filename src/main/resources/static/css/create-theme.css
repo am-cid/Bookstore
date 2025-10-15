@@ -21,6 +21,24 @@
     padding: 10px;
 }
 
+.profile-details p {
+    margin: 0;
+}
+
+.color-inputs {
+    display: grid;
+    grid-template-rows: repeat(9, auto);
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.color-inputs input {
+    justify-self: center;
+}
+
+.color-inputs span {
+    grid-column: 1 / -1;
+}
+
 #theme-preview-header .svg-text-heading {
     font-size: 24px;
     text-align: center;

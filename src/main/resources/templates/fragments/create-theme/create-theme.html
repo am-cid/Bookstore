@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore Fragment: main-content</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!--/*@thymesVar id="themeRequestDTO" type="com.simple.Bookstore.Theme.ThemeRequestDTO"*/-->
+<!--/*@thymesVar id="previewThemeCss" type="java.lang.String"*/-->
+<!--/*@thymesVar id="_overrideThemeUsed" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
+
+<div class="flex-column gap-10px" th:fragment="main-content">
+    <div class="flex-column" id="main-content">
+        <div class="flex-column" id="create-theme-form-outer-div">
+            <div th:replace="~{fragments/svg-fragments/heading-plain :: svgHeading('Create Theme', 1, 33)}"></div>
+            <div th:replace="~{fragments/create-theme/create-theme-form.html :: create-theme-form}"></div>
+            <div id="theme-preview-header"
+                 th:insert="~{fragments/svg-fragments/heading-strikethrough-behind :: svgHeading('Preview', 680, 24, 295)}">
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{fragments/components/theme-preview :: previewTheme(${previewThemeCss})}"></div>
+    <script th:src="@{/js/sync-input-fields-with-css-var.js}"></script>
+</div>
+
+</body>
+</html>

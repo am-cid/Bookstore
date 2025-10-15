@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -19,11 +18,11 @@
 </head>
 <body>
 <!--/*@thymesVar id="user" type="com.simple.Bookstore.User.User"*/-->
-<!--/*@thymesVar id="theme" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
 <!--/*@thymesVar id="previewThemeStyle" type="java.lang.String"*/-->
 <!--/*@thymesVar id="logoLetters" type="java.util.List<com.simple.Bookstore.utils.presentation.SiteLogoLetter>"*/-->
+<!--/*@thymesVar id="_overrideThemeUsed" type="com.simple.Bookstore.Theme.ThemeResponseDTO"*/-->
 
-<div id="theme-preview-render" th:fragment="previewTheme(theme)">
+<div id="theme-preview-render" th:fragment="previewTheme(previewThemeStyle)">
     <th:block th:if="${previewThemeStyle != null}" th:utext="${previewThemeStyle}"></th:block>
     <div th:replace="~{fragments/header.html :: header}"></div>
     <div id="main-layout">
@@ -38,7 +37,7 @@
             <div th:replace="~{fragments/components/theme-preview :: _bookSearchEntry}"></div>
             <script th:src="@{/js/genre-expand.js}"></script>
         </div>
-        <div th:replace="~{fragments/components/theme-preview :: _sidebarRight(${theme})}"></div>
+        <div th:replace="~{fragments/components/theme-preview :: _sidebarRight}"></div>
     </div>
 </div>
 
@@ -83,36 +82,8 @@
     </div>
 </div>
 
-<div id="sidebar-right" th:fragment="_sidebarRight(theme)">
-    <div class="sidebar-right-div" id="theme-div">
-        <div class="sidebar-right-heading" id="theme-heading">
-            <div th:replace="~{fragments/svg-fragments/heading-surrounded-by-circles :: svgHeading('THEME', 98, 19, 98)}"></div>
-        </div>
-        <!-- show used theme with swatch 8 colors -->
-        <div class="sidebar-right-content">
-            <div class="theme-div">
-                <ul class="theme-colors-list">
-                    <li class="theme-color" style="background-color: var(--color-00, #A40E60)"></li>
-                    <li class="theme-color" style="background-color: var(--color-01, #FF0000)"></li>
-                    <li class="theme-color" style="background-color: var(--color-02, #F61590)"></li>
-                    <li class="theme-color" style="background-color: var(--color-03, #F88B9E)"></li>
-                    <li class="theme-color" style="background-color: var(--color-04, #FFD376)"></li>
-                    <li class="theme-color" style="background-color: var(--color-05, #AAFFB1)"></li>
-                    <li class="theme-color" style="background-color: var(--color-06, #FFE2E7)"></li>
-                    <li class="theme-color" style="background-color: var(--color-07, #FFF2D3)"></li>
-                </ul>
-                <p class="theme-details">
-                    <strong th:text="${theme.name}"></strong> by
-                    <a th:href="@{/profile/{username}(username=${theme.username})}"
-                       th:text="${theme.userDisplayName}"></a>
-                </p>
-                <button type="submit">Unset Theme</button>
-            </div>
-            <!-- change theme link to change theme page -->
-            <a sec:authorize="isAnonymous()" th:href="@{/register?change_theme=true}">Change Theme</a>
-            <a sec:authorize="isAuthenticated()" th:href="@{/search(type='THEME')}">Change Theme</a>
-        </div>
-    </div>
+<div id="sidebar-right" th:fragment="_sidebarRight"
+     th:insert="~{fragments/sidebar-right.html :: _sidebarRightUsedTheme}">
 </div>
 
 <div class="enclosed-content-preview" th:fragment="_bookEntry">
